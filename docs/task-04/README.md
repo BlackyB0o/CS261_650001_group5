@@ -2,13 +2,14 @@
 
 ## 1. User Story Details (U11)
 - **Role:** ผู้ใช้งานทั่วไป (Guest / Unauthenticated User)
-- **Goal:** ต้องการสมัครสมาชิก (Register) และเข้าสู่ระบบ (Login)
-- **Benefit:** เพื่อให้สามารถสร้างบัญชีผู้ใช้งาน และเข้าถึงฟีเจอร์สำหรับสมาชิกในระบบได้
+- **Goal:** ต้องการสมัครสมาชิก (Register) โดยเลือกบทบาทผู้ใช้ และเข้าสู่ระบบ (Login)
+- **Benefit:** เพื่อให้สามารถสร้างบัญชีผู้ใช้งาน และเข้าถึงฟีเจอร์สำหรับผู้รับหิ้วหรือผู้ฝากหิ้วในระบบได้
 - **Acceptance Criteria:**
-  1. ระบบต้องตรวจสอบไม่ให้ใช้ Email ที่มีอยู่ในระบบแล้วสมัครซ้ำ
+  1. ระบบต้องตรวจสอบไม่ให้ใช้ Email หรือ เบอร์โทรศัพท์ที่มีอยู่ในระบบแล้วสมัครซ้ำ
   2. รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร
-  3. ระบบทำการเข้ารหัสรหัสผ่าน (Password Hashing) ก่อนบันทึกลง Database
-  4. เมื่อเข้าสู่ระบบสำเร็จ ระบบต้องส่งคืน JWT Access Token เพื่อใช้ยืนยันตัวตนใน API ถัดไป
+  3. ต้องระบุเบอร์โทรศัพท์ และเลือกประเภทผู้ใช้งาน (`RUNNER` = ผู้รับหิ้ว / `BUYER` = ผู้ฝากหิ้ว)
+  4. ระบบทำการเข้ารหัสรหัสผ่าน (Password Hashing) ก่อนบันทึกลง Database
+  5. เมื่อเข้าสู่ระบบสำเร็จ ระบบต้องส่งคืน JWT Access Token เพื่อใช้ยืนยันตัวตนใน API ถัดไป
 
 ---
 
@@ -27,9 +28,13 @@
 {
   "email": "user@example.com",
   "password": "password123",
-  "fullName": "Naphat Thongkao"
+  "fullName": "Naphat Thongkao",
+  "phoneNumber": "0812345678",
+  "role": "RUNNER"
 }
 ```
+*(หมายเหตุ: `role` สามารถเลือกเป็น `"RUNNER"` สำหรับผู้รับหิ้ว หรือ `"BUYER"` สำหรับผู้ฝากหิ้ว)*
+
 - **Response (201 Created):**
 ```json
 {
@@ -37,7 +42,10 @@
   "message": "User registered successfully",
   "data": {
     "userId": 1,
-    "email": "user@example.com"
+    "email": "user@example.com",
+    "fullName": "Naphat Thongkao",
+    "phoneNumber": "0812345678",
+    "role": "RUNNER"
   }
 }
 ```
@@ -77,6 +85,8 @@ classDiagram
         +String email
         +String password
         +String fullName
+        +String phoneNumber
+        +String role
     }
     class LoginRequestDTO {
         +String email
@@ -100,6 +110,8 @@ classDiagram
    - `email`: String (Not Null, Valid Email)
    - `password`: String (Not Null, Min 8 characters)
    - `fullName`: String (Not Null)
+   - `phoneNumber`: String (Not Null, Valid Phone Number)
+   - `role`: String (Not Null, "RUNNER" หรือ "BUYER")
 2. **`LoginRequestDTO`**
    - `email`: String (Not Null)
    - `password`: String (Not Null)
@@ -114,9 +126,13 @@ classDiagram
         -String email
         -String password
         -String fullName
+        -String phoneNumber
+        -String role
         +getEmail() String
         +getPassword() String
         +getFullName() String
+        +getPhoneNumber() String
+        +getRole() String
     }
 
     class LoginRequestDTO {
@@ -139,8 +155,10 @@ classDiagram
 ## 6. DAO / Repository Specification & Diagram
 - **Interface:** `UserRepository` (extends `JpaRepository<User, Long>`)
 - **Methods:**
-  - `Optional<User> findByEmail(String email)`
-  - `boolean existsByEmail(String email)`
+  - `Optional<User> findByEmail(String email)` - ดึงข้อมูลผู้ใช้จาก Email
+  - `boolean existsByEmail(String email)` - ตรวจสอบว่ามี Email นี้ในระบบแล้วหรือยัง
+  - `boolean existsByPhoneNumber(String phoneNumber)` - ตรวจสอบว่ามีเบอร์โทรศัพท์นี้ในระบบแล้วหรือยัง
+  - `User save(User user)` - บันทึกข้อมูลสมาชิกใหม่ลง Database (Register)
 
 ```mermaid
 classDiagram
@@ -148,6 +166,8 @@ classDiagram
         <<interface>>
         +findByEmail(String email) Optional~User~
         +existsByEmail(String email) boolean
+        +existsByPhoneNumber(String phoneNumber) boolean
+        +save(User user) User
     }
 ```
 
@@ -161,6 +181,8 @@ erDiagram
         varchar email UK "NOT NULL"
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
+        varchar phone_number UK "NOT NULL"
+        varchar role "NOT NULL DEFAULT 'BUYER'"
         timestamp created_at "DEFAULT CURRENT_TIMESTAMP"
     }
 ```
@@ -194,6 +216,8 @@ classDiagram
         <<interface>>
         +findByEmail(String email) Optional~User~
         +existsByEmail(String email) boolean
+        +existsByPhoneNumber(String phoneNumber) boolean
+        +save(User user) User
     }
 
     class User {
@@ -201,6 +225,8 @@ classDiagram
         -String email
         -String passwordHash
         -String fullName
+        -String phoneNumber
+        -String role
         -LocalDateTime createdAt
     }
 
@@ -208,6 +234,8 @@ classDiagram
         -String email
         -String password
         -String fullName
+        -String phoneNumber
+        -String role
     }
 
     class LoginRequestDTO {
@@ -237,3 +265,48 @@ classDiagram
 sequenceDiagram
     autonumber
     actor Client as Frontend
+    participant Controller as AuthController
+    participant Service as AuthService
+    participant DAO as UserRepository
+    participant DB as PostgreSQL
+
+    Client->>Controller: POST /api/v1/auth/register (RegisterRequestDTO)
+    Controller->>Service: register(RegisterRequestDTO)
+    Service->>DAO: existsByEmail(email)
+    DAO->>DB: SELECT COUNT(*) FROM users WHERE email = ?
+    DB-->>DAO: 0 (Not Found)
+    DAO-->>Service: false
+    Service->>DAO: existsByPhoneNumber(phoneNumber)
+    DAO->>DB: SELECT COUNT(*) FROM users WHERE phone_number = ?
+    DB-->>DAO: 0 (Not Found)
+    DAO-->>Service: false
+    Service->>Service: Hash Password (BCrypt)
+    Service->>DAO: save(User entity)
+    DAO->>DB: INSERT INTO users (email, password_hash, full_name, phone_number, role) ...
+    DB-->>DAO: Saved User
+    DAO-->>Service: User
+    Service-->>Controller: AuthResponseDTO
+    Controller-->>Client: 201 Created (AuthResponseDTO)
+```
+
+### Sequence Diagram 2: Login (เข้าสู่ระบบ)
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Frontend
+    participant Controller as AuthController
+    participant Service as AuthService
+    participant DAO as UserRepository
+    participant DB as PostgreSQL
+
+    Client->>Controller: POST /api/v1/auth/login (LoginRequestDTO)
+    Controller->>Service: login(LoginRequestDTO)
+    Service->>DAO: findByEmail(email)
+    DAO->>DB: SELECT * FROM users WHERE email = ?
+    DB-->>DAO: User Data
+    DAO-->>Service: Optional<User>
+    Service->>Service: Verify Password Hash (BCrypt)
+    Service->>Service: Generate JWT Token
+    Service-->>Controller: AuthResponseDTO
+    Controller-->>Client: 200 OK (AuthResponseDTO)
+```
