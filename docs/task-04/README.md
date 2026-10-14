@@ -12,7 +12,12 @@
 
 ---
 
-## 2. API Specification
+## 2. UI Prototype
+- **Figma Design Link:** [Task04 - Register & Login UI Prototype](https://www.figma.com/)
+
+---
+
+## 3. API Specification
 ### Endpoint 1: Register (สมัครสมาชิก)
 - **URL:** `/api/v1/auth/register`
 - **Method:** `POST`
@@ -61,7 +66,36 @@
 
 ---
 
-## 3. DTO Class Specification
+## 4. API Class Diagram
+```mermaid
+classDiagram
+    class AuthController {
+        +register(RegisterRequestDTO request) ResponseEntity~AuthResponseDTO~
+        +login(LoginRequestDTO request) ResponseEntity~AuthResponseDTO~
+    }
+    class RegisterRequestDTO {
+        +String email
+        +String password
+        +String fullName
+    }
+    class LoginRequestDTO {
+        +String email
+        +String password
+    }
+    class AuthResponseDTO {
+        +String token
+        +String tokenType
+    }
+
+    AuthController ..> RegisterRequestDTO : receives
+    AuthController ..> LoginRequestDTO : receives
+    AuthController ..> AuthResponseDTO : returns
+```
+
+---
+
+## 5. DTO Class Specification & Diagram
+### DTO Specifications
 1. **`RegisterRequestDTO`**
    - `email`: String (Not Null, Valid Email)
    - `password`: String (Not Null, Min 8 characters)
@@ -73,46 +107,133 @@
    - `token`: String
    - `tokenType`: String ("Bearer")
 
+### DTO Class Diagram
+```mermaid
+classDiagram
+    class RegisterRequestDTO {
+        -String email
+        -String password
+        -String fullName
+        +getEmail() String
+        +getPassword() String
+        +getFullName() String
+    }
+
+    class LoginRequestDTO {
+        -String email
+        -String password
+        +getEmail() String
+        +getPassword() String
+    }
+
+    class AuthResponseDTO {
+        -String token
+        -String tokenType
+        +getToken() String
+        +getTokenType() String
+    }
+```
+
 ---
 
-## 4. DAO / Repository Specification
+## 6. DAO / Repository Specification & Diagram
 - **Interface:** `UserRepository` (extends `JpaRepository<User, Long>`)
 - **Methods:**
   - `Optional<User> findByEmail(String email)`
   - `boolean existsByEmail(String email)`
 
----
-
-## 5. ER Diagram (DB Schema)
-**Table Name:** `users`
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| `id` | BIGINT | PRIMARY KEY, AUTO_INCREMENT | รหัสอ้างอิงผู้ใช้ |
-| `email` | VARCHAR(255) | UNIQUE, NOT NULL | อีเมลผู้ใช้งาน |
-| `password_hash` | VARCHAR(255) | NOT NULL | รหัสผ่านที่ Hash แล้ว |
-| `full_name` | VARCHAR(100) | NOT NULL | ชื่อ-นามสกุล |
-| `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | วันเวลาที่สมัคร |
+```mermaid
+classDiagram
+    class UserRepository {
+        <<interface>>
+        +findByEmail(String email) Optional~User~
+        +existsByEmail(String email) boolean
+    }
+```
 
 ---
 
-## 6. Sequence Diagram Code (Mermaid)
+## 7. ER Diagram (DB Schema)
+```mermaid
+erDiagram
+    USERS {
+        bigint id PK
+        varchar email UK "NOT NULL"
+        varchar password_hash "NOT NULL"
+        varchar full_name "NOT NULL"
+        timestamp created_at "DEFAULT CURRENT_TIMESTAMP"
+    }
+```
+
+---
+
+## 8. Extended API Class Diagram (Full Layered Architecture)
+```mermaid
+classDiagram
+    class AuthController {
+        -AuthService authService
+        +register(RegisterRequestDTO request) ResponseEntity~AuthResponseDTO~
+        +login(LoginRequestDTO request) ResponseEntity~AuthResponseDTO~
+    }
+
+    class AuthService {
+        <<interface>>
+        +register(RegisterRequestDTO request) AuthResponseDTO
+        +login(LoginRequestDTO request) AuthResponseDTO
+    }
+
+    class AuthServiceImpl {
+        -UserRepository userRepository
+        -PasswordEncoder passwordEncoder
+        -JwtTokenProvider jwtTokenProvider
+        +register(RegisterRequestDTO request) AuthResponseDTO
+        +login(LoginRequestDTO request) AuthResponseDTO
+    }
+
+    class UserRepository {
+        <<interface>>
+        +findByEmail(String email) Optional~User~
+        +existsByEmail(String email) boolean
+    }
+
+    class User {
+        -Long id
+        -String email
+        -String passwordHash
+        -String fullName
+        -LocalDateTime createdAt
+    }
+
+    class RegisterRequestDTO {
+        -String email
+        -String password
+        -String fullName
+    }
+
+    class LoginRequestDTO {
+        -String email
+        -String password
+    }
+
+    class AuthResponseDTO {
+        -String token
+        -String tokenType
+    }
+
+    AuthController --> AuthService : uses
+    AuthServiceImpl ..|> AuthService : implements
+    AuthServiceImpl --> UserRepository : uses
+    UserRepository ..> User : manages
+    AuthServiceImpl ..> RegisterRequestDTO : accepts
+    AuthServiceImpl ..> LoginRequestDTO : accepts
+    AuthServiceImpl ..> AuthResponseDTO : creates
+```
+
+---
+
+## 9. Sequence Diagrams
+### Sequence Diagram 1: Register (สมัครสมาชิก)
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Client as Frontend Client
-    participant Controller as AuthController
-    participant Service as AuthService
-    participant DAO as UserRepository
-    participant DB as PostgreSQL
-
-    Client->>Controller: POST /api/v1/auth/login (LoginRequestDTO)
-    Controller->>Service: login(LoginRequestDTO)
-    Service->>DAO: findByEmail(email)
-    DAO->>DB: SELECT * FROM users WHERE email = ?
-    DB-->>DAO: User Data
-    DAO-->>Service: Optional<User>
-    Service->>Service: Verify Password Hash (BCrypt)
-    Service->>Service: Generate JWT Token
-    Service-->>Controller: AuthResponseDTO
-    Controller-->>Client: 200 OK (AuthResponseDTO)
-```
+    actor Client as Frontend
