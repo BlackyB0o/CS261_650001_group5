@@ -2,14 +2,15 @@
 
 ## 1. User Story Details (U11)
 - **Role:** ผู้ใช้งานทั่วไป (Guest / Unauthenticated User)
-- **Goal:** ต้องการสมัครสมาชิก (Register) โดยเลือกบทบาทผู้ใช้ และเข้าสู่ระบบ (Login)
-- **Benefit:** เพื่อให้สามารถสร้างบัญชีผู้ใช้งาน และเข้าถึงฟีเจอร์สำหรับผู้รับหิ้วหรือผู้ฝากหิ้วในระบบได้
+- **Goal:** ต้องการสมัครสมาชิก (Register) โดยบังคับเลือกบทบาทเป็นผู้รับหิ้วหรือผู้ฝากหิ้ว และเข้าสู่ระบบ (Login) ด้วย Email หรือ เบอร์โทรศัพท์
+- **Benefit:** เพื่อให้สามารถสร้างบัญชีผู้ใช้งาน และเข้าถึงฟีเจอร์ตามบทบาทในระบบได้อย่างถูกต้อง
 - **Acceptance Criteria:**
-  1. ระบบต้องตรวจสอบไม่ให้ใช้ Email หรือ เบอร์โทรศัพท์ที่มีอยู่ในระบบแล้วสมัครซ้ำ
-  2. รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร
-  3. ต้องระบุเบอร์โทรศัพท์ และเลือกประเภทผู้ใช้งาน (`RUNNER` = ผู้รับหิ้ว / `BUYER` = ผู้ฝากหิ้ว)
+  1. การสมัครสมาชิก (Register): บังคับระบุทั้ง Email และ เบอร์โทรศัพท์ โดยระบบต้องตรวจสอบไม่ให้ซ้ำกับที่มีในระบบ
+  2. ต้องระบุชื่อ-นามสกุล และ รหัสผ่าน (ความยาวอย่างน้อย 8 ตัวอักษร)
+  3. **บังคับเลือกบทบาทผู้ใช้งาน (Mandatory Role Selection):** ผู้ใช้ **ต้องเลือก** บทบาทอย่างใดอย่างหนึ่งระหว่าง `RUNNER` (ผู้รับหิ้ว) หรือ `BUYER` (ผู้ฝากหิ้ว) เสมอ (ห้ามปล่อยว่าง)
   4. ระบบทำการเข้ารหัสรหัสผ่าน (Password Hashing) ก่อนบันทึกลง Database
-  5. เมื่อเข้าสู่ระบบสำเร็จ ระบบต้องส่งคืน JWT Access Token เพื่อใช้ยืนยันตัวตนใน API ถัดไป
+  5. การเข้าสู่ระบบ (Login): สามารถระบุ **Email หรือ เบอร์โทรศัพท์** อย่างใดอย่างหนึ่ง คู่กับ รหัสผ่านได้
+  6. เมื่อเข้าสู่ระบบสำเร็จ ระบบต้องส่งคืน JWT Access Token เพื่อใช้ยืนยันตัวตนใน API ถัดไป
 
 ---
 
@@ -33,7 +34,7 @@
   "role": "RUNNER"
 }
 ```
-*(หมายเหตุ: `role` สามารถเลือกเป็น `"RUNNER"` สำหรับผู้รับหิ้ว หรือ `"BUYER"` สำหรับผู้ฝากหิ้ว)*
+*(หมายเหตุ: ฟิลด์ `role` **บังคับส่ง** โดยเลือกได้เพียง 2 ค่าเท่านั้น คือ `"RUNNER"` สำหรับผู้รับหิ้ว หรือ `"BUYER"` สำหรับผู้ฝากหิ้ว)*
 
 - **Response (201 Created):**
 ```json
@@ -57,10 +58,12 @@
 - **Request Body:**
 ```json
 {
-  "email": "user@example.com",
+  "identifier": "user@example.com",
   "password": "password123"
 }
 ```
+*(หมายเหตุ: `identifier` ระบุได้ทั้ง Email เช่น `"user@example.com"` หรือ เบอร์โทรศัพท์ เช่น `"0812345678"`)*
+
 - **Response (200 OK):**
 ```json
 {
@@ -89,7 +92,7 @@ classDiagram
         +String role
     }
     class LoginRequestDTO {
-        +String email
+        +String identifier
         +String password
     }
     class AuthResponseDTO {
@@ -111,9 +114,9 @@ classDiagram
    - `password`: String (Not Null, Min 8 characters)
    - `fullName`: String (Not Null)
    - `phoneNumber`: String (Not Null, Valid Phone Number)
-   - `role`: String (Not Null, "RUNNER" หรือ "BUYER")
+   - `role`: String (Not Null, Required Choice: `"RUNNER"` หรือ `"BUYER"`)
 2. **`LoginRequestDTO`**
-   - `email`: String (Not Null)
+   - `identifier`: String (Not Null - ใส่ Email หรือ เบอร์โทรศัพท์)
    - `password`: String (Not Null)
 3. **`AuthResponseDTO`**
    - `token`: String
@@ -136,9 +139,9 @@ classDiagram
     }
 
     class LoginRequestDTO {
-        -String email
+        -String identifier
         -String password
-        +getEmail() String
+        +getIdentifier() String
         +getPassword() String
     }
 
@@ -155,16 +158,16 @@ classDiagram
 ## 6. DAO / Repository Specification & Diagram
 - **Interface:** `UserRepository` (extends `JpaRepository<User, Long>`)
 - **Methods:**
-  - `Optional<User> findByEmail(String email)` - ดึงข้อมูลผู้ใช้จาก Email
-  - `boolean existsByEmail(String email)` - ตรวจสอบว่ามี Email นี้ในระบบแล้วหรือยัง
-  - `boolean existsByPhoneNumber(String phoneNumber)` - ตรวจสอบว่ามีเบอร์โทรศัพท์นี้ในระบบแล้วหรือยัง
-  - `User save(User user)` - บันทึกข้อมูลสมาชิกใหม่ลง Database (Register)
+  - `Optional<User> findByEmailOrPhoneNumber(String email, String phoneNumber)` - ค้นหาผู้ใช้ด้วย Email หรือ เบอร์โทรศัพท์ (ใช้ตอน Login)
+  - `boolean existsByEmail(String email)` - เช็ค Email ซ้ำ
+  - `boolean existsByPhoneNumber(String phoneNumber)` - เช็คเบอร์โทรศัพท์ซ้ำ
+  - `User save(User user)` - บันทึกข้อมูลผู้ใช้ใหม่ (Register)
 
 ```mermaid
 classDiagram
     class UserRepository {
         <<interface>>
-        +findByEmail(String email) Optional~User~
+        +findByEmailOrPhoneNumber(String email, String phoneNumber) Optional~User~
         +existsByEmail(String email) boolean
         +existsByPhoneNumber(String phoneNumber) boolean
         +save(User user) User
@@ -182,7 +185,7 @@ erDiagram
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
         varchar phone_number UK "NOT NULL"
-        varchar role "NOT NULL DEFAULT 'BUYER'"
+        varchar role "NOT NULL"
         timestamp created_at "DEFAULT CURRENT_TIMESTAMP"
     }
 ```
@@ -214,7 +217,7 @@ classDiagram
 
     class UserRepository {
         <<interface>>
-        +findByEmail(String email) Optional~User~
+        +findByEmailOrPhoneNumber(String email, String phoneNumber) Optional~User~
         +existsByEmail(String email) boolean
         +existsByPhoneNumber(String phoneNumber) boolean
         +save(User user) User
@@ -239,7 +242,7 @@ classDiagram
     }
 
     class LoginRequestDTO {
-        -String email
+        -String identifier
         -String password
     }
 
@@ -280,6 +283,7 @@ sequenceDiagram
     DAO->>DB: SELECT COUNT(*) FROM users WHERE phone_number = ?
     DB-->>DAO: 0 (Not Found)
     DAO-->>Service: false
+    Service->>Service: Validate Role (RUNNER / BUYER)
     Service->>Service: Hash Password (BCrypt)
     Service->>DAO: save(User entity)
     DAO->>DB: INSERT INTO users (email, password_hash, full_name, phone_number, role) ...
@@ -289,7 +293,7 @@ sequenceDiagram
     Controller-->>Client: 201 Created (AuthResponseDTO)
 ```
 
-### Sequence Diagram 2: Login (เข้าสู่ระบบ)
+### Sequence Diagram 2: Login (เข้าสู่ระบบด้วย Email หรือ เบอร์โทรศัพท์)
 ```mermaid
 sequenceDiagram
     autonumber
@@ -301,8 +305,8 @@ sequenceDiagram
 
     Client->>Controller: POST /api/v1/auth/login (LoginRequestDTO)
     Controller->>Service: login(LoginRequestDTO)
-    Service->>DAO: findByEmail(email)
-    DAO->>DB: SELECT * FROM users WHERE email = ?
+    Service->>DAO: findByEmailOrPhoneNumber(identifier, identifier)
+    DAO->>DB: SELECT * FROM users WHERE email = ? OR phone_number = ?
     DB-->>DAO: User Data
     DAO-->>Service: Optional<User>
     Service->>Service: Verify Password Hash (BCrypt)
@@ -310,3 +314,16 @@ sequenceDiagram
     Service-->>Controller: AuthResponseDTO
     Controller-->>Client: 200 OK (AuthResponseDTO)
 ```
+```
+
+---
+
+### 🚀 สเต็ปดันขึ้น GitHub หลังวางไฟล์เรียบร้อย:
+
+1. บันทึกไฟล์ใน VS Code (**`Cmd + S`**)
+2. พิมพ์คำสั่งใน Terminal:
+   ```bash
+   git add .
+   git commit -m "docs: enforce mandatory role selection (RUNNER or BUYER) during registration"
+   git push
+   ```
