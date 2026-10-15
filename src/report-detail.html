@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดรายงาน | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CarryHub Admin</h1>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="admin-reports.html">จัดการรายงาน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>รายละเอียดรายงาน</h1>
+            <p>หมายเลขรายงาน: RP001</p>
+            <p>สถานะปัจจุบัน: รอตรวจสอบ</p>
+        </section>
+
+        <section>
+            <h2>ข้อมูลรายงาน</h2>
+
+            <p>หมายเลขออเดอร์: CH001</p>
+            <p>ผู้รายงาน: ผู้ฝากซื้อ</p>
+            <p>ประเภทปัญหา: สินค้าไม่ตรงตามที่สั่ง</p>
+            <p>วันที่รายงาน: 15 ตุลาคม 2026</p>
+
+            <h3>รายละเอียดปัญหา</h3>
+            <p>ผู้ฝากซื้อแจ้งว่าได้รับสินค้าไม่ตรงตามรายการที่สั่งซื้อ</p>
+        </section>
+
+        <section>
+            <h2>ผลการตรวจสอบ</h2>
+
+            <form action="admin-reports.html">
+
+                <div>
+                    <label for="status">สถานะรายงาน</label>
+
+                    <select id="status" name="status" required>
+                        <option value="pending">รอตรวจสอบ</option>
+                        <option value="investigating">กำลังตรวจสอบ</option>
+                        <option value="resolved">แก้ไขแล้ว</option>
+                        <option value="rejected">ไม่รับเรื่อง</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="admin-note">บันทึกจากแอดมิน</label>
+
+                    <textarea id="admin-note" name="admin-note"
+                              rows="5"
+                              placeholder="บันทึกผลการตรวจสอบหรือแนวทางแก้ไข"></textarea>
+                </div>
+
+                <button type="submit">บันทึกผลการตรวจสอบ</button>
+
+                <a href="admin-reports.html">กลับไปรายการรายงาน</a>
+
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>CarryHub © 2026</p>
+    </footer>
+
+</body>
+</html>

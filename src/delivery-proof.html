@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หลักฐานการส่งมอบ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CarryHub</h1>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>ยืนยันการส่งมอบสินค้า</h1>
+            <p>ออเดอร์: CH001</p>
+            <p>กรุณาตรวจสอบข้อมูลและแนบรูปภาพหลักฐานการส่งมอบสินค้า</p>
+        </section>
+
+        <section>
+            <h2>ข้อมูลการส่งมอบ</h2>
+
+            <p>ร้านค้า: ร้านชานมหน้ามหาวิทยาลัย</p>
+            <p>ผู้รับหิ้ว: สมชาย</p>
+            <p>ผู้ฝากซื้อ: นัท</p>
+            <p>สถานที่ส่งมอบ: จุดนัดรับหน้ามหาวิทยาลัย</p>
+        </section>
+
+        <section>
+            <h2>แนบหลักฐาน</h2>
+
+            <form action="order-detail.html">
+
+                <div>
+                    <label for="order-id">หมายเลขออเดอร์</label>
+                    <input type="text" id="order-id" name="order-id"
+                           value="CH001" readonly>
+                </div>
+
+                <div>
+                    <label for="proof">รูปภาพหลักฐานการส่งมอบ</label>
+                    <input type="file" id="proof" name="proof"
+                           accept="image/*" required>
+                </div>
+
+                <div>
+                    <label for="note">หมายเหตุ</label>
+                    <textarea id="note" name="note" rows="4"
+                              placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับการส่งมอบ"></textarea>
+                </div>
+
+                <button type="submit">ยืนยันการส่งมอบ</button>
+                <a href="order-detail.html">กลับไปหน้ารายละเอียดออเดอร์</a>
+
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>CarryHub © 2026</p>
+    </footer>
+
+</body>
+</html>
