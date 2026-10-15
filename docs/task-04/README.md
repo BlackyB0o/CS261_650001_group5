@@ -1,4 +1,6 @@
-`# Task04: U11 - Define Details, Design UI, API, DB Schema & Sequence Diagram
+# Task04: U11 - Define Details, Design UI, API, DB Schema & Sequence Diagram
+
+> ใช้ร่วมกับ [API Conventions](../common/API-CONVENTIONS.md) (รูปแบบ response, JWT, enum) และ [ERD](../database/ERD.md) (ตาราง `USERS`)
 
 ## 1. User Story Details (U11)
 - **Role:** ผู้ใช้งานทั่วไป (Guest / Unauthenticated User)
@@ -11,6 +13,8 @@
   4. ระบบทำการเข้ารหัสรหัสผ่าน (Password Hashing) ก่อนบันทึกลง Database
   5. การเข้าสู่ระบบ (Login): สามารถระบุ **Email หรือ เบอร์โทรศัพท์** อย่างใดอย่างหนึ่ง คู่กับ รหัสผ่านได้
   6. เมื่อเข้าสู่ระบบสำเร็จ ระบบต้องส่งคืน JWT Access Token เพื่อใช้ยืนยันตัวตนใน API ถัดไป
+  7. หากกรอกข้อมูลไม่ครบหรือไม่ถูกต้อง ระบบต้องแสดงข้อความแจ้งเตือนชัดเจนที่ช่องนั้น ๆ และไม่บันทึกข้อมูลลงระบบ
+- **หมายเหตุ:** ผู้ดูแลระบบ (Admin) ไม่ได้สมัครผ่านหน้านี้ รับสมัครเฉพาะ `RUNNER` และ `BUYER`
 
 ---
 
@@ -20,6 +24,12 @@
 ---
 
 ## 3. API Specification
+
+> **รูปแบบ Response ที่ใช้ร่วมกันทุก endpoint (`ApiResponseDTO<T>`)** ดูรายละเอียดที่ [API Conventions](../common/API-CONVENTIONS.md)
+> - สำเร็จ: `{ "status": "SUCCESS", "message": "...", "data": ... }`
+> - ผิดพลาด: `{ "status": "ERROR", "message": "...", "errors": [ { "field": "...", "message": "..." } ] }`
+>   (`errors` ใช้เมื่อต้องบอกว่าช่องไหนผิด ตามเกณฑ์ข้อ 7)
+
 ### Endpoint 1: Register (สมัครสมาชิก)
 - **URL:** `/api/v1/auth/register`
 - **Method:** `POST`
@@ -36,7 +46,7 @@
 ```
 *(หมายเหตุ: ฟิลด์ `role` **บังคับส่ง** โดยเลือกได้เพียง 2 ค่าเท่านั้น คือ `"RUNNER"` สำหรับผู้รับหิ้ว หรือ `"BUYER"` สำหรับผู้ฝากหิ้ว)*
 
-- **Response (201 Created):**
+- **Response (201 Created):** ข้อมูลผู้ใช้ที่สมัครสำเร็จ (`RegisterResponseDTO`) ไม่ส่งรหัสผ่านกลับ
 ```json
 {
   "status": "SUCCESS",
@@ -48,6 +58,29 @@
     "phoneNumber": "0812345678",
     "role": "RUNNER"
   }
+}
+```
+
+- **Response (400 Bad Request):** ข้อมูลไม่ครบหรือผิด format (ไม่บันทึกข้อมูล)
+```json
+{
+  "status": "ERROR",
+  "message": "Validation failed",
+  "errors": [
+    { "field": "phoneNumber", "message": "must be a valid phone number" },
+    { "field": "role", "message": "must not be blank" }
+  ]
+}
+```
+
+- **Response (409 Conflict):** Email หรือ เบอร์โทรศัพท์ซ้ำกับที่มีในระบบ
+```json
+{
+  "status": "ERROR",
+  "message": "Duplicate data",
+  "errors": [
+    { "field": "email", "message": "Email is already in use" }
+  ]
 }
 ```
 
@@ -68,6 +101,7 @@
 ```json
 {
   "status": "SUCCESS",
+  "message": "Login successful",
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsIn...",
     "tokenType": "Bearer"
@@ -75,14 +109,35 @@
 }
 ```
 
+- **Response (400 Bad Request):** ไม่กรอก `identifier` หรือ `password`
+```json
+{
+  "status": "ERROR",
+  "message": "Validation failed",
+  "errors": [
+    { "field": "password", "message": "must not be blank" }
+  ]
+}
+```
+
+- **Response (401 Unauthorized):** ไม่พบผู้ใช้หรือรหัสผ่านไม่ถูกต้อง (ใช้ข้อความเดียวกัน ไม่บอกว่าผิดที่ตัวไหน)
+```json
+{
+  "status": "ERROR",
+  "message": "Invalid email/phone number or password"
+}
+```
+
+- **JWT ที่ออกให้:** ต้องมีข้อมูล `userId` และ `role` (`RUNNER` / `BUYER`) เพราะ endpoint ของ task อื่นใช้ค่านี้ระบุตัวผู้ใช้และตรวจสิทธิ์ (ดู [API Conventions](../common/API-CONVENTIONS.md))
+
 ---
 
 ## 4. API Class Diagram
 ```mermaid
 classDiagram
     class AuthController {
-        +register(RegisterRequestDTO request) ResponseEntity~AuthResponseDTO~
-        +login(LoginRequestDTO request) ResponseEntity~AuthResponseDTO~
+        +register(RegisterRequestDTO request) ResponseEntity~ApiResponseDTO~
+        +login(LoginRequestDTO request) ResponseEntity~ApiResponseDTO~
     }
     class RegisterRequestDTO {
         +String email
@@ -95,14 +150,34 @@ classDiagram
         +String identifier
         +String password
     }
+    class RegisterResponseDTO {
+        +Long userId
+        +String email
+        +String fullName
+        +String phoneNumber
+        +String role
+    }
     class AuthResponseDTO {
         +String token
         +String tokenType
     }
+    class ApiResponseDTO~T~ {
+        +String status
+        +String message
+        +T data
+        +List~FieldErrorDTO~ errors
+    }
+    class FieldErrorDTO {
+        +String field
+        +String message
+    }
 
     AuthController ..> RegisterRequestDTO : receives
     AuthController ..> LoginRequestDTO : receives
-    AuthController ..> AuthResponseDTO : returns
+    AuthController ..> ApiResponseDTO : returns
+    ApiResponseDTO ..> RegisterResponseDTO : wraps (register)
+    ApiResponseDTO ..> AuthResponseDTO : wraps (login)
+    ApiResponseDTO ..> FieldErrorDTO : errors
 ```
 
 ---
@@ -110,17 +185,31 @@ classDiagram
 ## 5. DTO Class Specification & Diagram
 ### DTO Specifications
 1. **`RegisterRequestDTO`**
-   - `email`: String (Not Null, Valid Email)
-   - `password`: String (Not Null, Min 8 characters)
-   - `fullName`: String (Not Null)
-   - `phoneNumber`: String (Not Null, Valid Phone Number)
-   - `role`: String (Not Null, Required Choice: `"RUNNER"` หรือ `"BUYER"`)
+   - `email`: String (Not Blank, Valid Email)
+   - `password`: String (Not Blank, Min 8 characters)
+   - `fullName`: String (Not Blank)
+   - `phoneNumber`: String (Not Blank, Valid Phone Number เช่น 10 หลัก ขึ้นต้นด้วย 0)
+   - `role`: String (Not Blank, Required Choice: `"RUNNER"` หรือ `"BUYER"`)
 2. **`LoginRequestDTO`**
-   - `identifier`: String (Not Null - ใส่ Email หรือ เบอร์โทรศัพท์)
-   - `password`: String (Not Null)
-3. **`AuthResponseDTO`**
+   - `identifier`: String (Not Blank - ใส่ Email หรือ เบอร์โทรศัพท์)
+   - `password`: String (Not Blank)
+3. **`RegisterResponseDTO`** (ตอบกลับหลังสมัครสำเร็จ ไม่มีรหัสผ่าน)
+   - `userId`: Long
+   - `email`: String
+   - `fullName`: String
+   - `phoneNumber`: String
+   - `role`: String
+4. **`AuthResponseDTO`** (ตอบกลับหลัง Login สำเร็จ)
    - `token`: String
    - `tokenType`: String ("Bearer")
+5. **`ApiResponseDTO<T>`** (wrapper ของทุก response)
+   - `status`: String (`"SUCCESS"` / `"ERROR"`)
+   - `message`: String
+   - `data`: T (ใช้เมื่อสำเร็จ)
+   - `errors`: List&lt;FieldErrorDTO&gt; (ใช้เมื่อผิดพลาดและต้องระบุช่อง ไม่มีค่าเมื่อสำเร็จ)
+6. **`FieldErrorDTO`**
+   - `field`: String (ชื่อ field ที่ผิด เช่น `"phoneNumber"`)
+   - `message`: String (ข้อความแจ้งเตือนที่ช่องนั้น)
 
 ### DTO Class Diagram
 ```mermaid
@@ -145,11 +234,42 @@ classDiagram
         +getPassword() String
     }
 
+    class RegisterResponseDTO {
+        -Long userId
+        -String email
+        -String fullName
+        -String phoneNumber
+        -String role
+        +getUserId() Long
+        +getEmail() String
+        +getFullName() String
+        +getPhoneNumber() String
+        +getRole() String
+    }
+
     class AuthResponseDTO {
         -String token
         -String tokenType
         +getToken() String
         +getTokenType() String
+    }
+
+    class ApiResponseDTO~T~ {
+        -String status
+        -String message
+        -T data
+        -List~FieldErrorDTO~ errors
+        +getStatus() String
+        +getMessage() String
+        +getData() T
+        +getErrors() List~FieldErrorDTO~
+    }
+
+    class FieldErrorDTO {
+        -String field
+        -String message
+        +getField() String
+        +getMessage() String
     }
 ```
 
@@ -186,7 +306,7 @@ erDiagram
         varchar full_name "NOT NULL"
         varchar phone_number UK "NOT NULL"
         varchar role "NOT NULL"
-        timestamp created_at "DEFAULT CURRENT_TIMESTAMP"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 ```
 
@@ -197,13 +317,13 @@ erDiagram
 classDiagram
     class AuthController {
         -AuthService authService
-        +register(RegisterRequestDTO request) ResponseEntity~AuthResponseDTO~
-        +login(LoginRequestDTO request) ResponseEntity~AuthResponseDTO~
+        +register(RegisterRequestDTO request) ResponseEntity~ApiResponseDTO~
+        +login(LoginRequestDTO request) ResponseEntity~ApiResponseDTO~
     }
 
     class AuthService {
         <<interface>>
-        +register(RegisterRequestDTO request) AuthResponseDTO
+        +register(RegisterRequestDTO request) RegisterResponseDTO
         +login(LoginRequestDTO request) AuthResponseDTO
     }
 
@@ -211,7 +331,7 @@ classDiagram
         -UserRepository userRepository
         -PasswordEncoder passwordEncoder
         -JwtTokenProvider jwtTokenProvider
-        +register(RegisterRequestDTO request) AuthResponseDTO
+        +register(RegisterRequestDTO request) RegisterResponseDTO
         +login(LoginRequestDTO request) AuthResponseDTO
     }
 
@@ -246,18 +366,37 @@ classDiagram
         -String password
     }
 
+    class RegisterResponseDTO {
+        -Long userId
+        -String email
+        -String fullName
+        -String phoneNumber
+        -String role
+    }
+
     class AuthResponseDTO {
         -String token
         -String tokenType
     }
 
+    class ApiResponseDTO~T~ {
+        -String status
+        -String message
+        -T data
+        -List~FieldErrorDTO~ errors
+    }
+
     AuthController --> AuthService : uses
+    AuthController ..> ApiResponseDTO : returns
     AuthServiceImpl ..|> AuthService : implements
     AuthServiceImpl --> UserRepository : uses
     UserRepository ..> User : manages
     AuthServiceImpl ..> RegisterRequestDTO : accepts
     AuthServiceImpl ..> LoginRequestDTO : accepts
+    AuthServiceImpl ..> RegisterResponseDTO : creates
     AuthServiceImpl ..> AuthResponseDTO : creates
+    ApiResponseDTO ..> RegisterResponseDTO : wraps
+    ApiResponseDTO ..> AuthResponseDTO : wraps
 ```
 
 ---
@@ -274,23 +413,35 @@ sequenceDiagram
     participant DB as PostgreSQL
 
     Client->>Controller: POST /api/v1/auth/register (RegisterRequestDTO)
+    Controller->>Controller: Validate request (Bean Validation)
+    alt ข้อมูลไม่ครบหรือผิด format
+        Controller-->>Client: 400 Bad Request (ApiResponseDTO + errors)
+    end
     Controller->>Service: register(RegisterRequestDTO)
     Service->>DAO: existsByEmail(email)
     DAO->>DB: SELECT COUNT(*) FROM users WHERE email = ?
-    DB-->>DAO: 0 (Not Found)
-    DAO-->>Service: false
+    DB-->>DAO: count
+    DAO-->>Service: true / false
+    alt Email ซ้ำ
+        Service-->>Controller: throw DuplicateException (email)
+        Controller-->>Client: 409 Conflict (ApiResponseDTO + errors)
+    end
     Service->>DAO: existsByPhoneNumber(phoneNumber)
     DAO->>DB: SELECT COUNT(*) FROM users WHERE phone_number = ?
-    DB-->>DAO: 0 (Not Found)
-    DAO-->>Service: false
+    DB-->>DAO: count
+    DAO-->>Service: true / false
+    alt เบอร์โทรศัพท์ซ้ำ
+        Service-->>Controller: throw DuplicateException (phoneNumber)
+        Controller-->>Client: 409 Conflict (ApiResponseDTO + errors)
+    end
     Service->>Service: Validate Role (RUNNER / BUYER)
     Service->>Service: Hash Password (BCrypt)
     Service->>DAO: save(User entity)
     DAO->>DB: INSERT INTO users (email, password_hash, full_name, phone_number, role) ...
     DB-->>DAO: Saved User
     DAO-->>Service: User
-    Service-->>Controller: AuthResponseDTO
-    Controller-->>Client: 201 Created (AuthResponseDTO)
+    Service-->>Controller: RegisterResponseDTO
+    Controller-->>Client: 201 Created (ApiResponseDTO wraps RegisterResponseDTO)
 ```
 
 ### Sequence Diagram 2: Login (เข้าสู่ระบบด้วย Email หรือ เบอร์โทรศัพท์)
@@ -304,26 +455,21 @@ sequenceDiagram
     participant DB as PostgreSQL
 
     Client->>Controller: POST /api/v1/auth/login (LoginRequestDTO)
+    Controller->>Controller: Validate request (Bean Validation)
+    alt ไม่กรอก identifier หรือ password
+        Controller-->>Client: 400 Bad Request (ApiResponseDTO + errors)
+    end
     Controller->>Service: login(LoginRequestDTO)
     Service->>DAO: findByEmailOrPhoneNumber(identifier, identifier)
     DAO->>DB: SELECT * FROM users WHERE email = ? OR phone_number = ?
     DB-->>DAO: User Data
-    DAO-->>Service: Optional<User>
+    DAO-->>Service: Optional of User
     Service->>Service: Verify Password Hash (BCrypt)
+    alt ไม่พบผู้ใช้ หรือรหัสผ่านไม่ถูกต้อง
+        Service-->>Controller: throw InvalidCredentialsException
+        Controller-->>Client: 401 Unauthorized (ApiResponseDTO)
+    end
     Service->>Service: Generate JWT Token
     Service-->>Controller: AuthResponseDTO
-    Controller-->>Client: 200 OK (AuthResponseDTO)
+    Controller-->>Client: 200 OK (ApiResponseDTO wraps AuthResponseDTO)
 ```
-```
-
----
-
-### 🚀 สเต็ปดันขึ้น GitHub หลังวางไฟล์เรียบร้อย:
-
-1. บันทึกไฟล์ใน VS Code (**`Cmd + S`**)
-2. พิมพ์คำสั่งใน Terminal:
-   ```bash
-   git add .
-   git commit -m "docs: enforce mandatory role selection (RUNNER or BUYER) during registration"
-   git push
-   ````
