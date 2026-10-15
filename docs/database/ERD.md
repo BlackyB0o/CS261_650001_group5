@@ -53,4 +53,26 @@ erDiagram
         int quantity "NOT NULL, > 0"
         varchar note "OPTIONAL"
     }
-```
+
+    %% Task 20 - ชำระค่าสินค้าและค่าหิ้ว
+    PAYMENTS {
+        bigint id PK
+        bigint order_id FK "NOT NULL, UK"
+        decimal product_amount "NOT NULL, >=0"
+        decimal service_fee "NOT NULL, >=0"
+        decimal total_amount "NOT NULL, >=0"
+        varchar payment_method "NOT NULL"
+        varchar payment_status "NOT NULL"
+        varchar transaction_reference
+        timestamp paid_at
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    %% Task 24 - ยืนยันรับสินค้าและปิดออเดอร์
+    ORDER_COMPLETIONS {
+        bigint id PK
+        bigint payment_id FK "NOT NULL, UK"
+        bigint confirmed_by FK "NOT NULL"
+        timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        varchar completion_status "NOT NULL"
+    }
