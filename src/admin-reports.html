@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการรายงานปัญหา | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CarryHub Admin</h1>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="admin-reports.html">จัดการรายงาน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>จัดการรายงานปัญหา</h1>
+            <p>ตรวจสอบรายงานปัญหาที่ส่งมาจากผู้ฝากซื้อและผู้รับหิ้ว</p>
+        </section>
+
+        <section>
+            <h2>ภาพรวมรายงาน</h2>
+
+            <p>รายงานทั้งหมด: 3 รายการ</p>
+            <p>รอตรวจสอบ: 2 รายการ</p>
+            <p>ตรวจสอบแล้ว: 1 รายการ</p>
+        </section>
+
+        <section>
+            <h2>รายการรายงาน</h2>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>หมายเลขรายงาน</th>
+                        <th>หมายเลขออเดอร์</th>
+                        <th>ผู้รายงาน</th>
+                        <th>ประเภทปัญหา</th>
+                        <th>สถานะ</th>
+                        <th>รายละเอียด</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>RP001</td>
+                        <td>CH001</td>
+                        <td>ผู้ฝากซื้อ</td>
+                        <td>สินค้าไม่ตรงตามที่สั่ง</td>
+                        <td>รอตรวจสอบ</td>
+                        <td>
+                            <a href="report-detail.html">ดูรายละเอียด</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>RP002</td>
+                        <td>CH002</td>
+                        <td>ผู้รับหิ้ว</td>
+                        <td>ปัญหาการส่งมอบ</td>
+                        <td>รอตรวจสอบ</td>
+                        <td>
+                            <a href="report-detail.html">ดูรายละเอียด</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>RP003</td>
+                        <td>CH003</td>
+                        <td>ผู้ฝากซื้อ</td>
+                        <td>ปัญหาการชำระเงิน</td>
+                        <td>ตรวจสอบแล้ว</td>
+                        <td>
+                            <a href="report-detail.html">ดูรายละเอียด</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>CarryHub © 2026</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานปัญหา | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CarryHub</h1>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>รายงานปัญหา</h1>
+            <p>แจ้งปัญหาที่พบเพื่อให้ทีมงานตรวจสอบ</p>
+        </section>
+
+        <section>
+            <form action="order-detail.html">
+
+                <div>
+                    <label for="order-id">หมายเลขออเดอร์</label>
+                    <input type="text" id="order-id" name="order-id"
+                           placeholder="เช่น CH001" required>
+                </div>
+
+                <div>
+                    <label for="reporter">ผู้รายงาน</label>
+                    <select id="reporter" name="reporter" required>
+                        <option value="">เลือกประเภทผู้รายงาน</option>
+                        <option value="buyer">ผู้ฝากซื้อ</option>
+                        <option value="carrier">ผู้รับหิ้ว</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="category">ประเภทปัญหา</label>
+                    <select id="category" name="category" required>
+                        <option value="">เลือกประเภทปัญหา</option>
+                        <option value="product">สินค้าไม่ตรงตามที่สั่ง</option>
+                        <option value="delivery">ปัญหาการส่งมอบ</option>
+                        <option value="payment">ปัญหาการชำระเงิน</option>
+                        <option value="user">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
+                        <option value="other">อื่น ๆ</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="description">รายละเอียดปัญหา</label>
+                    <textarea id="description" name="description"
+                              rows="6" placeholder="อธิบายปัญหาที่พบ" required></textarea>
+                </div>
+
+                <div>
+                    <label for="evidence">แนบรูปภาพประกอบ (ถ้ามี)</label>
+                    <input type="file" id="evidence" name="evidence"
+                           accept="image/*">
+                </div>
+
+                <button type="submit">ส่งรายงาน</button>
+                <a href="order-detail.html">ยกเลิก</a>
+
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>CarryHub © 2026</p>
+    </footer>
+
+</body>
+</html>

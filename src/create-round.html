@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างรอบรับหิ้ว | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="form-card">
+            <h1>สร้างรอบรับหิ้ว</h1>
+            <p>กรอกรายละเอียดเพื่อเปิดรับรายการสั่งซื้อจากผู้ฝากซื้อ</p>
+
+            <form action="rounds.html">
+                <div class="form-group">
+                    <label for="round-name">ชื่อรอบรับหิ้ว</label>
+                    <input type="text" id="round-name" placeholder="เช่น รอบร้านชานมช่วงเที่ยง" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="shop">ชื่อร้านค้า</label>
+                    <input type="text" id="shop" placeholder="กรอกชื่อร้านค้า" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">สถานที่รับสินค้า</label>
+                    <input type="text" id="location" placeholder="กรอกสถานที่" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">วันที่ไปรับสินค้า</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">เวลาปิดรับออเดอร์</label>
+                    <input type="time" id="deadline" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="capacity">จำนวนออเดอร์ที่รับได้</label>
+                    <input type="number" id="capacity" min="1" placeholder="เช่น 10" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fee">ค่าบริการต่อรายการ (บาท)</label>
+                    <input type="number" id="fee" min="0" placeholder="เช่น 10" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="details">รายละเอียดเพิ่มเติม</label>
+                    <textarea id="details" rows="4" placeholder="แจ้งรายละเอียดที่ผู้ฝากซื้อควรรู้"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">สร้างรอบรับหิ้ว</button>
+                <a href="rounds.html" class="btn btn-outline">ยกเลิก</a>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CarryHub</p>
+    </footer>
+</body>
+</html>

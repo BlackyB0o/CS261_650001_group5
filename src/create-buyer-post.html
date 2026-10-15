@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างโพสต์หาคนรับหิ้ว | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CarryHub</h1>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการสั่งซื้อ</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>สร้างโพสต์หาคนรับหิ้ว</h1>
+            <p>กรอกรายละเอียดสินค้าที่ต้องการ เพื่อให้ผู้รับหิ้วสามารถติดต่อหรือรับงานได้</p>
+
+            <form action="buyer-posts.html">
+
+                <div>
+                    <label for="post-title">ชื่อโพสต์</label>
+                    <input type="text" id="post-title" name="post-title"
+                           placeholder="เช่น ฝากซื้อเครื่องดื่ม" required>
+                </div>
+
+                <div>
+                    <label for="shop-name">ชื่อร้านค้า</label>
+                    <input type="text" id="shop-name" name="shop-name"
+                           placeholder="กรอกชื่อร้านค้า" required>
+                </div>
+
+                <div>
+                    <label for="product">รายการสินค้า</label>
+                    <textarea id="product" name="product" rows="4"
+                              placeholder="ระบุชื่อสินค้าและรายละเอียด" required></textarea>
+                </div>
+
+                <div>
+                    <label for="quantity">จำนวนสินค้า</label>
+                    <input type="number" id="quantity" name="quantity"
+                           min="1" placeholder="ระบุจำนวน" required>
+                </div>
+
+                <div>
+                    <label for="date">วันที่ต้องการรับสินค้า</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div>
+                    <label for="location">สถานที่รับสินค้า</label>
+                    <input type="text" id="location" name="location"
+                           placeholder="เช่น หน้าคณะ" required>
+                </div>
+
+                <div>
+                    <label for="budget">งบประมาณค่าสินค้า (บาท)</label>
+                    <input type="number" id="budget" name="budget"
+                           min="0" placeholder="ระบุงบประมาณ">
+                </div>
+
+                <div>
+                    <label for="details">รายละเอียดเพิ่มเติม</label>
+                    <textarea id="details" name="details" rows="4"
+                              placeholder="ระบุข้อมูลเพิ่มเติม"></textarea>
+                </div>
+
+                <button type="submit">สร้างโพสต์</button>
+                <a href="buyer-posts.html">ยกเลิก</a>
+
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>CarryHub © 2026</p>
+    </footer>
+
+</body>
+</html>

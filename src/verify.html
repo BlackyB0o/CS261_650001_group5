@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืนยันข้อมูล | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="auth-card">
+            <h1>ยืนยันข้อมูลสมาชิก</h1>
+            <p>กรอกข้อมูลที่จำเป็นสำหรับการตรวจสอบสิทธิ์การใช้งาน</p>
+
+            <form action="login.html">
+                <div class="form-group">
+                    <label for="student-id">รหัสนักศึกษา</label>
+                    <input type="text" id="student-id" placeholder="กรอกรหัสนักศึกษา" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="university">มหาวิทยาลัย</label>
+                    <input type="text" id="university" placeholder="กรอกชื่อมหาวิทยาลัย" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="faculty">คณะ</label>
+                    <input type="text" id="faculty" placeholder="กรอกชื่อคณะ" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    ส่งข้อมูลยืนยัน
+                </button>
+            </form>
+
+            <p class="text-center">
+                <a href="register.html">กลับไปสมัครสมาชิก</a>
+            </p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CarryHub</p>
+    </footer>
+</body>
+</html>
