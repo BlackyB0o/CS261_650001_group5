@@ -11,6 +11,11 @@ erDiagram
     USERS ||--o{ ORDERS : places
     DELIVERY_ROUNDS ||--o{ ORDERS : receives
     ORDERS ||--|{ ORDER_ITEMS : contains
+
+    %% Task 20, 24 - ความสัมพันธ์การชำระเงินและยืนยันรับสินค้า
+    ORDERS ||--o| PAYMENTS : has
+    PAYMENTS ||--o| ORDER_COMPLETIONS : leads_to
+    USERS ||--o{ ORDER_COMPLETIONS : confirms
     
     %% Task 04 - ลงทะเบียนหรือเข้าสู่ระบบ
     USERS {
@@ -57,7 +62,7 @@ erDiagram
     %% Task 20 - ชำระค่าสินค้าและค่าหิ้ว
     PAYMENTS {
         bigint id PK
-        bigint order_id FK "NOT NULL, UK"
+        bigint order_id FK,UK "NOT NULL"
         decimal product_amount "NOT NULL, >=0"
         decimal service_fee "NOT NULL, >=0"
         decimal total_amount "NOT NULL, >=0"
@@ -71,8 +76,9 @@ erDiagram
     %% Task 24 - ยืนยันรับสินค้าและปิดออเดอร์
     ORDER_COMPLETIONS {
         bigint id PK
-        bigint payment_id FK "NOT NULL, UK"
+        bigint payment_id FK,UK "NOT NULL"
         bigint confirmed_by FK "NOT NULL"
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         varchar completion_status "NOT NULL"
     }
+```
