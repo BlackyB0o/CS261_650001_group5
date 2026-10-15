@@ -1,5 +1,5 @@
 ## 1. API Specification
-
+ 
 ### Endpoint 1: Create Delivery Round (สร้างรอบหิ้ว)
 - **URL:** `/api/v1/delivery-rounds`
 - **Method:** `POST`
@@ -14,7 +14,7 @@
   "serviceFee": 20.00
 }
 ```
-
+ 
 - **Response (201 Created):**
 ```json
 {
@@ -32,7 +32,7 @@
   }
 }
 ```
-
+ 
 ### Endpoint 2: Get Active Delivery Rounds (ดึงรายการรอบหิ้วที่เปิดอยู่)
 - **URL:** `/api/v1/delivery-rounds?status=OPEN`
 - **Method:** `GET`
@@ -54,7 +54,7 @@
   ]
 }
 ```
-
+ 
 ### Endpoint 3: Update Delivery Round Status (อัปเดตสถานะรอบหิ้ว)
 - **URL:** `/api/v1/delivery-rounds/{roundId}/status`
 - **Method:** `PATCH`
@@ -77,16 +77,16 @@
   }
 }
 ```
-
+ 
 ---
-
+ 
 ## 2. DTO Class Specification & Diagram
 ### DTO Specifications
 1. **`CreateDeliveryRoundRequestDTO`**
    - `storeName`: String (Not Null)
    - `locationName`: String (Not Null)
    - `scheduledAt`: LocalDateTime (Not Null)
-   - `serviceFee`: Double (Not Null, Min 0.0)
+   - `serviceFee`: BigDecimal (Not Null, Min 0.00)
 2. **`UpdateRoundStatusRequestDTO`**
    - `status`: String (Not Null, Choices: `"OPEN"`, `"CLOSED"`, `"COMPLETED"`, `"CANCELLED"`)
 3. **`DeliveryRoundResponseDTO`**
@@ -96,9 +96,8 @@
    - `storeName`: String
    - `locationName`: String
    - `scheduledAt`: LocalDateTime
-   - `serviceFee`: Double
+   - `serviceFee`: BigDecimal
    - `status`: String
-
 ### DTO Class Diagram
 ```mermaid
 classDiagram
@@ -106,18 +105,18 @@ classDiagram
         -String storeName
         -String locationName
         -LocalDateTime scheduledAt
-        -Double serviceFee
+        -BigDecimal serviceFee
         +getStoreName() String
         +getLocationName() String
         +getScheduledAt() LocalDateTime
-        +getServiceFee() Double
+        +getServiceFee() BigDecimal
     }
-
+ 
     class UpdateRoundStatusRequestDTO {
         -String status
         +getStatus() String
     }
-
+ 
     class DeliveryRoundResponseDTO {
         -Long roundId
         -Long runnerId
@@ -125,13 +124,13 @@ classDiagram
         -String storeName
         -String locationName
         -LocalDateTime scheduledAt
-        -Double serviceFee
+        -BigDecimal serviceFee
         -String status
     }
 ```
-
+ 
 ---
-
+ 
 ## 3. DAO / Repository Specification & Diagram
 - **Interface:** `DeliveryRoundRepository` (extends `JpaRepository<DeliveryRound, Long>`)
 - **Methods:**
@@ -139,7 +138,6 @@ classDiagram
   - `List<DeliveryRound> findByRunnerId(Long runnerId)` - ดึงประวัติรอบหิ้วของ Runner คนนั้นๆ
   - `DeliveryRound save(DeliveryRound round)` - บันทึกข้อมูลรอบหิ้ว
   - `Optional<DeliveryRound> findById(Long id)` - ค้นหารอบหิ้วด้วย ID
-
 ```mermaid
 classDiagram
     class DeliveryRoundRepository {
