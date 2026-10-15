@@ -1,4 +1,4 @@
-# Task04: U11 - Define Details, Design UI, API, DB Schema & Sequence Diagram
+`# Task04: U11 - Define Details, Design UI, API, DB Schema & Sequence Diagram
 
 ## 1. User Story Details (U11)
 - **Role:** ผู้ใช้งานทั่วไป (Guest / Unauthenticated User)
@@ -326,4 +326,4 @@ sequenceDiagram
    git add .
    git commit -m "docs: enforce mandatory role selection (RUNNER or BUYER) during registration"
    git push
-   ```
+   ````
