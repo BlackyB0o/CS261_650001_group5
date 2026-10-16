@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สมัครสมาชิก | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <header class="navbar">
         <a href="index.html" class="logo">CarryHub</a>
@@ -38,7 +40,17 @@
 
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
-                    <input type="password" id="password" placeholder="ตั้งรหัสผ่าน" required>
+                    <input type="password" id="password" name="password" placeholder="อย่างน้อย 8 ตัวอักษร"
+                        minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                        title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
+                        autocomplete="new-password" required>
+                    <small>ใช้ตัวพิมพ์ใหญ่ พิมพ์เล็ก และตัวเลข</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">ยืนยันรหัสผ่าน</label>
+                    <input type="password" id="confirm-password" name="confirm-password"
+                        placeholder="กรอกรหัสผ่านอีกครั้ง" minlength="8" autocomplete="new-password" required>
                 </div>
 
                 <div class="form-group">
@@ -62,4 +74,5 @@
         <p>© 2026 CarryHub</p>
     </footer>
 </body>
+
 </html>
