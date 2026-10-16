@@ -528,3 +528,139 @@ form input[type="submit"] {
     }
 }
 
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #777777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.review-card {
+    width: 100%;
+    max-width: 600px;
+    margin: 35px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.review-card h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.review-card > p {
+    color: #777777;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.review-list {
+    margin-bottom: 25px;
+}
+
+.review-list div {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.review-list span {
+    color: #777777;
+    flex-shrink: 0;
+}
+
+.review-list strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.review-card .btn-full {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    margin-top: 12px;
+}
+
+@media (max-width: 480px) {
+    .review-card {
+        padding: 22px 18px;
+        margin: 20px auto;
+    }
+
+    .review-card h1 {
+        font-size: 21px;
+    }
+
+    .review-list div {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .review-list strong {
+        text-align: left;
+    }
+}
+
+.success-card {
+    width: 100%;
+    max-width: 450px;
+    margin: 60px auto;
+    padding: 35px 25px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: #fff0df;
+    color: #f58220;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.success-card h1 {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.success-card p {
+    color: #777777;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.success-card .btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .success-card {
+        margin: 30px auto;
+        padding: 25px 18px;
+    }
+
+    .success-card h1 {
+        font-size: 21px;
+    }
+}
