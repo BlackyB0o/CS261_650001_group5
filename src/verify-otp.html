@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กรอกรหัส OTP | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/verify-otp.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าหลัก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+        </nav>
+    </header>
+
+    <main class="verify-container">
+        <div class="verify-card">
+
+            <div class="verify-step">ขั้นตอนที่ 2 จาก 2</div>
+
+            <h1>กรอกรหัส OTP</h1>
+            <p>กรอกรหัสยืนยัน 6 หลักที่ได้รับทาง SMS</p>
+
+            <form action="login.html" method="get">
+                <label for="otp">รหัส OTP</label>
+                <input
+                    type="text"
+                    id="otp"
+                    name="otp"
+                    placeholder="กรอกรหัส OTP 6 หลัก"
+                    maxlength="6"
+                    pattern="[0-9]{6}"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    required
+                >
+
+                <button type="submit" class="btn-full">
+                    ยืนยันรหัส OTP
+                </button>
+            </form>
+
+            <div class="otp-actions">
+                <a href="verify.html">เปลี่ยนเบอร์โทรศัพท์</a>
+                <a href="verify.html">ขอรหัสใหม่</a>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
