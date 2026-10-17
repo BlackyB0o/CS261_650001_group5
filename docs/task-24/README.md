@@ -18,7 +18,7 @@
 ### Endpoint 1: Confirm Receipt and Close Order (ยืนยันรับสินค้าและปิดออเดอร์)
 - **URL:** `/api/v1/orders/{orderId}/completion`
 - **Method:** `POST`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`BUYER` เจ้าของออเดอร์เท่านั้น)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ผู้ฝากหิ้วเจ้าของออเดอร์เท่านั้น)
 - **Content-Type:** `multipart/form-data`
 - **Request Parts:**
 
@@ -62,7 +62,7 @@
 |---|---|---|
 | `400 Bad Request` | ไม่แนบรูป / ไม่ใช่ JPEG หรือ PNG / ขนาดเกิน 5 MB (ไม่บันทึกและไม่ปิดออเดอร์) | `Validation failed` พร้อม `errors` ระบุ field `evidenceImage` |
 | `401 Unauthorized` | ไม่ส่ง token หรือ token ไม่ถูกต้อง | `Invalid or missing token` |
-| `403 Forbidden` | ไม่ใช่ `BUYER` หรือไม่ใช่เจ้าของออเดอร์นี้ | `You are not the owner of this order` |
+| `403 Forbidden` | ไม่ใช่เจ้าของออเดอร์นี้ | `You are not the owner of this order` |
 | `404 Not Found` | ไม่พบออเดอร์ตาม `orderId` | `Order not found` |
 | `409 Conflict` | ออเดอร์ยังไม่ได้ชำระเงิน (สถานะ `PENDING`) | `Order has not been paid` |
 | `409 Conflict` | ออเดอร์ถูกปิดไปแล้ว (สถานะ `COMPLETED`) | `Order is already completed` |
@@ -322,7 +322,6 @@ classDiagram
     class User {
         -Long id
         -String fullName
-        -String role
     }
     class ConfirmReceiptRequestDTO
     class CompletionResponseDTO
