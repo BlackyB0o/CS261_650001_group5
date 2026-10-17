@@ -79,6 +79,8 @@ erDiagram
         decimal service_fee "NOT NULL, >=0"
         decimal total_amount "NOT NULL, >=0"
         varchar payment_method "NOT NULL"
+        varchar qr_payload
+        varchar slip_image_url
         varchar payment_status "NOT NULL"
         varchar transaction_reference
         timestamp paid_at
@@ -90,6 +92,7 @@ erDiagram
         bigint id PK
         bigint payment_id FK,UK "NOT NULL"
         bigint confirmed_by FK "NOT NULL"
+        varchar evidence_image_url "NOT NULL"
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         varchar completion_status "NOT NULL"
     }
