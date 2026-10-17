@@ -18,7 +18,7 @@
 ### Endpoint 1: Create Order (ฝากซื้อสินค้า/อาหาร)
 - **URL:** `/api/v1/orders`
 - **Method:** `POST`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`BUYER` Only)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ต้องเข้าสู่ระบบ)
 - **Content-Type:** `application/json`
 - **Request Body:**
 ```json
@@ -92,7 +92,7 @@
 |---|---|---|
 | `400 Bad Request` | ข้อมูลไม่ครบ/ไม่ถูกต้อง เช่น `items` ว่าง, `quantity` น้อยกว่า 1, `handoffMethod` ไม่อยู่ในค่าที่กำหนด | `Validation failed` (พร้อมรายการ field ที่ผิดใน `errors`) |
 | `401 Unauthorized` | ไม่ส่ง token หรือ token ไม่ถูกต้อง/หมดอายุ | `Invalid or missing token` |
-| `403 Forbidden` | ผู้ใช้ไม่ได้มี role `BUYER` | `Only BUYER can create orders` |
+| `403 Forbidden` | ฝากซื้อในรอบหิ้วของตัวเอง | `You cannot order from your own round` |
 | `404 Not Found` | ไม่พบรอบหิ้วตาม `roundId` | `Delivery round not found` |
 | `409 Conflict` | รอบหิ้วไม่ได้อยู่ในสถานะ `OPEN` | `Delivery round is not open` |
 
@@ -111,15 +111,15 @@
 ### Endpoint 2: Get My Orders (รายการสั่งซื้อของฉัน)
 - **URL:** `/api/v1/orders/my`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`BUYER` Only)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ต้องเข้าสู่ระบบ)
 - **ผลลัพธ์:** ออเดอร์ทั้งหมดของผู้ฝากหิ้วที่ล็อกอินอยู่ ทุกสถานะ เรียงจาก `createdAt` ล่าสุดไปเก่าสุด
 - **Response (200 OK):** `data` เป็น array ของออเดอร์ รูปแบบเดียวกับ `data` ใน Endpoint 1
-- **Error:** `401` เมื่อไม่มี token, `403` เมื่อไม่ใช่ `BUYER`
+- **Error:** `401` เมื่อไม่มี token
 
 ### Endpoint 3: Get Orders of a Round (ออเดอร์ทั้งหมดในรอบของผู้รับหิ้ว)
 - **URL:** `/api/v1/orders?roundId=101`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`RUNNER` เจ้าของรอบนั้นเท่านั้น)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (เจ้าของรอบนั้นเท่านั้น)
 - **Query Parameter:** `roundId` (บังคับ)
 - **ผลลัพธ์:** ออเดอร์ทุกสถานะในรอบนั้น พร้อมรายการสินค้า เรียงจาก `createdAt` เก่าไปใหม่
 - **Response (200 OK):** `data` เป็น array ของออเดอร์ รูปแบบเดียวกับ `data` ใน Endpoint 1
@@ -129,7 +129,7 @@
 |---|---|---|
 | `400 Bad Request` | ไม่ส่ง `roundId` | `roundId is required` |
 | `401 Unauthorized` | ไม่มี token | `Invalid or missing token` |
-| `403 Forbidden` | ไม่ใช่ `RUNNER` หรือไม่ใช่เจ้าของรอบนี้ | `You are not the owner of this delivery round` |
+| `403 Forbidden` | ไม่ใช่เจ้าของรอบนี้ | `You are not the owner of this delivery round` |
 | `404 Not Found` | ไม่พบรอบ | `Delivery round not found` |
 
 ### Endpoint 4: Get Order Detail (รายละเอียดออเดอร์)
@@ -427,7 +427,6 @@ classDiagram
     class User {
         -Long id
         -String fullName
-        -String role
     }
     class CreateOrderRequestDTO
     class OrderItemRequestDTO
