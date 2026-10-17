@@ -63,8 +63,8 @@ erDiagram
     DELIVERY_ROUNDS {
         bigint id PK
         bigint runner_id FK "NOT NULL"
-        varchar store_name
-        varchar location_name
+        varchar store_name "NOT NULL"
+        varchar location_name "NOT NULL"
         timestamp scheduled_at "NOT NULL"
         decimal service_fee "NOT NULL, >=0"
         varchar status "NOT NULL"
