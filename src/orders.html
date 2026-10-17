@@ -17,7 +17,7 @@
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
-            <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
             <a href="orders.html" class="active">รายการของฉัน</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
@@ -192,7 +192,7 @@
                     </div>
 
                     <a href="buyer-posts.html" class="create-order-btn">
-                        ค้นหางานเพิ่ม
+                      + ค้นหางานเพิ่ม
                     </a>
                 </div>
 
@@ -347,8 +347,8 @@
                         <p>จัดการรอบที่คุณเปิด และตรวจสอบรายการที่มีคนฝากซื้อ</p>
                     </div>
 
-                    <a href="rounds.html" class="btn btn-primary">
-                        + เปิดรอบรับหิ้ว
+                    <a href="rounds.html"class="create-order-btn">
+                      + สร้างรอบรับหิ้ว
                     </a>
                 </div>
                 <div class="orders-list">
@@ -388,7 +388,7 @@
                                     ดูคนฝากซื้อ
                                 </a>
 
-                                <a href="round-detail.html?id=RD001" class="btn btn-outline">
+                                <a href="my-round-detail.htmal" class="btn btn-outline">
                                     ดูรายละเอียดรอบ
                                 </a>
                             </div>
@@ -431,7 +431,7 @@
                                     ดูคนฝากซื้อ
                                 </a>
 
-                                <a href="round-detail.html?id=RD001" class="btn btn-outline">
+                                <a href="my-round-detail.htmal" class="btn btn-outline">
                                     ดูรายละเอียดรอบ
                                 </a>
                             </div>
@@ -446,6 +446,84 @@
                 </div>
         </section>
 
+<section class="report-history" id="report-history">
+
+    <div class="report-history-header">
+        <div>
+            <h2>ประวัติการรายงานปัญหา</h2>
+            <p>ติดตามสถานะปัญหาที่คุณเคยแจ้งไว้</p>
+        </div>
+
+        <a href="report.html" class="report-button">
+            + แจ้งปัญหา
+        </a>
+    </div>
+
+    <div class="report-search">
+        <input
+            type="text"
+            id="reportSearch"
+            placeholder="ค้นหารหัสรายงานหรือหัวข้อปัญหา..."
+        >
+    </div>
+
+    <div class="report-table-wrapper">
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>รหัสรายงาน</th>
+                    <th>หัวข้อปัญหา</th>
+                    <th>วันที่แจ้ง</th>
+                    <th>สถานะ</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody id="reportTableBody">
+                <tr>
+                    <td>RP0001</td>
+                    <td>ไม่ได้รับสินค้า</td>
+                    <td>15/10/2026</td>
+                    <td>
+                        <span class="report-status pending">
+                            กำลังตรวจสอบ
+                        </span>
+                    </td>
+                    <td>
+                        <a href="my-report-detail.html?id=RP0001"
+                           class="report-detail-link">
+                            ดูรายละเอียด
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>RP0002</td>
+                    <td>ปัญหาการชำระเงิน</td>
+                    <td>12/10/2026</td>
+                    <td>
+                        <span class="report-status resolved">
+                            แก้ไขแล้ว
+                        </span>
+                    </td>
+                    <td>
+                        <a href="my-report-detail.html?id=RP0002"
+                           class="report-detail-link">
+                            ดูรายละเอียด
+                        </a>
+                    </td>
+                </tr>
+
+                <tr id="noReportFound" style="display: none;">
+                    <td colspan="5" class="no-report">
+                        ไม่พบรายงานที่ค้นหา
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
     </main>
 
     <footer class="footer">
