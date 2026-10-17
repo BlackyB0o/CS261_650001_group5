@@ -14,18 +14,20 @@
 | รหัส (id) | `Long` |
 | จำนวนเงิน | `BigDecimal` ทศนิยม 2 ตำแหน่ง เช่น `20.00` |
 | วันและเวลา | `LocalDateTime` รูปแบบ ISO-8601 เช่น `2026-10-25T14:00:00` |
-| Enum | ส่งเป็น `String` ตัวพิมพ์ใหญ่ เช่น `"RUNNER"` |
+| Enum | ส่งเป็น `String` ตัวพิมพ์ใหญ่ เช่น `"OPEN"` |
 | ภาษาของ `message` | อังกฤษ (ตรงกับ Bean Validation และเอกสาร Task04/08/16) หน้าเว็บเลือกแปลหรือแสดงตามที่ต้องการ |
 
 ---
 
-## 2. Authentication และ Role
+## 2. Authentication และสิทธิ์การใช้งาน
 
-- ทุก endpoint ต้องแนบ `Authorization: Bearer <JWT_TOKEN>` ยกเว้น `register` และ `login` (Task04)
-- JWT ต้องมีข้อมูล `userId` และ `role` (`RUNNER` หรือ `BUYER`)
-- ค่าที่บอกว่า "ใครเป็นคนทำ" (`runnerId`, `buyerId`, `confirmedBy`) ดึงจาก JWT เสมอ **ห้ามรับจาก request body** เพื่อกันการปลอมเป็นผู้ใช้อื่น
-- ไม่มี token หรือ token ไม่ถูกต้อง → `401` / role ไม่ตรงหรือไม่ใช่เจ้าของข้อมูล → `403`
-- ผู้ดูแลระบบไม่ได้สมัครผ่าน `register` (รับเฉพาะ `RUNNER` และ `BUYER`)
+- **ไม่มี role** ผู้ใช้ทุกคนฝากหิ้ว โพสต์ และเปิดรอบรับหิ้วได้ในบัญชีเดียว
+- **Guest (ไม่ได้เข้าสู่ระบบ)** ดูได้อย่างเดียว ไม่ต้องแนบ token ใช้ได้เฉพาะ endpoint เหล่านี้: `GET /delivery-rounds`, `GET /delivery-rounds/{id}`, `GET /posts`, `GET /posts/{id}` และ endpoint กลุ่ม `/auth/*` (Task04)
+- endpoint อื่นทั้งหมดต้องแนบ `Authorization: Bearer <JWT_TOKEN>` ไม่มี token → `401`
+- JWT มีเฉพาะ `userId` ได้มาหลังยืนยัน OTP สำเร็จ (login 2 ขั้นตอน ดู Task04)
+- ค่าที่บอกว่า "ใครเป็นคนทำ" (`runnerId`, `buyerId`, `confirmedBy`, `acceptedBy`) ดึงจาก JWT เสมอ **ห้ามรับจาก request body**
+- สิทธิ์ตามความเป็นเจ้าของข้อมูล: เจ้าของรอบ = ผู้รับหิ้วของรอบนั้น, เจ้าของออเดอร์ = ผู้ฝากหิ้วของออเดอร์นั้น ทำรายการที่ไม่ใช่เจ้าของ → `403`
+- กติกากันใช้ซ้ำซ้อน: สั่งของจากรอบของตัวเองไม่ได้ (`403`), รับโพสต์ของตัวเองไม่ได้ (`403`)
 
 ---
 
@@ -84,8 +86,9 @@ classDiagram
 | `201 Created` | สร้างข้อมูลใหม่สำเร็จ |
 | `400 Bad Request` | ข้อมูลไม่ครบหรือไม่ถูกรูปแบบ (ไม่บันทึกข้อมูล) |
 | `401 Unauthorized` | ไม่มี token หรือ token ไม่ถูกต้อง/หมดอายุ |
-| `403 Forbidden` | role ไม่ตรง หรือไม่ใช่เจ้าของข้อมูล |
+| `403 Forbidden` | ไม่ใช่เจ้าของข้อมูล หรือทำรายการกับของตัวเองที่ไม่อนุญาต |
 | `404 Not Found` | ไม่พบข้อมูลตาม id |
+| `429 Too Many Requests` | ขอ/กรอก OTP เกินกำหนด (ขอซ้ำก่อน 60 วินาที หรือกรอกผิดเกิน 5 ครั้ง) |
 | `409 Conflict` | ข้อมูลซ้ำ หรือสถานะปัจจุบันไม่อนุญาตให้ทำรายการนี้ |
 
 ---
@@ -94,12 +97,12 @@ classDiagram
 
 | Enum | ค่าที่ใช้ | ใช้ที่ |
 |---|---|---|
-| `Role` | `RUNNER` (ผู้รับหิ้ว), `BUYER` (ผู้ฝากหิ้ว) | `USERS.role` |
+| `OtpPurpose` | `LOGIN`, `RESET_PASSWORD` | `OTP_VERIFICATIONS.purpose` |
 | `RoundStatus` | `OPEN`, `CLOSED`, `COMPLETED`, `CANCELLED` | `DELIVERY_ROUNDS.status` |
 | `HandoffMethod` | `MEETUP` (นัดรับ), `DELIVERY` (ส่งถึงที่) | `ORDERS.handoff_method` |
 | `OrderStatus` | `PENDING` (รอชำระเงิน), `PAID` (ชำระแล้ว), `COMPLETED` (ปิดออเดอร์) | `ORDERS.status` |
 | `PaymentStatus` | `PENDING`, `HELD` (ชำระสำเร็จ เงินพักไว้ที่ระบบกลาง), `FAILED`, `RELEASED` (โอนให้ผู้รับหิ้วแล้ว) | `PAYMENTS.payment_status` |
-| `PostStatus` | `OPEN`, `CLOSED` | `POSTS.status` (Task12) |
+| `PostStatus` | `OPEN`, `ACCEPTED` | `POSTS.status` (Task12) |
 | `PaymentMethod` | `QR_TRANSFER` (สแกน QR ระบบตัวกลาง + แนบสลิป) | `PAYMENTS.payment_method` |
 | `CompletionStatus` | `COMPLETED` | `ORDER_COMPLETIONS.completion_status` |
 
