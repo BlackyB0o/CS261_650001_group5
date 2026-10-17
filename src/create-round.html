@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สร้างรอบรับหิ้ว | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-round.css">
 </head>
 <body>
+
     <header class="navbar">
         <a href="index.html" class="logo">CarryHub</a>
         <nav>
@@ -17,61 +19,199 @@
     </header>
 
     <main class="container">
+
         <section class="form-card">
-            <h1>สร้างรอบรับหิ้ว</h1>
-            <p>กรอกรายละเอียดเพื่อเปิดรับรายการสั่งซื้อจากผู้ฝากซื้อ</p>
+
+            <div class="form-heading">
+                <a href="rounds.html" class="back-link">← กลับไปรอบรับหิ้ว</a>
+                <h1>สร้างรอบรับหิ้ว</h1>
+                <p>กรอกรายละเอียดรอบรับหิ้วและเพิ่มรูปเมนู เพื่อให้ผู้ฝากซื้อเลือกสินค้าได้ง่ายขึ้น</p>
+            </div>
 
             <form action="round-review.html" method="get">
-                <div class="form-group">
-                    <label for="round-name">ชื่อรอบรับหิ้ว</label>
-                    <input type="text" id="round-name" placeholder="เช่น รอบร้านชานมช่วงเที่ยง" required>
+
+                <div class="form-section">
+                    <h2>ข้อมูลรอบรับหิ้ว</h2>
+                    <p class="section-description">ระบุข้อมูลพื้นฐานของรอบรับหิ้วที่ต้องการเปิด</p>
+
+                    <div class="form-group">
+                        <label for="round-name">ชื่อรอบรับหิ้ว <span class="required">*</span></label>
+                        <input
+                            type="text"
+                            id="round-name"
+                            name="round-name"
+                            placeholder="เช่น รอบร้านชานมช่วงเที่ยง"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shop">ชื่อร้านค้า <span class="required">*</span></label>
+                        <input
+                            type="text"
+                            id="shop"
+                            name="shop"
+                            placeholder="กรอกชื่อร้านค้า"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">สถานที่รับสินค้า <span class="required">*</span></label>
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            placeholder="เช่น หน้าร้าน หรืออาคารที่นัดรับ"
+                            required
+                        >
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="shop">ชื่อร้านค้า</label>
-                    <input type="text" id="shop" placeholder="กรอกชื่อร้านค้า" required>
+                <div class="form-section">
+                    <h2>วันเวลาและจำนวนออเดอร์</h2>
+                    <p class="section-description">กำหนดวันไปรับสินค้า เวลาปิดรับ และจำนวนที่รับได้</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">วันที่ไปรับสินค้า <span class="required">*</span></label>
+                            <input
+                                type="date"
+                                id="date"
+                                name="date"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="deadline">เวลาปิดรับออเดอร์ <span class="required">*</span></label>
+                            <input
+                                type="time"
+                                id="deadline"
+                                name="deadline"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="capacity">จำนวนออเดอร์ที่รับได้ <span class="required">*</span></label>
+                            <input
+                                type="number"
+                                id="capacity"
+                                name="capacity"
+                                min="1"
+                                placeholder="เช่น 10"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fee">ค่าบริการต่อรายการ (บาท) <span class="required">*</span></label>
+                            <input
+                                type="number"
+                                id="fee"
+                                name="fee"
+                                min="0"
+                                placeholder="เช่น 10"
+                                required
+                            >
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="location">สถานที่รับสินค้า</label>
-                    <input type="text" id="location" placeholder="กรอกสถานที่" required>
+                <div class="form-section">
+                    <h2>รูปเมนูสินค้า</h2>
+                    <p class="section-description">เพิ่มรูปเมนูจากร้านค้า เพื่อให้ผู้ฝากซื้อเห็นรายการสินค้าที่สามารถสั่งได้</p>
+
+                    <label for="menu-image" class="image-upload-box">
+                        <span class="upload-icon">＋</span>
+                        <span class="upload-title">เพิ่มรูปเมนู</span>
+                        <span class="upload-hint">คลิกเพื่อเลือกรูปจากอุปกรณ์ของคุณ</span>
+                        <span class="upload-format">รองรับไฟล์ JPG, PNG และ WEBP</span>
+                    </label>
+
+                    <input
+                        type="file"
+                        id="menu-image"
+                        name="menu-image"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                    >
+
+                    <div id="image-preview" class="image-preview"></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="date">วันที่ไปรับสินค้า</label>
-                    <input type="date" id="date" required>
+                <div class="form-section">
+                    <h2>รายละเอียดเพิ่มเติม</h2>
+                    <p class="section-description">แจ้งข้อมูลอื่น ๆ ที่ผู้ฝากซื้อควรทราบก่อนสั่งสินค้า</p>
+
+                    <div class="form-group">
+                        <label for="details">รายละเอียดเพิ่มเติม</label>
+                        <textarea
+                            id="details"
+                            name="details"
+                            rows="4"
+                            placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขการสั่งซื้อ"
+                        ></textarea>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="deadline">เวลาปิดรับออเดอร์</label>
-                    <input type="time" id="deadline" required>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        ตรวจสอบรายละเอียด
+                    </button>
+
+                    <a href="rounds.html" class="btn btn-outline">
+                        ยกเลิก
+                    </a>
                 </div>
 
-                <div class="form-group">
-                    <label for="capacity">จำนวนออเดอร์ที่รับได้</label>
-                    <input type="number" id="capacity" min="1" placeholder="เช่น 10" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="fee">ค่าบริการต่อรายการ (บาท)</label>
-                    <input type="number" id="fee" min="0" placeholder="เช่น 10" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="details">รายละเอียดเพิ่มเติม</label>
-                    <textarea id="details" rows="4" placeholder="แจ้งรายละเอียดที่ผู้ฝากซื้อควรรู้"></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-    ตรวจสอบรายละเอียด
-</button>
-                <a href="rounds.html" class="btn btn-outline">ยกเลิก</a>
             </form>
+
         </section>
+
     </main>
 
     <footer class="footer">
         <p>© 2026 CarryHub</p>
     </footer>
+
+    <script>
+        const menuImage = document.getElementById("menu-image");
+        const imagePreview = document.getElementById("image-preview");
+
+        menuImage.addEventListener("change", function () {
+            imagePreview.innerHTML = "";
+
+            Array.from(this.files).forEach(function (file) {
+                if (!file.type.startsWith("image/")) {
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    const item = document.createElement("div");
+                    item.className = "preview-item";
+
+                    const image = document.createElement("img");
+                    image.src = event.target.result;
+                    image.alt = file.name;
+
+                    const fileName = document.createElement("p");
+                    fileName.textContent = file.name;
+
+                    item.appendChild(image);
+                    item.appendChild(fileName);
+                    imagePreview.appendChild(item);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+
 </body>
 </html>

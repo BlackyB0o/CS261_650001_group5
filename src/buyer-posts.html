@@ -5,72 +5,212 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โพสต์หาคนรับหิ้ว | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/buyer-posts.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
 
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
-            <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+            <a href="buyer-posts.html" class="active">โพสต์หาคนรับหิ้ว</a>
             <a href="orders.html">รายการสั่งซื้อ</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h1>โพสต์หาคนรับหิ้ว</h1>
-            <p>ค้นหาโพสต์ของผู้ฝากซื้อที่กำลังต้องการคนช่วยซื้อสินค้า</p>
+    <main class="buyer-posts-container">
 
-            <a href="create-buyer-post.html">+ สร้างโพสต์ใหม่</a>
+        <section class="buyer-posts-hero">
+            <div class="buyer-posts-hero-content">
+                <p class="buyer-posts-eyebrow">FIND A CARRIER</p>
+
+                <h1>โพสต์หาคนรับหิ้ว</h1>
+
+                <p class="buyer-posts-description">
+                    อยากได้อะไรจากร้านโปรด แต่ไม่มีเวลาไปซื้อ?
+                    สร้างโพสต์เพื่อหาคนช่วยซื้อสินค้าให้คุณได้เลย
+                </p>
+
+                <a href="create-buyer-post.html" class="buyer-posts-create-btn">
+                    <span>+</span>
+                    สร้างโพสต์ใหม่
+                </a>
+            </div>
+
+            <div class="buyer-posts-hero-illustration">
+                <div class="buyer-posts-illustration-card">
+                    <span class="buyer-posts-illustration-label">CarryHub</span>
+                    <div class="buyer-posts-bag">CH</div>
+                    <div class="buyer-posts-illustration-line"></div>
+                    <div class="buyer-posts-illustration-line short"></div>
+                    <div class="buyer-posts-illustration-tag">ฝากซื้อได้ง่าย ๆ</div>
+                </div>
+            </div>
         </section>
 
-        <section>
-            <h2>โพสต์ทั้งหมด</h2>
+        <section class="buyer-posts-content">
 
-            <article>
-                <h3>ฝากซื้อเครื่องดื่ม</h3>
-                <p>ร้านค้า: ร้านชานมหน้ามหาวิทยาลัย</p>
-                <p>ผู้ฝากซื้อ: นัท</p>
-                <p>วันที่ต้องการ: 15 ตุลาคม 2026</p>
-                <p>รายละเอียด: ต้องการชานม 2 แก้ว</p>
-                <p>สถานะ: กำลังหาคนรับหิ้ว</p>
+            <div class="buyer-posts-section-heading">
+                <div>
+                    <h2>โพสต์ทั้งหมด</h2>
+                    <p>ค้นหาโพสต์ที่คุณต้องการ แล้วดูรายละเอียดเพิ่มเติม</p>
+                </div>
 
-                <a href="buyer-post-detail.html">ดูรายละเอียด</a>
-            </article>
+                <span class="buyer-posts-count">3 โพสต์</span>
+            </div>
 
-            <hr>
+            <div class="buyer-posts-list">
 
-            <article>
-                <h3>ฝากซื้ออาหารกลางวัน</h3>
-                <p>ร้านค้า: ร้านอาหารตามสั่ง</p>
-                <p>ผู้ฝากซื้อ: ฟ้า</p>
-                <p>วันที่ต้องการ: 15 ตุลาคม 2026</p>
-                <p>รายละเอียด: ต้องการข้าวผัด 1 กล่อง</p>
-                <p>สถานะ: กำลังหาคนรับหิ้ว</p>
+                <article class="buyer-post-card">
 
-                <a href="buyer-post-detail.html">ดูรายละเอียด</a>
-            </article>
+                    <div class="buyer-post-card-top">
+                        <div class="buyer-post-category-icon">DR</div>
 
-            <hr>
+                        <span class="buyer-post-status">
+                            กำลังหาคนรับหิ้ว
+                        </span>
+                    </div>
 
-            <article>
-                <h3>ฝากซื้อขนม</h3>
-                <p>ร้านค้า: ร้านเบเกอรี</p>
-                <p>ผู้ฝากซื้อ: มิน</p>
-                <p>วันที่ต้องการ: 16 ตุลาคม 2026</p>
-                <p>รายละเอียด: ต้องการขนมปัง 3 ชิ้น</p>
-                <p>สถานะ: กำลังหาคนรับหิ้ว</p>
+                    <div class="buyer-post-card-content">
+                        <h3>ฝากซื้อเครื่องดื่ม</h3>
 
-                <a href="buyer-post-detail.html">ดูรายละเอียด</a>
-            </article>
+                        <p class="buyer-post-shop">
+                            ร้านชานมหน้ามหาวิทยาลัย
+                        </p>
+
+                        <div class="buyer-post-divider"></div>
+
+                        <div class="buyer-post-info">
+                            <div>
+                                <span class="buyer-post-info-label">ผู้ฝากซื้อ</span>
+                                <span class="buyer-post-info-value">นัท</span>
+                            </div>
+
+                            <div>
+                                <span class="buyer-post-info-label">วันที่ต้องการ</span>
+                                <span class="buyer-post-info-value">15 ต.ค. 2026</span>
+                            </div>
+                        </div>
+
+                        <p class="buyer-post-description">
+                            ต้องการชานม 2 แก้ว
+                        </p>
+                    </div>
+
+                    <div class="buyer-post-card-footer">
+                        <a href="buyer-post-detail.html" class="buyer-post-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+                <article class="buyer-post-card">
+
+                    <div class="buyer-post-card-top">
+                        <div class="buyer-post-category-icon food">FD</div>
+
+                        <span class="buyer-post-status">
+                            กำลังหาคนรับหิ้ว
+                        </span>
+                    </div>
+
+                    <div class="buyer-post-card-content">
+                        <h3>ฝากซื้ออาหารกลางวัน</h3>
+
+                        <p class="buyer-post-shop">
+                            ร้านอาหารตามสั่ง
+                        </p>
+
+                        <div class="buyer-post-divider"></div>
+
+                        <div class="buyer-post-info">
+                            <div>
+                                <span class="buyer-post-info-label">ผู้ฝากซื้อ</span>
+                                <span class="buyer-post-info-value">ฟ้า</span>
+                            </div>
+
+                            <div>
+                                <span class="buyer-post-info-label">วันที่ต้องการ</span>
+                                <span class="buyer-post-info-value">15 ต.ค. 2026</span>
+                            </div>
+                        </div>
+
+                        <p class="buyer-post-description">
+                            ต้องการข้าวผัด 1 กล่อง
+                        </p>
+                    </div>
+
+                    <div class="buyer-post-card-footer">
+                        <a href="buyer-post-detail.html" class="buyer-post-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+                <article class="buyer-post-card">
+
+                    <div class="buyer-post-card-top">
+                        <div class="buyer-post-category-icon bakery">BK</div>
+
+                        <span class="buyer-post-status">
+                            กำลังหาคนรับหิ้ว
+                        </span>
+                    </div>
+
+                    <div class="buyer-post-card-content">
+                        <h3>ฝากซื้อขนม</h3>
+
+                        <p class="buyer-post-shop">
+                            ร้านเบเกอรี
+                        </p>
+
+                        <div class="buyer-post-divider"></div>
+
+                        <div class="buyer-post-info">
+                            <div>
+                                <span class="buyer-post-info-label">ผู้ฝากซื้อ</span>
+                                <span class="buyer-post-info-value">มิน</span>
+                            </div>
+
+                            <div>
+                                <span class="buyer-post-info-label">วันที่ต้องการ</span>
+                                <span class="buyer-post-info-value">16 ต.ค. 2026</span>
+                            </div>
+                        </div>
+
+                        <p class="buyer-post-description">
+                            ต้องการขนมปัง 3 ชิ้น
+                        </p>
+                    </div>
+
+                    <div class="buyer-post-card-footer">
+                        <a href="buyer-post-detail.html" class="buyer-post-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+            </div>
+
+            <div class="buyer-posts-bottom">
+                <p>ยังไม่เจอโพสต์ที่ต้องการใช่ไหม?</p>
+                <a href="create-buyer-post.html">สร้างโพสต์ของคุณเอง</a>
+            </div>
+
         </section>
+
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
 
