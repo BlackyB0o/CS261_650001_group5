@@ -1,6 +1,6 @@
 # CS261 Group 5 - Database ER Diagram
 
-## Database ER Diagram (Tasks 04, 08, 16, 20, 24)
+## Database ER Diagram (Tasks 04, 08, 12, 16, 20, 24)
 
 ```mermaid
 erDiagram
@@ -10,6 +10,7 @@ erDiagram
     %% Task 16 - ความสัมพันธ์ของรายการสั่งซื้อ
     USERS ||--o{ ORDERS : places
     DELIVERY_ROUNDS ||--o{ ORDERS : receives
+    USERS ||--o{ POSTS : creates
     ORDERS ||--|{ ORDER_ITEMS : contains
 
     %% Task 20, 24 - ความสัมพันธ์การชำระเงินและยืนยันรับสินค้า
@@ -28,6 +29,17 @@ erDiagram
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
+    %% Task 12 - ผู้ฝากหิ้วโพสต์หาคนรับหิ้ว
+    POSTS {
+        bigint id PK
+        bigint buyer_id FK "NOT NULL"
+        varchar product_detail "NOT NULL"
+        varchar shop_name "NOT NULL"
+        varchar location "NOT NULL"
+        varchar receiving_detail "NOT NULL"
+        varchar status "NOT NULL, DEFAULT OPEN"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
     %% Task 08 - เปิดรอบรับหิ้ว
     DELIVERY_ROUNDS {
         bigint id PK
