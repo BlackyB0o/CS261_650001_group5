@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>รายการฝากซื้อในรอบ | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/round-requests.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+            <a href="orders.html" class="active">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+
+    <main class="round-requests-container">
+
+        <a href="orders.html" class="back-link">
+            ← กลับไปรายการของฉัน
+        </a>
+
+        <section class="round-summary-card">
+
+            <div class="round-summary-top">
+
+                <div class="round-shop-icon">🧋</div>
+
+                <div class="round-summary-title">
+                    <span class="round-id">รหัสรอบ RD001</span>
+                    <h1>รอบรับหิ้วชานม</h1>
+                    <p>ร้านชานมหน้ามหาวิทยาลัย</p>
+                </div>
+
+                <span class="round-status">เปิดรับฝากซื้อ</span>
+
+            </div>
+
+            <div class="round-summary-info">
+
+                <div class="summary-item">
+                    <span>📅 วันที่รับหิ้ว</span>
+                    <strong>20 ต.ค. 2569</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>⏰ ปิดรับฝาก</span>
+                    <strong>12:00 น.</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>📍 จุดรับของ</span>
+                    <strong>หน้ามหาวิทยาลัย</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="requests-section">
+
+            <div class="requests-heading">
+
+                <div>
+                    <h2>รายการที่มีคนฝากซื้อ</h2>
+                    <p>ตรวจสอบรายละเอียดก่อนตัดสินใจรับงาน</p>
+                </div>
+
+                <div class="requests-total">
+                    <strong id="request-count">4</strong>
+                    <span>รายการ</span>
+                </div>
+
+            </div>
+
+            <div class="request-filters">
+
+                <button class="filter-btn active" data-filter="all">
+                    ทั้งหมด
+                </button>
+
+                <button class="filter-btn" data-filter="waiting">
+                    รอรับงาน
+                </button>
+
+                <button class="filter-btn" data-filter="accepted">
+                    รับงานแล้ว
+                </button>
+
+            </div>
+
+
+            <div class="request-list">
+
+
+                <!-- Request 1 -->
+                <article class="request-card" data-status="waiting">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">รายการ PB001</span>
+                            <h3>ชานมไข่มุก</h3>
+                        </div>
+
+                        <span class="request-status status-waiting">
+                            รอรับงาน
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">🧋</div>
+
+                        <div class="product-info">
+                            <strong>ชานมไข่มุกหวาน 50%</strong>
+                            <p>ขนาดกลาง · หวาน 50% · ไข่มุกปกติ</p>
+                            <p>จำนวน <strong>2 แก้ว</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">น</div>
+
+                        <div>
+                            <span>ผู้ฝากซื้อ</span>
+                            <strong>นัท</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>ค่าหิ้วที่เสนอ</span>
+                            <strong>20 บาท</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="requester-detail.html?id=PB001"
+                               class="btn btn-outline">
+                                ดูรายละเอียด
+                            </a>
+
+                            <button class="btn btn-primary accept-btn"
+                                    data-id="PB001">
+                                รับงาน
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="request-card" data-status="waiting">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">รายการ PB002</span>
+                            <h3>ชาไทย</h3>
+                        </div>
+
+                        <span class="request-status status-waiting">
+                            รอรับงาน
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">🥤</div>
+
+                        <div class="product-info">
+                            <strong>ชาไทยหวานน้อย</strong>
+                            <p>ขนาดใหญ่ · หวาน 25%</p>
+                            <p>จำนวน <strong>1 แก้ว</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">พ</div>
+
+                        <div>
+                            <span>ผู้ฝากซื้อ</span>
+                            <strong>พิม</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>ค่าหิ้วที่เสนอ</span>
+                            <strong>15 บาท</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="requester-detail.html?id=PB002"
+                               class="btn btn-outline">
+                                ดูรายละเอียด
+                            </a>
+
+                            <button class="btn btn-primary accept-btn"
+                                    data-id="PB002">
+                                รับงาน
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="request-card" data-status="accepted">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">รายการ PB003</span>
+                            <h3>โกโก้เย็น</h3>
+                        </div>
+
+                        <span class="request-status status-accepted">
+                            รับงานแล้ว
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">🥤</div>
+
+                        <div class="product-info">
+                            <strong>โกโก้เย็น</strong>
+                            <p>ขนาดกลาง · หวานปกติ</p>
+                            <p>จำนวน <strong>1 แก้ว</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">ม</div>
+
+                        <div>
+                            <span>ผู้ฝากซื้อ</span>
+                            <strong>มายด์</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>ค่าหิ้วที่เสนอ</span>
+                            <strong>10 บาท</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="requester-detail.html?id=PB003"
+                               class="btn btn-outline">
+                                ดูรายละเอียด
+                            </a>
+
+                            <button class="btn btn-accepted" disabled>
+                                ✓ รับงานแล้ว
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="request-card" data-status="waiting">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">รายการ PB004</span>
+                            <h3>ชาเขียวมัทฉะ</h3>
+                        </div>
+
+                        <span class="request-status status-waiting">
+                            รอรับงาน
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">🍵</div>
+
+                        <div class="product-info">
+                            <strong>ชาเขียวมัทฉะหวานน้อย</strong>
+                            <p>ขนาดใหญ่ · เพิ่มไข่มุก</p>
+                            <p>จำนวน <strong>1 แก้ว</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">ต</div>
+
+                        <div>
+                            <span>ผู้ฝากซื้อ</span>
+                            <strong>ต้น</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>ค่าหิ้วที่เสนอ</span>
+                            <strong>20 บาท</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="requester-detail.html?id=PB004"
+                               class="btn btn-outline">
+                                ดูรายละเอียด
+                            </a>
+
+                            <button class="btn btn-primary accept-btn"
+                                    data-id="PB004">
+                                รับงาน
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">📋</div>
+                <h3>ไม่พบรายการฝากซื้อ</h3>
+                <p>ไม่มีรายการในสถานะที่เลือก</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+
+    <script>
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const requestCards = document.querySelectorAll(".request-card");
+        const emptyState = document.getElementById("empty-state");
+
+        function filterRequests(status) {
+            let visibleCount = 0;
+
+            requestCards.forEach(card => {
+                const cardStatus = card.dataset.status;
+
+                const shouldShow =
+                    status === "all" || cardStatus === status;
+
+                card.hidden = !shouldShow;
+
+                if (shouldShow) {
+                    visibleCount++;
+                }
+            });
+
+            document.getElementById("request-count").textContent =
+                visibleCount;
+
+            emptyState.hidden = visibleCount !== 0;
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                filterButtons.forEach(item =>
+                    item.classList.remove("active")
+                );
+
+                button.classList.add("active");
+
+                filterRequests(button.dataset.filter);
+            });
+        });
+
+        document.querySelectorAll(".accept-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                const card = button.closest(".request-card");
+                const requestId = button.dataset.id;
+
+                const confirmed = confirm(
+                    `ต้องการรับงานรายการ ${requestId} ใช่หรือไม่?`
+                );
+
+                if (!confirmed) return;
+
+                card.dataset.status = "accepted";
+
+                const statusLabel =
+                    card.querySelector(".request-status");
+
+                statusLabel.textContent = "รับงานแล้ว";
+                statusLabel.className =
+                    "request-status status-accepted";
+
+                button.textContent = "✓ รับงานแล้ว";
+                button.classList.remove("btn-primary", "accept-btn");
+                button.classList.add("btn-accepted");
+                button.disabled = true;
+
+                const activeFilter =
+                    document.querySelector(".filter-btn.active");
+
+                filterRequests(activeFilter.dataset.filter);
+            });
+        });
+    </script>
+
+</body>
+</html>

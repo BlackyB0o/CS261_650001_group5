@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ส่งรายงานสำเร็จ | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/report-success.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="success-page">
+
+        <section class="success-card">
+
+            <div class="success-icon">
+                <span>✓</span>
+            </div>
+
+            <span class="success-label">REPORT SUBMITTED</span>
+
+            <h1>ส่งรายงานสำเร็จ!</h1>
+
+            <p class="success-description">
+                ระบบได้รับรายงานปัญหาของคุณแล้ว
+                ทีมงานจะตรวจสอบรายละเอียดและอัปเดตสถานะให้ทราบ
+            </p>
+
+            <div class="report-number-box">
+                <span>หมายเลขรายงานของคุณ</span>
+                <strong id="report-id">กำลังโหลด...</strong>
+                <small>โปรดเก็บหมายเลขนี้ไว้สำหรับติดตามรายงาน</small>
+            </div>
+
+            <div class="next-step">
+                <div class="next-step-icon">📋</div>
+
+                <div>
+                    <h3>ติดตามสถานะรายงานได้ที่นี่</h3>
+                    <p>
+                        คุณสามารถกลับมาดูสถานะและผลการตรวจสอบ
+                        ได้จากหน้าประวัติรายงานของฉัน
+                    </p>
+                </div>
+            </div>
+
+            <div class="success-actions">
+                <a href="my-reports.html" class="primary-btn">
+                    ดูประวัติรายงาน
+                </a>
+
+                <a href="orders.html" class="secondary-btn">
+                    กลับไปรายการของฉัน
+                </a>
+            </div>
+
+            <a href="index.html" class="home-link">
+                กลับหน้าหลัก
+            </a>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+    <script>
+        // แสดงหมายเลขรายงานที่สร้างไว้ตอนส่งแบบฟอร์ม
+        const params = new URLSearchParams(window.location.search);
+        const reportId = params.get("id");
+
+        document.getElementById("report-id").textContent =
+            reportId || "ยังไม่มีหมายเลขรายงาน";
+    </script>
+
+</body>
+</html>

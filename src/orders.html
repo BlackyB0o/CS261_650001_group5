@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/orders.css">
 </head>
+
 <body>
 
     <header class="navbar">
@@ -52,6 +54,12 @@
                     <span class="tab-icon">🛵</span>
                     รายการรับหิ้ว
                     <span class="tab-count" id="carrier-count">3</span>
+                </button>
+
+                <button class="orders-tab" data-tab="rounds">
+                    <span class="tab-icon">📍</span>
+                    รอบรับหิ้วของฉัน
+                    <span class="tab-count" id="rounds-count">2</span>
                 </button>
             </div>
 
@@ -331,6 +339,111 @@
                 </div>
             </div>
 
+            <div class="orders-panel" id="rounds-panel">
+
+                <div class="my-rounds-header">
+                    <div>
+                        <h2>รอบรับหิ้วของฉัน</h2>
+                        <p>จัดการรอบที่คุณเปิด และตรวจสอบรายการที่มีคนฝากซื้อ</p>
+                    </div>
+
+                    <a href="rounds.html" class="btn btn-primary">
+                        + เปิดรอบรับหิ้ว
+                    </a>
+                </div>
+                <div class="orders-list">
+
+                    <article class="order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">หมายเลขออเดอร์</span>
+                                <h3>RD001</h3>
+                            </div>
+
+                            <span class="round-status status-open">
+                                เปิดรับฝากซื้อ
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>รอบรับหิ้วชานม</h4>
+                                <p class="order-carrier">ร้านชานมหน้ามหาวิทยาลัย</p>
+                            </div>
+                        </div>
+
+                        <div class="my-round-bottom">
+                            <div class="round-request-summary">
+                                <span class="request-icon">📋</span>
+                                <div>
+                                    <strong>4 รายการ</strong>
+                                    <p>ที่มีคนฝากซื้อในรอบนี้</p>
+                                </div>
+                            </div>
+
+                            <div class="my-round-actions">
+                                <a href="round-requests.html?id=RD001" class="btn btn-primary">
+                                    ดูคนฝากซื้อ
+                                </a>
+
+                                <a href="round-detail.html?id=RD001" class="btn btn-outline">
+                                    ดูรายละเอียดรอบ
+                                </a>
+                            </div>
+                        </div>
+
+                    </article>
+
+                    <article class="order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">หมายเลขออเดอร์</span>
+                                <h3>RD002</h3>
+                            </div>
+
+                            <span class="round-status status-open">
+                                เปิดรับฝากซื้อ
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>รอบรับหิ้วชานม</h4>
+                                <p class="order-carrier">ร้านชานมหน้ามหาวิทยาลัย</p>
+                            </div>
+                        </div>
+
+                        <div class="my-round-bottom">
+                            <div class="round-request-summary">
+                                <span class="request-icon">📋</span>
+                                <div>
+                                    <strong>1 รายการ</strong>
+                                    <p>ที่มีคนฝากซื้อในรอบนี้</p>
+                                </div>
+                            </div>
+
+                            <div class="my-round-actions">
+                                <a href="round-requests.html?id=RD001" class="btn btn-primary">
+                                    ดูคนฝากซื้อ
+                                </a>
+
+                                <a href="round-detail.html?id=RD001" class="btn btn-outline">
+                                    ดูรายละเอียดรอบ
+                                </a>
+                            </div>
+                        </div>
+
+                    </article>
+
+                        
+
+                    </div>
+
+                </div>
         </section>
 
     </main>
@@ -368,4 +481,5 @@
     </script>
 
 </body>
+
 </html>

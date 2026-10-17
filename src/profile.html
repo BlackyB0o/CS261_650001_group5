@@ -16,7 +16,7 @@
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
             <a href="buyer-posts.html">หาคนรับหิ้ว</a>
-            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="orders.html">รายการของฉัน</a>
             <a href="profile.html" class="profile-nav-active">โปรไฟล์</a>
         </nav>
     </header>
@@ -45,9 +45,21 @@
 
                 <div class="profile-user-content">
 
-                    <div class="profile-avatar">
-                        <span>N</span>
-                    </div>
+                    <div class="profile-avatar" id="profile-avatar">
+    <span id="avatar-letter">N</span>
+    <img id="avatar-image" src="" alt="รูปโปรไฟล์">
+</div>
+
+<label for="avatar-upload" class="avatar-edit-btn" title="เปลี่ยนรูปโปรไฟล์">
+    ✎
+</label>
+
+<input
+    type="file"
+    id="avatar-upload"
+    accept="image/png, image/jpeg, image/webp"
+    hidden
+>
 
                     <div class="profile-user-info">
                         <h2>นัท ตัวอย่าง</h2>
@@ -149,8 +161,8 @@
                     <div class="menu-card-icon">01</div>
 
                     <div class="menu-card-content">
-                        <h3>รายการสั่งซื้อ</h3>
-                        <p>ดูรายการสั่งซื้อและตรวจสอบสถานะ</p>
+                        <h3>รายการของฉัน</h3>
+                        <p>ดูรายการต่างๆและตรวจสอบสถานะ</p>
                     </div>
 
                     <span class="menu-arrow">&rarr;</span>

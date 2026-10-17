@@ -5,66 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หลักฐานการส่งมอบ | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/delivery-proof.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
 
         <nav>
             <a href="index.html">หน้าแรก</a>
-            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="orders.html" class="active">รายการของฉัน</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h1>ยืนยันการส่งมอบสินค้า</h1>
-            <p>ออเดอร์: CH001</p>
-            <p>กรุณาตรวจสอบข้อมูลและแนบรูปภาพหลักฐานการส่งมอบสินค้า</p>
+    <main class="proof-container">
+
+        <div class="proof-breadcrumb">
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <span>/</span>
+            <a href="order-detail.html">รายละเอียดออเดอร์</a>
+            <span>/</span>
+            <span>หลักฐานการส่งมอบ</span>
+        </div>
+
+        <section class="proof-heading">
+            <div class="proof-heading-icon">CH</div>
+
+            <div>
+                <p class="proof-eyebrow">ORDER CH001</p>
+                <h1>ยืนยันการส่งมอบสินค้า</h1>
+                <p class="proof-subtitle">
+                    ตรวจสอบข้อมูลออเดอร์และแนบรูปภาพเพื่อยืนยันการส่งมอบสินค้า
+                </p>
+            </div>
+
+            <span class="proof-status">รอการส่งมอบ</span>
         </section>
 
-        <section>
-            <h2>ข้อมูลการส่งมอบ</h2>
+        <div class="proof-layout">
 
-            <p>ร้านค้า: ร้านชานมหน้ามหาวิทยาลัย</p>
-            <p>ผู้รับหิ้ว: สมชาย</p>
-            <p>ผู้ฝากซื้อ: นัท</p>
-            <p>สถานที่ส่งมอบ: จุดนัดรับหน้ามหาวิทยาลัย</p>
-        </section>
+            <div class="proof-main">
 
-        <section>
-            <h2>แนบหลักฐาน</h2>
+                <section class="proof-card">
+                    <div class="proof-card-heading">
+                        <div>
+                            <h2>ข้อมูลการส่งมอบ</h2>
+                            <p>ตรวจสอบรายละเอียดก่อนยืนยันการส่งมอบ</p>
+                        </div>
+                    </div>
 
-            <form action="order-detail.html">
+                    <div class="proof-info-list">
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">หมายเลขออเดอร์</span>
+                            <span class="proof-info-value">CH001</span>
+                        </div>
 
-                <div>
-                    <label for="order-id">หมายเลขออเดอร์</label>
-                    <input type="text" id="order-id" name="order-id"
-                           value="CH001" readonly>
-                </div>
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">ร้านค้า</span>
+                            <span class="proof-info-value">ร้านชานมหน้ามหาวิทยาลัย</span>
+                        </div>
 
-                <div>
-                    <label for="proof">รูปภาพหลักฐานการส่งมอบ</label>
-                    <input type="file" id="proof" name="proof"
-                           accept="image/*" required>
-                </div>
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">ผู้รับหิ้ว</span>
+                            <span class="proof-info-value">สมชาย</span>
+                        </div>
 
-                <div>
-                    <label for="note">หมายเหตุ</label>
-                    <textarea id="note" name="note" rows="4"
-                              placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับการส่งมอบ"></textarea>
-                </div>
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">ผู้ฝากซื้อ</span>
+                            <span class="proof-info-value">นัท</span>
+                        </div>
 
-                <button type="submit">ยืนยันการส่งมอบ</button>
-                <a href="order-detail.html">กลับไปหน้ารายละเอียดออเดอร์</a>
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">สถานที่ส่งมอบ</span>
+                            <span class="proof-info-value">จุดนัดรับหน้ามหาวิทยาลัย</span>
+                        </div>
+                    </div>
+                </section>
 
-            </form>
-        </section>
+                <section class="proof-card">
+                    <div class="proof-card-heading">
+                        <div>
+                            <h2>หลักฐานการส่งมอบ</h2>
+                            <p>แนบรูปภาพเพื่อใช้เป็นหลักฐานยืนยันการส่งสินค้า</p>
+                        </div>
+                    </div>
+
+                    <form action="order-detail.html" method="get">
+
+                        <input type="hidden" name="order-id" value="CH001">
+
+                        <label class="proof-upload-area" for="proof">
+                            <div class="proof-upload-icon">+</div>
+                            <h3>แนบรูปภาพหลักฐาน</h3>
+                            <p>คลิกเพื่อเลือกภาพจากอุปกรณ์ของคุณ</p>
+                            <span>รองรับไฟล์รูปภาพ</span>
+                            <input
+                                type="file"
+                                id="proof"
+                                name="proof"
+                                accept="image/*"
+                                required
+                            >
+                        </label>
+
+                        <div class="proof-form-group">
+                            <label for="note">หมายเหตุเพิ่มเติม</label>
+                            <textarea
+                                id="note"
+                                name="note"
+                                rows="4"
+                                placeholder="ระบุรายละเอียดเพิ่มเติมเกี่ยวกับการส่งมอบ (ถ้ามี)"
+                            ></textarea>
+                        </div>
+
+                        <div class="proof-notice">
+                            <span class="proof-notice-mark">!</span>
+                            <p>
+                                กรุณาตรวจสอบว่ารูปภาพเป็นหลักฐานของออเดอร์นี้
+                                ก่อนกดยืนยันการส่งมอบ
+                            </p>
+                        </div>
+
+                        <div class="proof-actions">
+                            <a href="order-detail.html" class="proof-btn proof-btn-secondary">
+                                กลับ
+                            </a>
+
+                            <button type="submit" class="proof-btn proof-btn-primary">
+                                ยืนยันการส่งมอบ
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+            </div>
+
+            <aside class="proof-sidebar">
+
+                <section class="proof-card proof-summary">
+                    <h2>สรุปออเดอร์</h2>
+
+                    <div class="proof-summary-id">
+                        <span>หมายเลขออเดอร์</span>
+                        <strong>CH001</strong>
+                    </div>
+
+                    <div class="proof-summary-status">
+                        <span class="proof-status-dot"></span>
+                        รอการยืนยันการส่งมอบ
+                    </div>
+
+                    <div class="proof-summary-divider"></div>
+
+                    <div class="proof-summary-row">
+                        <span>สถานะหลักฐาน</span>
+                        <span>ยังไม่แนบรูปภาพ</span>
+                    </div>
+
+                    <div class="proof-summary-row">
+                        <span>สถานที่รับสินค้า</span>
+                        <span>หน้ามหาวิทยาลัย</span>
+                    </div>
+                </section>
+
+                <section class="proof-help-card">
+                    <h3>ต้องการความช่วยเหลือ?</h3>
+                    <p>
+                        หากพบปัญหาเกี่ยวกับการส่งมอบสินค้า
+                        สามารถแจ้งปัญหาให้ทีมงานตรวจสอบได้
+                    </p>
+                    <a href="report.html">แจ้งปัญหาออเดอร์</a>
+                </section>
+
+            </aside>
+
+        </div>
+
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
 

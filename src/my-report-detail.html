@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>รายละเอียดรายงาน | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/my-report-detail.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">CarryHub</a>
+
+            <div class="nav-links">
+                <a href="index.html">หน้าหลัก</a>
+                <a href="orders.html">คำสั่งซื้อ</a>
+                <a href="report.html">แจ้งปัญหา</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="report-detail-page">
+
+        <!-- Back Button -->
+        <a href="orders.html#report-history" class="back-link">
+            ← กลับไปประวัติรายงาน
+        </a>
+
+        <!-- Page Header -->
+        <div class="page-heading">
+            <div>
+                <h1>รายละเอียดรายงาน</h1>
+                <p>ตรวจสอบข้อมูลและความคืบหน้าของรายงานปัญหาของคุณ</p>
+            </div>
+
+            <span class="report-id" id="reportId">RP0001</span>
+        </div>
+
+        <!-- Report Information -->
+        <section class="detail-card">
+
+            <div class="card-heading">
+                <h2>ข้อมูลการรายงาน</h2>
+
+                <span class="status-badge pending" id="reportStatus">
+                    กำลังตรวจสอบ
+                </span>
+            </div>
+
+            <div class="detail-divider"></div>
+
+            <div class="detail-grid">
+
+                <div class="detail-item">
+                    <span class="detail-label">หัวข้อปัญหา</span>
+                    <p id="reportSubject">ไม่ได้รับสินค้า</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">วันที่แจ้ง</span>
+                    <p id="reportDate">15 ตุลาคม 2026</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">ประเภทปัญหา</span>
+                    <p id="reportCategory">ปัญหาการรับสินค้า</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">สถานะปัจจุบัน</span>
+                    <p id="reportStatusText">กำลังตรวจสอบ</p>
+                </div>
+
+            </div>
+
+            <div class="description-section">
+                <span class="detail-label">รายละเอียดปัญหา</span>
+
+                <p id="reportDescription">
+                    ผู้ใช้แจ้งว่ายังไม่ได้รับสินค้าตามเวลาที่ตกลงกันไว้
+                    และต้องการให้ตรวจสอบสถานะของคำสั่งซื้อ
+                </p>
+            </div>
+
+        </section>
+
+        <!-- Evidence -->
+        <section class="detail-card">
+
+            <h2>หลักฐานประกอบการรายงาน</h2>
+
+            <div class="evidence-box" id="evidenceBox">
+                <div class="evidence-icon">📎</div>
+
+                <div>
+                    <p class="evidence-title">ไฟล์หลักฐาน</p>
+                    <p class="evidence-description" id="evidenceText">
+                        ไม่มีไฟล์หลักฐานแนบ
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Progress -->
+        <section class="detail-card">
+
+            <h2>ความคืบหน้าการตรวจสอบ</h2>
+
+            <div class="timeline" id="reportTimeline">
+
+                <div class="timeline-item completed">
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <h3>ส่งรายงานแล้ว</h3>
+                        <p>ระบบได้รับรายงานปัญหาของคุณแล้ว</p>
+                        <span>15 ตุลาคม 2026</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item active">
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <h3>กำลังตรวจสอบ</h3>
+                        <p>รายงานอยู่ระหว่างการตรวจสอบ</p>
+                        <span>รอการอัปเดต</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+
+                    <div class="timeline-content">
+                        <h3>ดำเนินการเรียบร้อย</h3>
+                        <p>ระบบจะแสดงผลการดำเนินการเมื่อมีการอัปเดต</p>
+                        <span>-</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Admin Response -->
+        <section class="detail-card response-card">
+
+            <h2>การตอบกลับจากทีมงาน</h2>
+
+            <div class="response-content" id="adminResponse">
+                <div class="response-icon">💬</div>
+
+                <div>
+                    <p class="response-title">ยังไม่มีการตอบกลับ</p>
+                    <p class="response-description">
+                        เมื่อทีมงานตรวจสอบรายงานแล้ว
+                        ข้อมูลการตอบกลับจะแสดงในส่วนนี้
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Bottom Action -->
+        <div class="bottom-actions">
+            <a href="orders.html#report-history" class="secondary-button">
+                กลับไปประวัติรายงาน
+            </a>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="report-footer">
+        <p>© 2026 CarryHub. All rights reserved.</p>
+    </footer>
+
+    <script src="js/my-report-detail.js"></script>
+
+</body>
+</html>
