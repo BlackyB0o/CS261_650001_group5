@@ -4,6 +4,10 @@
 
 ```mermaid
 erDiagram
+
+    %% Task 04 - OTP Verification
+    USERS ||--o{ OTP_VERIFICATIONS : verifies
+
     %% Task 08 - เปิดรอบรับหิ้ว
     USERS ||--o{ DELIVERY_ROUNDS : opens
     
@@ -27,6 +31,18 @@ erDiagram
         varchar full_name "NOT NULL"
         varchar phone_number UK "NOT NULL"
         varchar role "NOT NULL, DEFAULT USER"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    %% Task 04 - OTP Verification
+    OTP_VERIFICATIONS {
+        bigint id PK
+        bigint user_id FK "NOT NULL"
+        varchar otp_hash "NOT NULL"
+        varchar purpose "NOT NULL"
+        timestamp expires_at "NOT NULL"
+        timestamp verified_at "OPTIONAL"
+        int attempts_count "NOT NULL, DEFAULT 0"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
