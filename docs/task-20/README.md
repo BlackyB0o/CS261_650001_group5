@@ -28,7 +28,7 @@
 ### Endpoint 1: Set Product Price (ผู้รับหิ้วระบุราคาสินค้าของออเดอร์)
 - **URL:** `/api/v1/orders/{orderId}/price`
 - **Method:** `PUT`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`RUNNER` เจ้าของรอบที่ออเดอร์อยู่เท่านั้น)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (เจ้าของรอบที่ออเดอร์อยู่เท่านั้น)
 - **Content-Type:** `application/json`
 - **Request Body:**
 ```json
@@ -70,7 +70,7 @@
 |---|---|---|
 | `400 Bad Request` | ข้อมูลไม่ครบหรือไม่ถูกรูปแบบ | `Validation failed` พร้อม `errors` |
 | `401 Unauthorized` | ไม่มี token | `Invalid or missing token` |
-| `403 Forbidden` | ไม่ใช่ `RUNNER` หรือไม่ใช่เจ้าของรอบของออเดอร์นี้ | `You are not the owner of this round` |
+| `403 Forbidden` | ไม่ใช่เจ้าของรอบของออเดอร์นี้ | `You are not the owner of this round` |
 | `404 Not Found` | ไม่พบออเดอร์ | `Order not found` |
 | `409 Conflict` | ออเดอร์ไม่ใช่ `PENDING` (ชำระแล้วหรือปิดแล้ว) | `Order has already been paid` |
 
@@ -90,7 +90,7 @@
 ### Endpoint 3: Submit Payment Slip (ผู้ฝากหิ้วแนบสลิปเพื่อยืนยันการชำระเงิน)
 - **URL:** `/api/v1/orders/{orderId}/payment/slip`
 - **Method:** `POST`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`BUYER` เจ้าของออเดอร์เท่านั้น)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ผู้ฝากหิ้วเจ้าของออเดอร์เท่านั้น)
 - **Content-Type:** `multipart/form-data`
 - **Request Parts:**
 
@@ -131,7 +131,7 @@
 |---|---|---|
 | `400 Bad Request` | ไม่แนบสลิป / ไม่ใช่ JPEG หรือ PNG / เกิน 5 MB / `paidAmount` ไม่เท่ายอดรวม (ไม่เปลี่ยนสถานะ ตาม Test case 2) | `Validation failed` พร้อม `errors` |
 | `401 Unauthorized` | ไม่มี token | `Invalid or missing token` |
-| `403 Forbidden` | ไม่ใช่ `BUYER` หรือไม่ใช่เจ้าของออเดอร์ | `You are not the owner of this order` |
+| `403 Forbidden` | ไม่ใช่เจ้าของออเดอร์ | `You are not the owner of this order` |
 | `404 Not Found` | ไม่พบออเดอร์ | `Order not found` |
 | `409 Conflict` | ผู้รับหิ้วยังไม่ระบุราคา | `Product price has not been set yet` |
 | `409 Conflict` | ออเดอร์ชำระแล้วหรือปิดแล้ว | `Order has already been paid` |
