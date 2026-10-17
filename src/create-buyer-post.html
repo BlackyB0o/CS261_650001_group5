@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สร้างโพสต์หาคนรับหิ้ว | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-buyer-post.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
-
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
@@ -19,72 +19,233 @@
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h1>สร้างโพสต์หาคนรับหิ้ว</h1>
-            <p>กรอกรายละเอียดสินค้าที่ต้องการ เพื่อให้ผู้รับหิ้วสามารถติดต่อหรือรับงานได้</p>
+    <main class="container">
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                <a href="buyer-posts.html" class="back-link">← กลับไปหน้าโพสต์หาคนรับหิ้ว</a>
+
+                <h1>สร้างโพสต์หาคนรับหิ้ว</h1>
+                <p>กรอกรายละเอียดสินค้าที่ต้องการ เพื่อให้ผู้รับหิ้วสามารถติดต่อหรือรับงานได้</p>
+            </div>
 
             <form action="buyer-post-review.html" method="get">
 
-                <div>
-                    <label for="post-title">ชื่อโพสต์</label>
-                    <input type="text" id="post-title" name="post-title"
-                           placeholder="เช่น ฝากซื้อเครื่องดื่ม" required>
+                <div class="form-section">
+                    <h2>ข้อมูลสินค้า</h2>
+                    <p class="section-description">
+                        ระบุชื่อโพสต์ ร้านค้า และรายการสินค้าที่ต้องการฝากซื้อ
+                    </p>
+
+                    <div class="form-group">
+                        <label for="post-title">
+                            ชื่อโพสต์ <span class="required">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="post-title"
+                            name="post-title"
+                            placeholder="เช่น ฝากซื้อเครื่องดื่ม"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shop-name">
+                            ชื่อร้านค้า <span class="required">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="shop-name"
+                            name="shop-name"
+                            placeholder="กรอกชื่อร้านค้า"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product">
+                            รายการสินค้า <span class="required">*</span>
+                        </label>
+                        <textarea
+                            id="product"
+                            name="product"
+                            rows="4"
+                            placeholder="ระบุชื่อสินค้า รุ่น รสชาติ หรือรายละเอียดที่ต้องการ"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">
+                            จำนวนสินค้า <span class="required">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            min="1"
+                            placeholder="ระบุจำนวนสินค้า"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+    <label for="carry-fee">
+        ค่าหิ้วที่เสนอให้ (บาท) <span class="required">*</span>
+    </label>
+    <input
+        type="number"
+        id="carry-fee"
+        name="carry-fee"
+        min="0"
+        step="0.01"
+        placeholder="เช่น 20"
+        required
+    >
+</div>
+
+                    <div class="form-group">
+                        <label for="product-images">รูปภาพสินค้า</label>
+                        <p class="section-description">
+                            เพิ่มรูปสินค้าเพื่อให้ผู้รับหิ้วเข้าใจสิ่งที่ต้องการได้ชัดเจนขึ้น
+                        </p>
+
+                        <label for="product-images" class="image-upload-box">
+                            <span class="upload-icon">＋</span>
+                            <span class="upload-title">เพิ่มรูปสินค้า</span>
+                            <span class="upload-hint">คลิกเพื่อเลือกรูปจากอุปกรณ์ของคุณ</span>
+                            <span class="upload-format">รองรับไฟล์ JPG, PNG และ WEBP</span>
+                        </label>
+
+                        <input
+                            type="file"
+                            id="product-images"
+                            name="product-images"
+                            accept="image/jpeg,image/png,image/webp"
+                            multiple
+                        >
+
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
                 </div>
 
-                <div>
-                    <label for="shop-name">ชื่อร้านค้า</label>
-                    <input type="text" id="shop-name" name="shop-name"
-                           placeholder="กรอกชื่อร้านค้า" required>
+                <div class="form-section">
+                    <h2>วันเวลาและสถานที่รับสินค้า</h2>
+                    <p class="section-description">
+                        ระบุวันที่ต้องการรับสินค้าและสถานที่ที่สะดวก
+                    </p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">
+                                วันที่ต้องการรับสินค้า <span class="required">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                id="date"
+                                name="date"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">
+                                สถานที่รับสินค้า <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="location"
+                                name="location"
+                                placeholder="เช่น หน้าคณะ"
+                                required
+                            >
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label for="product">รายการสินค้า</label>
-                    <textarea id="product" name="product" rows="4"
-                              placeholder="ระบุชื่อสินค้าและรายละเอียด" required></textarea>
+                <div class="form-section">
+                    <h2>งบประมาณและรายละเอียดเพิ่มเติม</h2>
+                    <p class="section-description">
+                        กำหนดงบประมาณและแจ้งข้อมูลที่ผู้รับหิ้วควรทราบ
+                    </p>
+
+                    <div class="form-group">
+                        <label for="budget">งบประมาณค่าสินค้า (บาท)</label>
+                        <input
+                            type="number"
+                            id="budget"
+                            name="budget"
+                            min="0"
+                            placeholder="ระบุงบประมาณ"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="details">รายละเอียดเพิ่มเติม</label>
+                        <textarea
+                            id="details"
+                            name="details"
+                            rows="4"
+                            placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขเพิ่มเติม"
+                        ></textarea>
+                    </div>
                 </div>
 
-                <div>
-                    <label for="quantity">จำนวนสินค้า</label>
-                    <input type="number" id="quantity" name="quantity"
-                           min="1" placeholder="ระบุจำนวน" required>
-                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        ตรวจสอบรายละเอียด
+                    </button>
 
-                <div>
-                    <label for="date">วันที่ต้องการรับสินค้า</label>
-                    <input type="date" id="date" name="date" required>
+                    <a href="buyer-posts.html" class="btn btn-outline">
+                        ยกเลิก
+                    </a>
                 </div>
-
-                <div>
-                    <label for="location">สถานที่รับสินค้า</label>
-                    <input type="text" id="location" name="location"
-                           placeholder="เช่น หน้าคณะ" required>
-                </div>
-
-                <div>
-                    <label for="budget">งบประมาณค่าสินค้า (บาท)</label>
-                    <input type="number" id="budget" name="budget"
-                           min="0" placeholder="ระบุงบประมาณ">
-                </div>
-
-                <div>
-                    <label for="details">รายละเอียดเพิ่มเติม</label>
-                    <textarea id="details" name="details" rows="4"
-                              placeholder="ระบุข้อมูลเพิ่มเติม"></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-    ตรวจสอบรายละเอียด
-</button>
-                <a href="buyer-posts.html">ยกเลิก</a>
 
             </form>
+
         </section>
+
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
+
+    <script>
+        const productImages = document.getElementById("product-images");
+        const imagePreview = document.getElementById("image-preview");
+
+        productImages.addEventListener("change", function () {
+            imagePreview.innerHTML = "";
+
+            Array.from(this.files).forEach(function (file) {
+                if (!file.type.startsWith("image/")) {
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    const item = document.createElement("div");
+                    item.className = "preview-item";
+
+                    const image = document.createElement("img");
+                    image.src = event.target.result;
+                    image.alt = file.name;
+
+                    const fileName = document.createElement("p");
+                    fileName.textContent = file.name;
+
+                    item.appendChild(image);
+                    item.appendChild(fileName);
+                    imagePreview.appendChild(item);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 
 </body>
 </html>

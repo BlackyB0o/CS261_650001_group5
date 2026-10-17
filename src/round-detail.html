@@ -1,46 +1,299 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>รายละเอียดรอบรับหิ้ว | CarryHub</title>
+
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/round-detail.css">
 </head>
+
 <body>
+
+    <!-- Navigation Bar -->
     <header class="navbar">
+
         <a href="index.html" class="logo">CarryHub</a>
+
         <nav>
-            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html" class="active">รอบรับหิ้ว</a>
             <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
             <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="profile.html">โปรไฟล์</a>
         </nav>
+
     </header>
 
-    <main class="container">
-        <section class="detail-card">
-            <span class="badge">เปิดรับออเดอร์</span>
-            <h1>รอบร้านชานม</h1>
 
-            <div class="detail-list">
-                <p><strong>ร้านค้า:</strong> ร้านชานมหน้ามหาวิทยาลัย</p>
-                <p><strong>ผู้รับหิ้ว:</strong> สมชาย</p>
-                <p><strong>วันที่รับสินค้า:</strong> 15 ตุลาคม 2026</p>
-                <p><strong>เวลาปิดรับ:</strong> 12:00 น.</p>
-                <p><strong>จำนวนที่รับได้:</strong> 10 รายการ</p>
-                <p><strong>ค่าบริการ:</strong> 10 บาทต่อรายการ</p>
-                <p><strong>สถานที่รับสินค้า:</strong> จุดนัดรับหน้ามหาวิทยาลัย</p>
+    <main class="container round-detail-container">
+
+        <!-- Back Button -->
+        <a href="rounds.html" class="back-link">
+            ← กลับไปหน้ารอบรับหิ้ว
+        </a>
+
+
+        <!-- Round Information -->
+        <section class="round-header-card">
+
+            <div class="round-header-top">
+
+                <span class="round-status">
+                    เปิดรับออเดอร์
+                </span>
+
+                <span class="round-id">
+                    รอบรับหิ้ว #RD001
+                </span>
+
             </div>
 
-            <h2>รายละเอียดเพิ่มเติม</h2>
-            <p>สามารถฝากซื้อเครื่องดื่มจากร้านได้ กรุณาระบุเมนูและรายละเอียดสินค้าให้ครบถ้วน</p>
 
-            <a href="orders.html" class="btn btn-primary">ฝากซื้อรอบนี้</a>
-            <a href="rounds.html" class="btn btn-outline">กลับไปหน้ารอบรับหิ้ว</a>
+            <div class="round-header-content">
+
+                <div class="round-header-info">
+
+                    <span class="round-eyebrow">
+                        CARRYHUB ROUND
+                    </span>
+
+                    <h1>รอบร้านชานม</h1>
+
+                    <p class="round-description">
+                        ฝากซื้อสินค้าและเครื่องดื่มจากร้านชานม
+                        สามารถดูเมนูของร้านและระบุรายการที่ต้องการฝากซื้อได้
+                    </p>
+
+
+                    <!-- Carrier Information -->
+                    <div class="round-carrier">
+
+                        <div class="carrier-avatar">
+                            ส
+                        </div>
+
+                        <div>
+                            <span>ผู้รับหิ้ว</span>
+                            <strong>สมชาย</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="round-illustration">
+
+                    <div class="cup">
+                        <span>CH</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Round Summary -->
+            <div class="round-summary">
+
+                <div class="summary-item">
+                    <span>วันที่รับสินค้า</span>
+                    <strong>15 ตุลาคม 2026</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>ปิดรับออเดอร์</span>
+                    <strong>12:00 น.</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>จำนวนที่รับได้</span>
+                    <strong>10 รายการ</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>สถานที่รับสินค้า</span>
+                    <strong>หน้ามหาวิทยาลัย</strong>
+                </div>
+
+            </div>
+
         </section>
+
+
+
+        <!-- Shop Menu Image -->
+        <section class="menu-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        SHOP MENU
+                    </span>
+
+                    <h2>เมนูของร้าน</h2>
+
+                    <p>
+                        ดูรูปเมนูรวมของร้านเพื่อเลือกสินค้าที่ต้องการฝากซื้อ
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Menu Image -->
+            <div class="shop-menu-image">
+
+                <img
+                    src="images/shop-menu.jpg"
+                    alt="รูปเมนูรวมของร้านชานม"
+                >
+
+            </div>
+
+
+            <p class="menu-notice">
+                กรุณาตรวจสอบชื่อสินค้าและราคาจากเมนูของร้านก่อนระบุรายการฝากซื้อ
+            </p>
+
+        </section>
+
+
+
+        <!-- Order Details -->
+        <section class="order-form-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        ORDER DETAILS
+                    </span>
+
+                    <h2>รายละเอียดการฝากซื้อ</h2>
+
+                    <p>
+                        ระบุรายการสินค้าและจำนวนที่ต้องการฝากซื้อจากเมนูด้านบน
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form action="orders.html" method="get" class="order-form">
+
+
+                <!-- Product List -->
+                <div class="form-group">
+
+                    <label for="product-details">
+                        รายการสินค้าที่ต้องการ
+                        <span>*</span>
+                    </label>
+
+                    <textarea
+                        id="product-details"
+                        name="product-details"
+                        rows="6"
+                        placeholder="ระบุรายการสินค้าที่ต้องการฝากซื้อ เช่น
+
+1. ชานมไต้หวัน 2 แก้ว หวานน้อย
+2. ชาไทย 1 แก้ว หวานปกติ
+3. ขนมปัง 1 ชิ้น"
+                        required
+                    ></textarea>
+
+                    <small>
+                        กรุณาระบุชื่อสินค้า จำนวน และรายละเอียดของสินค้าให้ชัดเจน
+                    </small>
+
+                </div>
+
+
+
+                <!-- Additional Details -->
+                <div class="form-group">
+
+                    <label for="note">
+                        รายละเอียดเพิ่มเติม
+                        <span class="optional">(ถ้ามี)</span>
+                    </label>
+
+                    <textarea
+                        id="note"
+                        name="note"
+                        rows="3"
+                        placeholder="เช่น หากสินค้าหมดให้ติดต่อก่อนเปลี่ยนสินค้า หรือมีรายละเอียดอื่น ๆ ที่ต้องการแจ้งผู้รับหิ้ว"
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- Pickup Information -->
+                <div class="pickup-info">
+
+                    <div class="pickup-icon">
+                        i
+                    </div>
+
+                    <div>
+
+                        <strong>สถานที่รับสินค้า</strong>
+
+                        <p>
+                            จุดนัดรับหน้ามหาวิทยาลัย
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Form Actions -->
+                <div class="order-actions">
+
+                    <a
+                        href="rounds.html"
+                        class="btn btn-outline"
+                    >
+                        กลับไปหน้ารอบรับหิ้ว
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        ดำเนินการฝากซื้อ
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
     </main>
 
+
+
+    <!-- Footer -->
     <footer class="footer">
+
         <p>© 2026 CarryHub</p>
+
     </footer>
+
 </body>
+
 </html>
