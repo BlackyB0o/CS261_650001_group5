@@ -5,66 +5,286 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายละเอียดออเดอร์ | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/order-detail.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
 
         <nav>
             <a href="index.html">หน้าแรก</a>
-            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h1>รายละเอียดออเดอร์</h1>
-            <p>หมายเลขออเดอร์: CH001</p>
-            <p>วันที่สั่งซื้อ: 15 ตุลาคม 2026</p>
-            <p>สถานะปัจจุบัน: กำลังดำเนินการ</p>
+    <main class="order-detail-page">
+
+        <div class="order-breadcrumb">
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <span>/</span>
+            <span>รายละเอียดออเดอร์</span>
+        </div>
+
+        <section class="order-header-card">
+
+            <div class="order-header-main">
+                <div>
+                    <p class="order-eyebrow">ORDER DETAILS</p>
+                    <h1>รายละเอียดออเดอร์</h1>
+                    <p class="order-id">หมายเลขออเดอร์ <strong>CH001</strong></p>
+                </div>
+
+                <span class="order-status">
+                    <span class="order-status-dot"></span>
+                    กำลังดำเนินการ
+                </span>
+            </div>
+
+            <div class="order-header-divider"></div>
+
+            <div class="order-meta-grid">
+                <div>
+                    <span>วันที่สั่งซื้อ</span>
+                    <strong>15 ตุลาคม 2026</strong>
+                </div>
+
+                <div>
+                    <span>ร้านค้า</span>
+                    <strong>ร้านชานมหน้ามหาวิทยาลัย</strong>
+                </div>
+
+                <div>
+                    <span>สถานที่รับสินค้า</span>
+                    <strong>จุดนัดรับหน้ามหาวิทยาลัย</strong>
+                </div>
+            </div>
+
         </section>
 
-        <section>
-            <h2>ข้อมูลสินค้า</h2>
+        <div class="order-content-grid">
 
-            <p>ร้านค้า: ร้านชานมหน้ามหาวิทยาลัย</p>
-            <p>สินค้า: ชานม</p>
-            <p>จำนวน: 2 แก้ว</p>
-            <p>ราคาสินค้ารวม: 80 บาท</p>
-            <p>ค่าบริการรับหิ้ว: 20 บาท</p>
-            <p>ยอดรวมทั้งหมด: 100 บาท</p>
+            <div class="order-main-column">
+
+                <section class="order-section-card">
+
+                    <div class="order-section-heading">
+                        <div>
+                            <h2>รายการสินค้า</h2>
+                            <p>ตรวจสอบสินค้าและจำนวนที่สั่งซื้อ</p>
+                        </div>
+
+                        <span class="order-item-count">1 รายการ</span>
+                    </div>
+
+                    <div class="order-product">
+                        <div class="product-placeholder">
+                            <span>CH</span>
+                        </div>
+
+                        <div class="order-product-info">
+                            <h3>ชานม</h3>
+                            <p>ร้านชานมหน้ามหาวิทยาลัย</p>
+                            <span>จำนวน 2 แก้ว</span>
+                        </div>
+
+                        <div class="order-product-price">
+                            <span>ราคารวม</span>
+                            <strong>80.00 บาท</strong>
+                        </div>
+                    </div>
+
+                    <div class="order-price-summary">
+
+                        <div class="price-row">
+                            <span>ราคาสินค้า</span>
+                            <span>80.00 บาท</span>
+                        </div>
+
+                        <div class="price-row">
+                            <span>ค่าบริการรับหิ้ว</span>
+                            <span>20.00 บาท</span>
+                        </div>
+
+                        <div class="price-divider"></div>
+
+                        <div class="price-row price-total">
+                            <strong>ยอดรวมทั้งหมด</strong>
+                            <strong>100.00 บาท</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="order-section-card">
+
+                    <div class="order-section-heading">
+                        <div>
+                            <h2>สถานะการดำเนินงาน</h2>
+                            <p>ขั้นตอนการดำเนินการของออเดอร์นี้</p>
+                        </div>
+                    </div>
+
+                    <div class="order-timeline">
+
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker">1</div>
+
+                            <div class="timeline-content">
+                                <h3>สร้างรายการสั่งซื้อแล้ว</h3>
+                                <p>ระบบได้รับรายการสั่งซื้อเรียบร้อยแล้ว</p>
+                            </div>
+
+                            <span class="timeline-tag">เสร็จแล้ว</span>
+                        </div>
+
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker">2</div>
+
+                            <div class="timeline-content">
+                                <h3>ตรวจสอบการชำระเงิน</h3>
+                                <p>ตรวจสอบข้อมูลการชำระเงินของรายการ</p>
+                            </div>
+
+                            <span class="timeline-tag">เสร็จแล้ว</span>
+                        </div>
+
+                        <div class="timeline-item current">
+                            <div class="timeline-marker">3</div>
+
+                            <div class="timeline-content">
+                                <h3>กำลังซื้อสินค้า</h3>
+                                <p>ผู้รับหิ้วกำลังดำเนินการซื้อสินค้าตามรายการ</p>
+                            </div>
+
+                            <span class="timeline-tag">กำลังดำเนินการ</span>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-marker">4</div>
+
+                            <div class="timeline-content">
+                                <h3>ส่งมอบสินค้า</h3>
+                                <p>รอผู้รับหิ้วส่งมอบสินค้าตามจุดนัดหมาย</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-marker">5</div>
+
+                            <div class="timeline-content">
+                                <h3>ยืนยันการรับสินค้า</h3>
+                                <p>ยืนยันเมื่อได้รับสินค้าเรียบร้อยแล้ว</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <aside class="order-side-column">
+
+                <section class="order-section-card people-card">
+
+                    <div class="order-section-heading">
+                        <div>
+                            <h2>ผู้เกี่ยวข้อง</h2>
+                            <p>ข้อมูลผู้ฝากซื้อและผู้รับหิ้ว</p>
+                        </div>
+                    </div>
+
+                    <div class="person-row">
+                        <div class="person-avatar buyer-avatar">N</div>
+
+                        <div class="person-info">
+                            <span>ผู้ฝากซื้อ</span>
+                            <strong>นัท</strong>
+                            <small>ผู้สั่งซื้อสินค้า</small>
+                        </div>
+                    </div>
+
+                    <div class="person-divider"></div>
+
+                    <div class="person-row">
+                        <div class="person-avatar carrier-avatar">S</div>
+
+                        <div class="person-info">
+                            <span>ผู้รับหิ้ว</span>
+                            <strong>สมชาย</strong>
+                            <small>ผู้ดำเนินการซื้อสินค้า</small>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section class="order-total-card">
+
+                    <p class="total-card-label">ORDER SUMMARY</p>
+
+                    <h2>ยอดที่ต้องชำระ</h2>
+
+                    <div class="total-card-amount">
+                        100.00 <span>บาท</span>
+                    </div>
+
+                    <div class="total-card-divider"></div>
+
+                    <div class="total-card-row">
+                        <span>ราคาสินค้า</span>
+                        <span>80.00 บาท</span>
+                    </div>
+
+                    <div class="total-card-row">
+                        <span>ค่าบริการ</span>
+                        <span>20.00 บาท</span>
+                    </div>
+
+                    <div class="payment-status">
+                        <span class="payment-status-dot"></span>
+                        ตรวจสอบการชำระเงินแล้ว
+                    </div>
+
+                </section>
+
+                <section class="order-help-card">
+                    <h3>ต้องการความช่วยเหลือ?</h3>
+
+                    <p>
+                        หากพบปัญหาเกี่ยวกับสินค้า
+                        การชำระเงิน หรือการส่งมอบ
+                        สามารถแจ้งทีมงานให้ตรวจสอบได้
+                    </p>
+
+                    <a href="report.html" class="order-report-btn">
+                        รายงานปัญหา
+                    </a>
+                </section>
+
+            </aside>
+
+        </div>
+
+        <section class="order-bottom-actions">
+
+            <a href="orders.html" class="order-back-btn">
+                กลับไปรายการสั่งซื้อ
+            </a>
+
+            <a href="delivery-proof.html" class="order-proof-btn">
+                ดูหลักฐานการส่งมอบ
+            </a>
+
         </section>
 
-        <section>
-            <h2>ข้อมูลผู้เกี่ยวข้อง</h2>
-
-            <p>ผู้ฝากซื้อ: นัท</p>
-            <p>ผู้รับหิ้ว: สมชาย</p>
-            <p>สถานที่รับสินค้า: จุดนัดรับหน้ามหาวิทยาลัย</p>
-        </section>
-
-        <section>
-            <h2>สถานะการดำเนินงาน</h2>
-
-            <ol>
-                <li>สร้างรายการสั่งซื้อ</li>
-                <li>ตรวจสอบการชำระเงิน</li>
-                <li>ผู้รับหิ้วกำลังดำเนินการซื้อสินค้า</li>
-                <li>รอส่งมอบสินค้า</li>
-                <li>ยืนยันการรับสินค้า</li>
-            </ol>
-        </section>
-
-        <section>
-            <a href="delivery-proof.html">ดูหลักฐานการส่งมอบ</a>
-            <a href="report.html">รายงานปัญหา</a>
-            <a href="orders.html">กลับไปรายการสั่งซื้อ</a>
-        </section>
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
 

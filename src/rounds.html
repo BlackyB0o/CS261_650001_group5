@@ -5,85 +5,275 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รอบรับหิ้ว | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rounds.css">
 </head>
 <body>
+
     <header class="navbar">
         <a href="index.html" class="logo">CarryHub</a>
+
         <nav>
             <a href="index.html">หน้าแรก</a>
-            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="rounds.html" class="active">รอบรับหิ้ว</a>
             <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
-            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="orders.html">รายการของฉัน</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main class="container">
-        <section class="page-header">
-            <h1>รอบรับหิ้วทั้งหมด</h1>
-            <p>ค้นหารอบรับหิ้วที่ตรงกับร้านค้าและเวลาที่คุณต้องการ</p>
-            <a href="create-round.html" class="btn btn-primary">+ สร้างรอบรับหิ้ว</a>
+    <main class="rounds-container">
+
+        <section class="rounds-hero">
+            <div class="rounds-hero-content">
+                <p class="rounds-eyebrow">FIND YOUR ROUND</p>
+
+                <h1>รอบรับหิ้วทั้งหมด</h1>
+
+                <p class="rounds-hero-description">
+                    อยากฝากซื้ออะไร ลองค้นหารอบรับหิ้วที่ตรงกับร้านค้า
+                    และเวลาที่คุณต้องการ แล้วสั่งซื้อได้ง่าย ๆ ในที่เดียว
+                </p>
+
+                <a href="create-round.html" class="rounds-create-btn">
+                    <span>+</span>
+                    สร้างรอบรับหิ้ว
+                </a>
+            </div>
+
+            <div class="rounds-hero-illustration">
+                <div class="rounds-illustration-card">
+                    <span class="rounds-illustration-label">CarryHub</span>
+
+                    <div class="rounds-illustration-bag">CH</div>
+
+                    <div class="rounds-illustration-line"></div>
+                    <div class="rounds-illustration-line short"></div>
+
+                    <div class="rounds-illustration-tag">
+                        ฝากซื้อได้ง่าย ๆ
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="form-card">
-            <h2>ค้นหารอบรับหิ้ว</h2>
+        <section class="rounds-search-card">
 
-            <form action="rounds.html">
-                <div class="form-group">
+            <div class="rounds-search-heading">
+                <div>
+                    <h2>ค้นหารอบรับหิ้ว</h2>
+                    <p>ค้นหาจากชื่อร้านค้า สินค้า หรือวันที่ต้องการรับสินค้า</p>
+                </div>
+            </div>
+
+            <form action="rounds.html" method="get" class="rounds-search-form">
+
+                <div class="rounds-form-group">
                     <label for="keyword">ชื่อร้านหรือสินค้า</label>
-                    <input type="text" id="keyword" placeholder="เช่น ร้านชานม ร้านอาหาร">
+
+                    <input
+                        type="text"
+                        id="keyword"
+                        name="keyword"
+                        placeholder="เช่น ร้านชานม ร้านอาหาร"
+                    >
                 </div>
 
-                <div class="form-group">
+                <div class="rounds-form-group">
                     <label for="date">วันที่รับสินค้า</label>
-                    <input type="date" id="date">
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                    >
                 </div>
 
-                <button type="submit" class="btn btn-primary">ค้นหา</button>
+                <button type="submit" class="rounds-search-btn">
+                    ค้นหา
+                </button>
+
             </form>
+
         </section>
 
-        <section class="card-grid">
-            <article class="card">
-                <span class="badge">เปิดรับออเดอร์</span>
-                <h2>รอบร้านชานม</h2>
-                <p>ร้าน: ร้านชานมหน้ามหาวิทยาลัย</p>
-                <p>ผู้รับหิ้ว: สมชาย</p>
-                <p>เวลาปิดรับ: 12:00 น.</p>
-                <p>ค่าบริการ: 10 บาทต่อรายการ</p>
-                <a href="round-detail.html" class="btn btn-primary">ดูรายละเอียด</a>
-            </article>
+        <section class="rounds-content">
 
-            <article class="card">
-                <span class="badge">เปิดรับออเดอร์</span>
-                <h2>รอบร้านอาหาร</h2>
-                <p>ร้าน: ร้านอาหารตามสั่ง</p>
-                <p>ผู้รับหิ้ว: มานะ</p>
-                <p>เวลาปิดรับ: 13:00 น.</p>
-                <p>ค่าบริการ: 15 บาทต่อรายการ</p>
-                <a href="round-detail.html" class="btn btn-primary">ดูรายละเอียด</a>
-            </article>
+            <div class="rounds-section-heading">
+                <div>
+                    <h2>รอบรับหิ้วที่เปิดอยู่</h2>
+                    <p>เลือกรอบที่ตรงกับความต้องการของคุณ</p>
+                </div>
 
-            <article class="card">
-                <span class="badge">เปิดรับออเดอร์</span>
-                <h2>รอบร้านเบเกอรี</h2>
-                <p>ร้าน: ร้านเบเกอรีใกล้มหาวิทยาลัย</p>
-                <p>ผู้รับหิ้ว: สุดา</p>
-                <p>เวลาปิดรับ: 15:00 น.</p>
-                <p>ค่าบริการ: 10 บาทต่อรายการ</p>
-                <a href="round-detail.html" class="btn btn-primary">ดูรายละเอียด</a>
-            </article>
+                <span class="rounds-count">3 รอบ</span>
+            </div>
+
+            <div class="rounds-list">
+
+                <article class="round-card">
+
+                    <div class="round-card-top">
+                        <div class="round-category-icon">DR</div>
+
+                        <span class="round-status">
+                            เปิดรับออเดอร์
+                        </span>
+                    </div>
+
+                    <div class="round-card-content">
+                        <h3>รอบร้านชานม</h3>
+
+                        <p class="round-shop-name">
+                            ร้านชานมหน้ามหาวิทยาลัย
+                        </p>
+
+                        <div class="round-divider"></div>
+
+                        <div class="round-info-list">
+
+                            <div class="round-info-row">
+                                <span>ผู้รับหิ้ว</span>
+                                <strong>สมชาย</strong>
+                            </div>
+
+                            <div class="round-info-row">
+                                <span>เวลาปิดรับ</span>
+                                <strong>12:00 น.</strong>
+                            </div>
+
+                            <div class="round-info-row">
+                                <span>ค่าบริการ</span>
+                                <strong class="round-service-fee">10 บาท / รายการ</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="round-card-footer">
+                        <a href="round-detail.html" class="round-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+                <article class="round-card">
+
+                    <div class="round-card-top">
+                        <div class="round-category-icon food">FD</div>
+
+                        <span class="round-status">
+                            เปิดรับออเดอร์
+                        </span>
+                    </div>
+
+                    <div class="round-card-content">
+                        <h3>รอบร้านอาหาร</h3>
+
+                        <p class="round-shop-name">
+                            ร้านอาหารตามสั่ง
+                        </p>
+
+                        <div class="round-divider"></div>
+
+                        <div class="round-info-list">
+
+                            <div class="round-info-row">
+                                <span>ผู้รับหิ้ว</span>
+                                <strong>มานะ</strong>
+                            </div>
+
+                            <div class="round-info-row">
+                                <span>เวลาปิดรับ</span>
+                                <strong>13:00 น.</strong>
+                            </div>
+
+                            <div class="round-info-row">
+                                <span>ค่าบริการ</span>
+                                <strong class="round-service-fee">15 บาท / รายการ</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="round-card-footer">
+                        <a href="round-detail.html" class="round-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+                <article class="round-card">
+
+                    <div class="round-card-top">
+                        <div class="round-category-icon bakery">BK</div>
+
+                        <span class="round-status">
+                            เปิดรับออเดอร์
+                        </span>
+                    </div>
+
+                    <div class="round-card-content">
+                        <h3>รอบร้านเบเกอรี</h3>
+
+                        <p class="round-shop-name">
+                            ร้านเบเกอรีใกล้มหาวิทยาลัย
+                        </p>
+
+                        <div class="round-divider"></div>
+
+                        <div class="round-info-list">
+
+                            <div class="round-info-row">
+                                <span>ผู้รับหิ้ว</span>
+                                <strong>สุดา</strong>
+                            </div>
+
+                            <div class="round-info-row">
+                                <span>เวลาปิดรับ</span>
+                                <strong>15:00 น.</strong>
+                            </div>
+
+                            <div class="round-info-row">
+                                <span>ค่าบริการ</span>
+                                <strong class="round-service-fee">10 บาท / รายการ</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="round-card-footer">
+                        <a href="round-detail.html" class="round-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+            </div>
+
         </section>
 
-        <section class="section">
-            <h2>หารอบที่ต้องการไม่เจอ?</h2>
-            <p>สร้างโพสต์เพื่อหาคนรับหิ้วสินค้าที่คุณต้องการได้</p>
-            <a href="create-buyer-post.html" class="btn btn-outline">โพสต์หาคนรับหิ้ว</a>
+        <section class="rounds-bottom">
+            <div>
+                <h2>หารอบที่ต้องการไม่เจอ?</h2>
+                <p>สร้างโพสต์เพื่อหาคนรับหิ้วสินค้าที่คุณต้องการได้เลย</p>
+            </div>
+
+            <a href="create-buyer-post.html" class="rounds-bottom-btn">
+                โพสต์หาคนรับหิ้ว
+                <span>→</span>
+            </a>
         </section>
+
     </main>
 
     <footer class="footer">
-        <p>© 2026 CarryHub</p>
+        <p>CarryHub © 2026</p>
     </footer>
+
 </body>
 </html>
