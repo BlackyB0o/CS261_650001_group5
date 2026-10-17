@@ -5,75 +5,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายงานปัญหา | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/report.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
 
         <nav>
             <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
             <a href="orders.html">รายการสั่งซื้อ</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main>
-        <section>
+    <main class="report-page">
+
+        <section class="report-heading">
+            <div class="report-heading-label">CUSTOMER SUPPORT</div>
+
             <h1>รายงานปัญหา</h1>
-            <p>แจ้งปัญหาที่พบเพื่อให้ทีมงานตรวจสอบ</p>
+
+            <p>
+                พบปัญหาจากการใช้งาน CarryHub ใช่ไหม?
+                แจ้งรายละเอียดให้ทีมงานตรวจสอบได้ที่นี่
+            </p>
         </section>
 
-        <section>
-            <form action="order-detail.html">
+        <div class="report-layout">
 
-                <div>
-                    <label for="order-id">หมายเลขออเดอร์</label>
-                    <input type="text" id="order-id" name="order-id"
-                           placeholder="เช่น CH001" required>
+            <section class="report-form-card">
+
+                <div class="report-card-heading">
+                    <div>
+                        <h2>รายละเอียดปัญหา</h2>
+                        <p>กรุณากรอกข้อมูลให้ครบถ้วนเพื่อให้ทีมงานตรวจสอบได้ง่ายขึ้น</p>
+                    </div>
+
+                    <span class="report-required">* จำเป็น</span>
                 </div>
 
-                <div>
-                    <label for="reporter">ผู้รายงาน</label>
-                    <select id="reporter" name="reporter" required>
-                        <option value="">เลือกประเภทผู้รายงาน</option>
-                        <option value="buyer">ผู้ฝากซื้อ</option>
-                        <option value="carrier">ผู้รับหิ้ว</option>
-                    </select>
-                </div>
+                <form action="report.html" method="get">
 
-                <div>
-                    <label for="category">ประเภทปัญหา</label>
-                    <select id="category" name="category" required>
-                        <option value="">เลือกประเภทปัญหา</option>
-                        <option value="product">สินค้าไม่ตรงตามที่สั่ง</option>
-                        <option value="delivery">ปัญหาการส่งมอบ</option>
-                        <option value="payment">ปัญหาการชำระเงิน</option>
-                        <option value="user">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
-                        <option value="other">อื่น ๆ</option>
-                    </select>
-                </div>
+                    <div class="report-form-grid">
 
-                <div>
-                    <label for="description">รายละเอียดปัญหา</label>
-                    <textarea id="description" name="description"
-                              rows="6" placeholder="อธิบายปัญหาที่พบ" required></textarea>
-                </div>
+                        <div class="report-field">
+                            <label for="order-id">
+                                หมายเลขออเดอร์ <span>*</span>
+                            </label>
 
-                <div>
-                    <label for="evidence">แนบรูปภาพประกอบ (ถ้ามี)</label>
-                    <input type="file" id="evidence" name="evidence"
-                           accept="image/*">
-                </div>
+                            <input
+                                type="text"
+                                id="order-id"
+                                name="order-id"
+                                placeholder="เช่น CH001"
+                                required
+                            >
 
-                <button type="submit">ส่งรายงาน</button>
-                <a href="order-detail.html">ยกเลิก</a>
+                            <small>ระบุหมายเลขออเดอร์ที่เกี่ยวข้องกับปัญหา</small>
+                        </div>
 
-            </form>
-        </section>
+                        <div class="report-field">
+                            <label for="reporter">
+                                ประเภทผู้รายงาน <span>*</span>
+                            </label>
+
+                            <select id="reporter" name="reporter" required>
+                                <option value="">เลือกประเภทผู้รายงาน</option>
+                                <option value="buyer">ผู้ฝากซื้อ</option>
+                                <option value="carrier">ผู้รับหิ้ว</option>
+                            </select>
+                        </div>
+
+                        <div class="report-field report-field-full">
+                            <label for="category">
+                                ประเภทปัญหา <span>*</span>
+                            </label>
+
+                            <select id="category" name="category" required>
+                                <option value="">เลือกประเภทปัญหาที่พบ</option>
+                                <option value="product">สินค้าไม่ตรงตามที่สั่ง</option>
+                                <option value="delivery">ปัญหาการส่งมอบสินค้า</option>
+                                <option value="payment">ปัญหาการชำระเงิน</option>
+                                <option value="user">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
+                                <option value="other">อื่น ๆ</option>
+                            </select>
+                        </div>
+
+                        <div class="report-field report-field-full">
+                            <label for="description">
+                                อธิบายปัญหาที่พบ <span>*</span>
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                rows="6"
+                                maxlength="1000"
+                                placeholder="โปรดอธิบายสิ่งที่เกิดขึ้น เช่น ปัญหาที่พบ เวลาที่เกิดเหตุ และข้อมูลเพิ่มเติมที่เกี่ยวข้อง"
+                                required
+                            ></textarea>
+
+                            <small>กรุณาอธิบายตามข้อเท็จจริง เพื่อช่วยให้ทีมงานตรวจสอบได้รวดเร็วขึ้น</small>
+                        </div>
+
+                        <div class="report-field report-field-full">
+                            <label for="evidence">
+                                รูปภาพประกอบ <span class="optional-label">(ไม่บังคับ)</span>
+                            </label>
+
+                            <div class="report-upload-box">
+                                <input
+                                    type="file"
+                                    id="evidence"
+                                    name="evidence"
+                                    accept="image/png, image/jpeg, image/webp"
+                                >
+
+                                <div class="upload-content">
+                                    <div class="upload-icon">+</div>
+
+                                    <div>
+                                        <strong>แนบรูปภาพประกอบ</strong>
+                                        <p>เลือกภาพจากอุปกรณ์ของคุณ</p>
+                                        <small>รองรับ JPG, PNG และ WEBP</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="report-form-footer">
+                        <a href="profile.html" class="report-cancel-btn">
+                            ยกเลิก
+                        </a>
+
+                        <button type="submit" class="report-submit-btn">
+                            ส่งรายงาน
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+
+            <aside class="report-sidebar">
+
+                <section class="report-help-card">
+                    <div class="report-help-label">NEED HELP?</div>
+
+                    <h2>แจ้งข้อมูลให้ชัดเจน</h2>
+
+                    <p>
+                        รายละเอียดที่ครบถ้วนจะช่วยให้ทีมงานเข้าใจปัญหา
+                        และตรวจสอบได้ตรงประเด็นมากขึ้น
+                    </p>
+
+                    <div class="report-tip">
+                        <span class="report-tip-number">01</span>
+                        <div>
+                            <strong>ตรวจสอบหมายเลขออเดอร์</strong>
+                            <p>กรอกหมายเลขออเดอร์ที่เกี่ยวข้องให้ถูกต้อง</p>
+                        </div>
+                    </div>
+
+                    <div class="report-tip">
+                        <span class="report-tip-number">02</span>
+                        <div>
+                            <strong>อธิบายสิ่งที่เกิดขึ้น</strong>
+                            <p>ระบุปัญหาและรายละเอียดที่จำเป็น</p>
+                        </div>
+                    </div>
+
+                    <div class="report-tip">
+                        <span class="report-tip-number">03</span>
+                        <div>
+                            <strong>แนบหลักฐานถ้ามี</strong>
+                            <p>รูปภาพอาจช่วยให้ทีมงานเข้าใจปัญหาได้ดีขึ้น</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="report-notice-card">
+                    <h3>ข้อควรทราบ</h3>
+
+                    <p>
+                        กรุณาให้ข้อมูลตามความเป็นจริง
+                        และหลีกเลี่ยงการใส่รหัสผ่านหรือข้อมูลส่วนตัวที่ไม่จำเป็น
+                    </p>
+                </section>
+
+            </aside>
+
+        </div>
+
+        <div class="report-back-link">
+            <a href="orders.html">&larr; กลับไปหน้ารายการสั่งซื้อ</a>
+        </div>
+
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
 

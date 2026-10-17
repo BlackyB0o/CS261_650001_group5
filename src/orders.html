@@ -5,70 +5,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายการสั่งซื้อ | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/orders.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
 
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
             <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
-            <a href="orders.html">รายการสั่งซื้อ</a>
+            <a href="orders.html" class="active">รายการสั่งซื้อ</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h1>รายการสั่งซื้อของฉัน</h1>
-            <p>ตรวจสอบรายการสั่งซื้อและติดตามสถานะได้ที่นี่</p>
+    <main class="orders-container">
+
+        <section class="orders-heading">
+            <div>
+                <p class="orders-eyebrow">MY ORDERS</p>
+                <h1>รายการสั่งซื้อของฉัน</h1>
+                <p class="orders-subtitle">
+                    ตรวจสอบรายการสั่งซื้อและติดตามสถานะออเดอร์ของคุณ
+                </p>
+            </div>
+
+            <div class="orders-total">
+                <span>รายการทั้งหมด</span>
+                <strong>3</strong>
+                <span>ออเดอร์</span>
+            </div>
         </section>
 
-        <section>
-            <h2>รายการทั้งหมด</h2>
+        <section class="orders-content">
 
-            <article>
-                <h3>ออเดอร์ #CH001</h3>
-                <p>ร้านค้า: ร้านชานมหน้ามหาวิทยาลัย</p>
-                <p>รายการสินค้า: ชานม 2 แก้ว</p>
-                <p>ผู้รับหิ้ว: สมชาย</p>
-                <p>ยอดรวม: 100 บาท</p>
-                <p>สถานะ: รอชำระเงิน</p>
+            <div class="orders-section-heading">
+                <div>
+                    <h2>ออเดอร์ของฉัน</h2>
+                    <p>รายการสั่งซื้อทั้งหมดของคุณ</p>
+                </div>
 
-                <a href="order-detail.html">ดูรายละเอียดออเดอร์</a>
-            </article>
+                <span class="orders-count">3 รายการ</span>
+            </div>
 
-            <hr>
+            <div class="orders-list">
 
-            <article>
-                <h3>ออเดอร์ #CH002</h3>
-                <p>ร้านค้า: ร้านอาหารตามสั่ง</p>
-                <p>รายการสินค้า: ข้าวผัด 1 กล่อง</p>
-                <p>ผู้รับหิ้ว: มานะ</p>
-                <p>ยอดรวม: 75 บาท</p>
-                <p>สถานะ: กำลังดำเนินการ</p>
+                <article class="order-card">
 
-                <a href="order-detail.html">ดูรายละเอียดออเดอร์</a>
-            </article>
+                    <div class="order-card-header">
+                        <div>
+                            <span class="order-label">หมายเลขออเดอร์</span>
+                            <h3>CH001</h3>
+                        </div>
 
-            <hr>
+                        <span class="order-status order-status-pending">
+                            รอชำระเงิน
+                        </span>
+                    </div>
 
-            <article>
-                <h3>ออเดอร์ #CH003</h3>
-                <p>ร้านค้า: ร้านเบเกอรี</p>
-                <p>รายการสินค้า: ขนมปัง 3 ชิ้น</p>
-                <p>ผู้รับหิ้ว: สุดา</p>
-                <p>ยอดรวม: 90 บาท</p>
-                <p>สถานะ: ส่งมอบสินค้าแล้ว</p>
+                    <div class="order-card-body">
+                        <div class="order-shop-icon">CH</div>
 
-                <a href="order-detail.html">ดูรายละเอียดออเดอร์</a>
-            </article>
+                        <div class="order-product-info">
+                            <h4>ร้านชานมหน้ามหาวิทยาลัย</h4>
+                            <p>ชานม 2 แก้ว</p>
+                            <p class="order-carrier">ผู้รับหิ้ว: สมชาย</p>
+                        </div>
+                    </div>
+
+                    <div class="order-card-footer">
+                        <div class="order-price">
+                            <span>ยอดรวม</span>
+                            <strong>100 บาท</strong>
+                        </div>
+
+                        <a href="order-detail.html" class="order-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+                <article class="order-card">
+
+                    <div class="order-card-header">
+                        <div>
+                            <span class="order-label">หมายเลขออเดอร์</span>
+                            <h3>CH002</h3>
+                        </div>
+
+                        <span class="order-status order-status-processing">
+                            กำลังดำเนินการ
+                        </span>
+                    </div>
+
+                    <div class="order-card-body">
+                        <div class="order-shop-icon">CH</div>
+
+                        <div class="order-product-info">
+                            <h4>ร้านอาหารตามสั่ง</h4>
+                            <p>ข้าวผัด 1 กล่อง</p>
+                            <p class="order-carrier">ผู้รับหิ้ว: มานะ</p>
+                        </div>
+                    </div>
+
+                    <div class="order-card-footer">
+                        <div class="order-price">
+                            <span>ยอดรวม</span>
+                            <strong>75 บาท</strong>
+                        </div>
+
+                        <a href="order-detail.html" class="order-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+                <article class="order-card">
+
+                    <div class="order-card-header">
+                        <div>
+                            <span class="order-label">หมายเลขออเดอร์</span>
+                            <h3>CH003</h3>
+                        </div>
+
+                        <span class="order-status order-status-completed">
+                            ส่งมอบสินค้าแล้ว
+                        </span>
+                    </div>
+
+                    <div class="order-card-body">
+                        <div class="order-shop-icon">CH</div>
+
+                        <div class="order-product-info">
+                            <h4>ร้านเบเกอรี</h4>
+                            <p>ขนมปัง 3 ชิ้น</p>
+                            <p class="order-carrier">ผู้รับหิ้ว: สุดา</p>
+                        </div>
+                    </div>
+
+                    <div class="order-card-footer">
+                        <div class="order-price">
+                            <span>ยอดรวม</span>
+                            <strong>90 บาท</strong>
+                        </div>
+
+                        <a href="order-detail.html" class="order-detail-btn">
+                            ดูรายละเอียด
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </article>
+
+            </div>
+
         </section>
+
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
 

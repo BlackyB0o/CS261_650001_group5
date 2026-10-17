@@ -3,66 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรไฟล์ | CarryHub</title>
+    <title>โปรไฟล์ของฉัน | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
 
-    <header>
-        <h1>CarryHub</h1>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
 
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
-            <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
             <a href="orders.html">รายการสั่งซื้อ</a>
-            <a href="profile.html">โปรไฟล์</a>
+            <a href="profile.html" class="profile-nav-active">โปรไฟล์</a>
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h1>โปรไฟล์ของฉัน</h1>
+    <main class="profile-page">
+
+        <section class="profile-heading">
+            <div>
+                <p class="profile-eyebrow">MY ACCOUNT</p>
+                <h1>โปรไฟล์ของฉัน</h1>
+                <p class="profile-subtitle">
+                    จัดการข้อมูลส่วนตัวและตรวจสอบการใช้งาน CarryHub
+                </p>
+            </div>
+
+            <a href="login.html" class="profile-logout">
+                ออกจากระบบ
+            </a>
         </section>
 
-        <section>
-            <h2>ข้อมูลสมาชิก</h2>
+        <section class="profile-overview">
 
-            <p>ชื่อ-นามสกุล: นัท ตัวอย่าง</p>
-            <p>อีเมล: user@example.com</p>
-            <p>เบอร์โทรศัพท์: 080-000-0000</p>
-            <p>สถานะบัญชี: ยืนยันข้อมูลแล้ว</p>
+            <div class="profile-user-card">
 
-            <a href="login.html">ออกจากระบบ</a>
+                <div class="profile-cover"></div>
+
+                <div class="profile-user-content">
+
+                    <div class="profile-avatar">
+                        <span>N</span>
+                    </div>
+
+                    <div class="profile-user-info">
+                        <h2>นัท ตัวอย่าง</h2>
+                        <p>สมาชิก CarryHub</p>
+
+                        <div class="profile-status">
+                            <span class="status-dot"></span>
+                            ยืนยันข้อมูลแล้ว
+                        </div>
+                    </div>
+
+                    <a href="verify.html" class="profile-edit-btn">
+                        จัดการการยืนยัน
+                    </a>
+
+                </div>
+
+                <div class="profile-user-footer">
+                    <div>
+                        <span class="profile-footer-label">ชื่อผู้ใช้</span>
+                        <strong>Natt</strong>
+                    </div>
+
+                    <div>
+                        <span class="profile-footer-label">สถานะบัญชี</span>
+                        <strong class="profile-active-text">ใช้งานได้</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <aside class="profile-help-card">
+                <div class="help-card-top">
+                    <span class="help-card-label">CARRYHUB</span>
+                    <span class="help-card-line"></span>
+                </div>
+
+                <h3>มีอะไรให้เราช่วยไหม?</h3>
+
+                <p>
+                    หากพบปัญหาในการสั่งซื้อหรือใช้งาน
+                    สามารถแจ้งปัญหาให้ทีมงานตรวจสอบได้
+                </p>
+
+                <a href="report.html" class="help-card-btn">
+                    ติดต่อฝ่ายช่วยเหลือ
+                </a>
+            </aside>
+
         </section>
 
-        <section>
-            <h2>เมนูของฉัน</h2>
+        <section class="profile-section">
 
-            <ul>
-                <li>
-                    <a href="orders.html">รายการสั่งซื้อของฉัน</a>
-                </li>
-                <li>
-                    <a href="rounds.html">ค้นหารอบรับหิ้ว</a>
-                </li>
-                <li>
-                    <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
-                </li>
-                <li>
-                    <a href="create-buyer-post.html">สร้างโพสต์ใหม่</a>
-                </li>
-            </ul>
+            <div class="profile-section-heading">
+                <div>
+                    <h2>ข้อมูลสมาชิก</h2>
+                    <p>ข้อมูลติดต่อที่ใช้สำหรับบัญชีของคุณ</p>
+                </div>
+            </div>
+
+            <div class="profile-info-grid">
+
+                <article class="profile-info-card">
+                    <span class="info-label">ชื่อ-นามสกุล</span>
+                    <p>นัท ตัวอย่าง</p>
+                </article>
+
+                <article class="profile-info-card">
+                    <span class="info-label">อีเมล</span>
+                    <p>user@example.com</p>
+                </article>
+
+                <article class="profile-info-card">
+                    <span class="info-label">เบอร์โทรศัพท์</span>
+                    <p>080-000-0000</p>
+                </article>
+
+                <article class="profile-info-card">
+                    <span class="info-label">สถานะการยืนยัน</span>
+                    <p class="verified-text">ยืนยันข้อมูลแล้ว</p>
+                </article>
+
+            </div>
+
         </section>
 
-        <section>
-            <h2>การช่วยเหลือ</h2>
-            <p>พบปัญหาในการใช้งาน สามารถแจ้งปัญหาผ่านระบบได้</p>
-            <a href="report.html">รายงานปัญหา</a>
+        <section class="profile-section">
+
+            <div class="profile-section-heading">
+                <div>
+                    <h2>เมนูของฉัน</h2>
+                    <p>เข้าถึงบริการต่าง ๆ ได้จากที่นี่</p>
+                </div>
+            </div>
+
+            <div class="profile-menu-grid">
+
+                <a href="orders.html" class="profile-menu-card">
+                    <div class="menu-card-icon">01</div>
+
+                    <div class="menu-card-content">
+                        <h3>รายการสั่งซื้อ</h3>
+                        <p>ดูรายการสั่งซื้อและตรวจสอบสถานะ</p>
+                    </div>
+
+                    <span class="menu-arrow">&rarr;</span>
+                </a>
+
+                <a href="rounds.html" class="profile-menu-card">
+                    <div class="menu-card-icon">02</div>
+
+                    <div class="menu-card-content">
+                        <h3>รอบรับหิ้ว</h3>
+                        <p>ค้นหารอบรับหิ้วที่เปิดให้บริการ</p>
+                    </div>
+
+                    <span class="menu-arrow">&rarr;</span>
+                </a>
+
+                <a href="buyer-posts.html" class="profile-menu-card">
+                    <div class="menu-card-icon">03</div>
+
+                    <div class="menu-card-content">
+                        <h3>โพสต์หาคนรับหิ้ว</h3>
+                        <p>ดูโพสต์ที่กำลังหาคนช่วยซื้อสินค้า</p>
+                    </div>
+
+                    <span class="menu-arrow">&rarr;</span>
+                </a>
+
+                <a href="create-buyer-post.html" class="profile-menu-card">
+                    <div class="menu-card-icon">04</div>
+
+                    <div class="menu-card-content">
+                        <h3>สร้างโพสต์ใหม่</h3>
+                        <p>โพสต์รายละเอียดสินค้าที่ต้องการฝากซื้อ</p>
+                    </div>
+
+                    <span class="menu-arrow">&rarr;</span>
+                </a>
+
+                <a href="create-round.html" class="profile-menu-card">
+                    <div class="menu-card-icon">05</div>
+
+                    <div class="menu-card-content">
+                        <h3>สร้างรอบรับหิ้ว</h3>
+                        <p>เปิดรอบเพื่อรับฝากซื้อสินค้าจากผู้อื่น</p>
+                    </div>
+
+                    <span class="menu-arrow">&rarr;</span>
+                </a>
+
+                <a href="report.html" class="profile-menu-card">
+                    <div class="menu-card-icon">06</div>
+
+                    <div class="menu-card-content">
+                        <h3>รายงานปัญหา</h3>
+                        <p>แจ้งปัญหาที่พบระหว่างการใช้งาน</p>
+                    </div>
+
+                    <span class="menu-arrow">&rarr;</span>
+                </a>
+
+            </div>
+
         </section>
+
+        <section class="profile-bottom-banner">
+            <div>
+                <p class="banner-eyebrow">CARRYHUB COMMUNITY</p>
+                <h2>ให้ทุกการฝากซื้อเป็นเรื่องง่าย</h2>
+                <p>ค้นหารอบรับหิ้วที่เหมาะกับคุณได้เลย</p>
+            </div>
+
+            <a href="rounds.html" class="banner-btn">
+                ดูรอบรับหิ้ว
+            </a>
+        </section>
+
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>CarryHub © 2026</p>
     </footer>
 
