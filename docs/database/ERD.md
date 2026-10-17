@@ -11,6 +11,7 @@ erDiagram
     USERS ||--o{ ORDERS : places
     DELIVERY_ROUNDS ||--o{ ORDERS : receives
     USERS ||--o{ POSTS : creates
+    USERS |o--o{ POSTS : accepts
     ORDERS ||--|{ ORDER_ITEMS : contains
 
     %% Task 20, 24 - ความสัมพันธ์การชำระเงินและยืนยันรับสินค้า
@@ -25,7 +26,7 @@ erDiagram
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
         varchar phone_number UK "NOT NULL"
-        varchar role "NOT NULL"
+        varchar role "NOT NULL, DEFAULT USER"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
@@ -39,6 +40,8 @@ erDiagram
         varchar receiving_detail "NOT NULL"
         varchar status "NOT NULL, DEFAULT OPEN"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        bigint accepted_by FK "OPTIONAL"
+        timestamp accepted_at "OPTIONAL"
     }
     %% Task 08 - เปิดรอบรับหิ้ว
     DELIVERY_ROUNDS {
