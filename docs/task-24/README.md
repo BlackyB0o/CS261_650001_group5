@@ -351,3 +351,192 @@ classDiagram
     OrderCompletionServiceImpl ..> CompletionResponseDTO : creates
     ApiResponseDTO ..> CompletionResponseDTO : wraps
 ```
+
+## Sequence Diagrams
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Buyer as User (BUYER / RUNNER)
+    participant Ctrl as OrderCompletionController<br/>(/api/v1/orders/{orderId}/completion)
+    participant Svc as OrderCompletionServiceImpl
+    participant OrderRepo as OrderRepository
+    participant PayRepo as PaymentRepository
+    participant CompRepo as OrderCompletionRepository
+    participant UserRepo as UserRepository
+    participant FileSvc as FileStorageService
+    participant DB as PostgreSQL Database (ORDER_COMPLETIONS, PAYMENTS, ORDERS)
+
+    %% ==========================================
+    %% 1. Endpoint 1: POST /api/v1/orders/{orderId}/completion (Confirm Receipt and Close Order)
+    %% ==========================================
+    rect rgb(240, 255, 240)
+    note over Buyer, DB: 1. Endpoint 1: Confirm Receipt and Close Order (POST /api/v1/orders/{orderId}/completion)
+    Buyer->>Ctrl: POST /api/v1/orders/{orderId}/completion (ConfirmReceiptRequestDTO)
+    activate Ctrl
+    note right of Buyer: Header: Bearer <JWT_TOKEN> (ผู้ฝากซื้อเจ้าของออเดอร์เท่านั้น)<br/>Content-Type: multipart/form-data<br/>Parts: evidenceImage (file <= 5MB, JPEG/PNG)
+
+    alt Missing/Invalid Token
+        Ctrl-->>Buyer: 401 Unauthorized (Invalid or missing token)
+    else Validation Failed (File missing / > 5MB / Not JPEG or PNG)
+        Ctrl-->>Buyer: 400 Bad Request (ApiResponseDTO with FieldErrorDTO)
+    else Authorization & Validation Passed
+        Ctrl->>Svc: confirmReceipt(buyerId, orderId, requestDTO)
+        activate Svc
+
+        Svc->>OrderRepo: findById(orderId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE id = orderId
+        activate DB
+        DB-->>OrderRepo: Order Entity / null
+        deactivate DB
+        OrderRepo-->>Svc: Optional<Order>
+        deactivate OrderRepo
+
+        alt Order Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>Buyer: 404 Not Found (Order not found)
+        else User is NOT the buyer of this order
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>Buyer: 403 Forbidden (You are not the owner of this order)
+        else Order status is 'PENDING' (ยังไม่ชำระเงิน)
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>Buyer: 409 Conflict (Order has not been paid)
+        else Order status is 'COMPLETED' (ปิดออเดอร์ไปแล้ว)
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>Buyer: 409 Conflict (Order is already completed)
+        else Order Status is 'PAID' & Valid
+            Svc->>PayRepo: findByOrderId(orderId)
+            activate PayRepo
+            PayRepo->>DB: SELECT * FROM PAYMENTS WHERE order_id = orderId
+            activate DB
+            DB-->>PayRepo: Payment Entity / null
+            deactivate DB
+            PayRepo-->>Svc: Optional<Payment>
+            deactivate PayRepo
+
+            Svc->>UserRepo: findById(buyerId)
+            activate UserRepo
+            UserRepo->>DB: SELECT * FROM USERS WHERE id = buyerId
+            activate DB
+            DB-->>UserRepo: User Entity (Buyer)
+            deactivate DB
+            UserRepo-->>Svc: User
+            deactivate UserRepo
+
+            %% Single Transaction Execution
+            note over Svc, DB: Atomic Transaction (ถ้าขั้นตอนใดล้มเหลว Rollback ทั้งหมด)
+
+            %% Step 1: Save Evidence Image File
+            Svc->>FileSvc: store(evidenceImage, "completions")
+            activate FileSvc
+            FileSvc-->>Svc: evidenceImageUrl (e.g. "/uploads/completions/5001-1761376200.jpg")
+            deactivate FileSvc
+
+            %% Step 2: Create & Save OrderCompletion Entity
+            Svc->>Svc: Construct OrderCompletion entity<br/>(payment, confirmedBy=buyer, confirmedAt=NOW(), completionStatus='COMPLETED', evidenceImageUrl)
+            Svc->>CompRepo: save(orderCompletion)
+            activate CompRepo
+            CompRepo->>DB: INSERT INTO ORDER_COMPLETIONS (payment_id, confirmed_by, confirmed_at, completion_status, evidence_image_url) VALUES (...)
+            activate DB
+            DB-->>CompRepo: Saved OrderCompletion (with generated completionId)
+            deactivate DB
+            CompRepo-->>Svc: OrderCompletion Entity
+            deactivate CompRepo
+
+            %% Step 3: Update Payment Status to RELEASED
+            Svc->>Svc: Set payment.paymentStatus = 'RELEASED'
+            Svc->>PayRepo: save(payment)
+            activate PayRepo
+            PayRepo->>DB: UPDATE PAYMENTS SET payment_status = 'RELEASED' WHERE id = ?
+            activate DB
+            DB-->>PayRepo: Updated Payment
+            deactivate DB
+            PayRepo-->>Svc: Payment Entity
+            deactivate PayRepo
+
+            %% Step 4: Update Order Status to COMPLETED
+            Svc->>Svc: Set order.status = 'COMPLETED'
+            Svc->>OrderRepo: save(order)
+            activate OrderRepo
+            OrderRepo->>DB: UPDATE ORDERS SET status = 'COMPLETED' WHERE id = ?
+            activate DB
+            DB-->>OrderRepo: Updated Order
+            deactivate DB
+            OrderRepo-->>Svc: Order Entity
+            deactivate OrderRepo
+
+            Svc-->>Ctrl: CompletionResponseDTO
+            deactivate Svc
+            Ctrl-->>Buyer: 201 Created<br/>ApiResponseDTO(status="SUCCESS", message="Order completed successfully", data=CompletionResponseDTO)
+            deactivate Ctrl
+        end
+    end
+    end
+
+    %% ==========================================
+    %% 2. Endpoint 2: GET /api/v1/orders/{orderId}/completion (Get Order Completion Detail)
+    %% ==========================================
+    rect rgb(240, 248, 255)
+    note over Buyer, DB: 2. Endpoint 2: Get Order Completion Detail (GET /api/v1/orders/{orderId}/completion)
+    Buyer->>Ctrl: GET /api/v1/orders/{orderId}/completion
+    activate Ctrl
+    note right of Buyer: Header: Bearer <JWT_TOKEN> (ผู้ฝากซื้อเจ้าของออเดอร์ หรือ ผู้รับหิ้วเจ้าของรอบ)
+
+    alt Missing/Invalid Token
+        Ctrl-->>Buyer: 401 Unauthorized
+    else Authorized Token Passed
+        Ctrl->>Svc: getCompletion(userId, orderId)
+        activate Svc
+
+        Svc->>OrderRepo: findById(orderId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE id = orderId
+        activate DB
+        DB-->>OrderRepo: Order Entity / null
+        deactivate DB
+        OrderRepo-->>Svc: Optional<Order>
+        deactivate OrderRepo
+
+        alt Order Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>Buyer: 404 Not Found (Order not found)
+        else User is NEITHER Buyer NOR Runner of this order
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>Buyer: 403 Forbidden (You are not allowed to view this order)
+        else User Authorized
+            Svc->>PayRepo: findByOrderId(orderId)
+            activate PayRepo
+            PayRepo->>DB: SELECT * FROM PAYMENTS WHERE order_id = orderId
+            activate DB
+            DB-->>PayRepo: Payment Entity / null
+            deactivate DB
+            PayRepo-->>Svc: Optional<Payment>
+            deactivate PayRepo
+
+            alt Payment Not Found
+                Svc-->>Ctrl: throw ResourceNotFoundException
+                Ctrl-->>Buyer: 404 Not Found (Order completion not found)
+            else Payment Found
+                Svc->>CompRepo: findByPaymentId(payment.id)
+                activate CompRepo
+                CompRepo->>DB: SELECT * FROM ORDER_COMPLETIONS WHERE payment_id = payment.id
+                activate DB
+                DB-->>CompRepo: OrderCompletion Entity / null
+                deactivate DB
+                CompRepo-->>Svc: Optional<OrderCompletion>
+                deactivate CompRepo
+
+                alt Order Completion Record Not Found
+                    Svc-->>Ctrl: throw ResourceNotFoundException
+                    Ctrl-->>Runner: 404 Not Found (Order completion not found)
+                else Record Found
+                    Svc-->>Ctrl: CompletionResponseDTO
+                    deactivate Svc
+                    Ctrl-->>Buyer: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=CompletionResponseDTO)
+                    deactivate Ctrl
+                end
+            end
+        end
+    end
+    end
