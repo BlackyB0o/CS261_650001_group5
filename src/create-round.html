@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/create-round.css">
 </head>
+
 <body>
 
     <header class="navbar">
@@ -36,35 +38,19 @@
 
                     <div class="form-group">
                         <label for="round-name">ชื่อรอบรับหิ้ว <span class="required">*</span></label>
-                        <input
-                            type="text"
-                            id="round-name"
-                            name="round-name"
-                            placeholder="เช่น รอบร้านชานมช่วงเที่ยง"
-                            required
-                        >
+                        <input type="text" id="round-name" name="round-name" placeholder="เช่น รอบร้านชานมช่วงเที่ยง"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label for="shop">ชื่อร้านค้า <span class="required">*</span></label>
-                        <input
-                            type="text"
-                            id="shop"
-                            name="shop"
-                            placeholder="กรอกชื่อร้านค้า"
-                            required
-                        >
+                        <input type="text" id="shop" name="shop" placeholder="กรอกชื่อร้านค้า" required>
                     </div>
 
                     <div class="form-group">
                         <label for="location">สถานที่รับสินค้า <span class="required">*</span></label>
-                        <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            placeholder="เช่น หน้าร้าน หรืออาคารที่นัดรับ"
-                            required
-                        >
+                        <input type="text" id="location" name="location" placeholder="เช่น หน้าร้าน หรืออาคารที่นัดรับ"
+                            required>
                     </div>
                 </div>
 
@@ -75,55 +61,32 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="date">วันที่ไปรับสินค้า <span class="required">*</span></label>
-                            <input
-                                type="date"
-                                id="date"
-                                name="date"
-                                required
-                            >
+                            <input type="date" id="date" name="date" required>
                         </div>
 
                         <div class="form-group">
                             <label for="deadline">เวลาปิดรับออเดอร์ <span class="required">*</span></label>
-                            <input
-                                type="time"
-                                id="deadline"
-                                name="deadline"
-                                required
-                            >
+                            <input type="time" id="deadline" name="deadline" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="capacity">จำนวนออเดอร์ที่รับได้ <span class="required">*</span></label>
-                            <input
-                                type="number"
-                                id="capacity"
-                                name="capacity"
-                                min="1"
-                                placeholder="เช่น 10"
-                                required
-                            >
+                            <input type="number" id="capacity" name="capacity" min="1" placeholder="เช่น 10" required>
                         </div>
 
                         <div class="form-group">
                             <label for="fee">ค่าบริการต่อรายการ (บาท) <span class="required">*</span></label>
-                            <input
-                                type="number"
-                                id="fee"
-                                name="fee"
-                                min="0"
-                                placeholder="เช่น 10"
-                                required
-                            >
+                            <input type="number" id="fee" name="fee" min="0" placeholder="เช่น 10" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h2>รูปเมนูสินค้า</h2>
-                    <p class="section-description">เพิ่มรูปเมนูจากร้านค้า เพื่อให้ผู้ฝากซื้อเห็นรายการสินค้าที่สามารถสั่งได้</p>
+                    <p class="section-description">เพิ่มรูปเมนูจากร้านค้า
+                        เพื่อให้ผู้ฝากซื้อเห็นรายการสินค้าที่สามารถสั่งได้</p>
 
                     <label for="menu-image" class="image-upload-box">
                         <span class="upload-icon">＋</span>
@@ -132,13 +95,8 @@
                         <span class="upload-format">รองรับไฟล์ JPG, PNG และ WEBP</span>
                     </label>
 
-                    <input
-                        type="file"
-                        id="menu-image"
-                        name="menu-image"
-                        accept="image/jpeg,image/png,image/webp"
-                        multiple
-                    >
+                    <input type="file" id="menu-image" name="menu-image" accept="image/jpeg,image/png,image/webp"
+                        multiple>
 
                     <div id="image-preview" class="image-preview"></div>
                 </div>
@@ -149,12 +107,8 @@
 
                     <div class="form-group">
                         <label for="details">รายละเอียดเพิ่มเติม</label>
-                        <textarea
-                            id="details"
-                            name="details"
-                            rows="4"
-                            placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขการสั่งซื้อ"
-                        ></textarea>
+                        <textarea id="details" name="details" rows="4"
+                            placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขการสั่งซื้อ"></textarea>
                     </div>
                 </div>
 
@@ -214,4 +168,5 @@
     </script>
 
 </body>
+
 </html>

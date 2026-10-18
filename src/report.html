@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/report.css">
 </head>
+
 <body>
 
     <header class="navbar">
@@ -56,13 +58,7 @@
                                 หมายเลขออเดอร์ <span>*</span>
                             </label>
 
-                            <input
-                                type="text"
-                                id="order-id"
-                                name="order-id"
-                                placeholder="เช่น CH001"
-                                required
-                            >
+                            <input type="text" id="order-id" name="order-id" placeholder="เช่น CH001" required>
 
                             <small>ระบุหมายเลขออเดอร์ที่เกี่ยวข้องกับปัญหา</small>
                         </div>
@@ -99,14 +95,9 @@
                                 อธิบายปัญหาที่พบ <span>*</span>
                             </label>
 
-                            <textarea
-                                id="description"
-                                name="description"
-                                rows="6"
-                                maxlength="1000"
+                            <textarea id="description" name="description" rows="6" maxlength="1000"
                                 placeholder="โปรดอธิบายสิ่งที่เกิดขึ้น เช่น ปัญหาที่พบ เวลาที่เกิดเหตุ และข้อมูลเพิ่มเติมที่เกี่ยวข้อง"
-                                required
-                            ></textarea>
+                                required></textarea>
 
                             <small>กรุณาอธิบายตามข้อเท็จจริง เพื่อช่วยให้ทีมงานตรวจสอบได้รวดเร็วขึ้น</small>
                         </div>
@@ -117,12 +108,8 @@
                             </label>
 
                             <div class="report-upload-box">
-                                <input
-                                    type="file"
-                                    id="evidence"
-                                    name="evidence"
-                                    accept="image/png, image/jpeg, image/webp"
-                                >
+                                <input type="file" id="evidence" name="evidence"
+                                    accept="image/png, image/jpeg, image/webp">
 
                                 <div class="upload-content">
                                     <div class="upload-icon">+</div>
@@ -212,4 +199,5 @@
     </footer>
 
 </body>
+
 </html>
