@@ -377,3 +377,206 @@ classDiagram
     PostServiceImpl ..> PostResponseDTO : creates
     ApiResponseDTO ..> PostResponseDTO : wraps
 ```
+
+## Sequence Diagrams
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User (BUYER / RUNNER / Guest)
+    participant Ctrl as PostController<br/>(/api/v1/posts)
+    participant Svc as PostServiceImpl
+    participant UserRepo as UserRepository
+    participant PostRepo as PostRepository
+    participant DB as PostgreSQL Database (posts)
+
+    %% ==========================================
+    %% 1. Endpoint 1: POST /api/v1/posts (Create Post)
+    %% ==========================================
+    rect rgb(240, 255, 240)
+    note over User, DB: 1. Endpoint 1: Create Post (POST /api/v1/posts)
+    User->>Ctrl: POST /api/v1/posts (CreatePostRequestDTO)
+    activate Ctrl
+    note right of User: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)<br/>Body: productDetail, shopName, location, receivingDetail
+
+    alt Missing/Invalid Token
+        Ctrl-->>User: 401 Unauthorized (Invalid or missing token)
+    else Validation Failed (Blank fields / Exceed length limits)
+        Ctrl-->>User: 400 Bad Request (ApiResponseDTO with FieldErrorDTO)
+    else Authorization & Validation Passed
+        Ctrl->>Svc: createPost(buyerId, requestDTO)
+        activate Svc
+
+        Svc->>UserRepo: findById(buyerId)
+        activate UserRepo
+        UserRepo->>DB: SELECT * FROM USERS WHERE id = buyerId
+        activate DB
+        DB-->>UserRepo: User Entity (Buyer)
+        deactivate DB
+        UserRepo-->>Svc: Optional<User>
+        deactivate UserRepo
+
+        Svc->>Svc: Construct Post entity (status = 'OPEN', acceptedBy = null, acceptedAt = null)
+        Svc->>PostRepo: save(post)
+        activate PostRepo
+        PostRepo->>DB: INSERT INTO posts (buyer_id, product_detail, shop_name, location, receiving_detail, status) VALUES (...)
+        activate DB
+        DB-->>PostRepo: Saved Post (with generated postId)
+        deactivate DB
+        PostRepo-->>Svc: Post Entity
+        deactivate PostRepo
+
+        Svc-->>Ctrl: PostResponseDTO
+        deactivate Svc
+        Ctrl-->>User: 201 Created<br/>ApiResponseDTO(status="SUCCESS", message="Post created successfully", data=PostResponseDTO)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 2. Endpoint 2: GET /api/v1/posts (Get Open Posts)
+    %% ==========================================
+    rect rgb(240, 248, 255)
+    note over User, DB: 2. Endpoint 2: Get Open Posts (GET /api/v1/posts)
+    User->>Ctrl: GET /api/v1/posts
+    activate Ctrl
+    note right of User: Header: ไม่ต้องใช้ Token (Guest ดูได้)
+
+    Ctrl->>Svc: getOpenPosts()
+    activate Svc
+    Svc->>PostRepo: findByStatusOrderByCreatedAtDesc("OPEN")
+    activate PostRepo
+    PostRepo->>DB: SELECT * FROM posts WHERE status = 'OPEN' ORDER BY created_at DESC
+    activate DB
+    DB-->>PostRepo: List<Post>
+    deactivate DB
+    PostRepo-->>Svc: List<Post>
+    deactivate PostRepo
+
+    Svc-->>Ctrl: List<PostResponseDTO>
+    deactivate Svc
+    Ctrl-->>User: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<PostResponseDTO>)
+    deactivate Ctrl
+    end
+
+    %% ==========================================
+    %% 3. Endpoint 3: GET /api/v1/posts/my (Get My Posts)
+    %% ==========================================
+    rect rgb(255, 250, 240)
+    note over User, DB: 3. Endpoint 3: Get My Posts (GET /api/v1/posts/my)
+    User->>Ctrl: GET /api/v1/posts/my
+    activate Ctrl
+    note right of User: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)
+
+    alt Missing/Invalid Token
+        Ctrl-->>User: 401 Unauthorized
+    else Authorized
+        Ctrl->>Svc: getMyPosts(buyerId)
+        activate Svc
+        Svc->>PostRepo: findByBuyerIdOrderByCreatedAtDesc(buyerId)
+        activate PostRepo
+        PostRepo->>DB: SELECT * FROM posts WHERE buyer_id = ? ORDER BY created_at DESC
+        activate DB
+        DB-->>PostRepo: List<Post>
+        deactivate DB
+        PostRepo-->>Svc: List<Post>
+        deactivate PostRepo
+
+        Svc-->>Ctrl: List<PostResponseDTO>
+        deactivate Svc
+        Ctrl-->>User: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<PostResponseDTO>)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 4. Endpoint 4: GET /api/v1/posts/{postId} (Get Post Detail)
+    %% ==========================================
+    rect rgb(245, 245, 245)
+    note over User, DB: 4. Endpoint 4: Get Post Detail (GET /api/v1/posts/{postId})
+    User->>Ctrl: GET /api/v1/posts/{postId}
+    activate Ctrl
+    note right of User: Header: ไม่ต้องใช้ Token (Guest ดูได้)
+
+    Ctrl->>Svc: getPost(postId)
+    activate Svc
+    Svc->>PostRepo: findById(postId)
+    activate PostRepo
+    PostRepo->>DB: SELECT * FROM posts WHERE id = postId
+    activate DB
+    DB-->>PostRepo: Post Entity / null
+    deactivate DB
+    PostRepo-->>Svc: Optional<Post>
+    deactivate PostRepo
+
+    alt Post Not Found
+        Svc-->>Ctrl: throw ResourceNotFoundException
+        Ctrl-->>User: 404 Not Found (Post not found)
+    else Found
+        Svc-->>Ctrl: PostResponseDTO
+        deactivate Svc
+        Ctrl-->>User: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=PostResponseDTO)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 5. Endpoint 5: PATCH /api/v1/posts/{postId}/accept (Accept Post)
+    %% ==========================================
+    rect rgb(255, 240, 245)
+    note over User, DB: 5. Endpoint 5: Accept Post (PATCH /api/v1/posts/{postId}/accept)
+    User->>Ctrl: PATCH /api/v1/posts/{postId}/accept
+    activate Ctrl
+    note right of User: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)<br/>Body: ไม่มี (อ่านผู้รับงานจาก JWT)
+
+    alt Missing/Invalid Token
+        Ctrl-->>User: 401 Unauthorized
+    else Authorized Token Passed
+        Ctrl->>Svc: acceptPost(runnerId, postId)
+        activate Svc
+
+        Svc->>PostRepo: findById(postId)
+        activate PostRepo
+        PostRepo->>DB: SELECT * FROM posts WHERE id = postId
+        activate DB
+        DB-->>PostRepo: Post Entity / null
+        deactivate DB
+        PostRepo-->>Svc: Optional<Post>
+        deactivate PostRepo
+
+        alt Post Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>User: 404 Not Found (Post not found)
+        else User is the Owner of this Post (buyerId == runnerId)
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>User: 403 Forbidden (You cannot accept your own post)
+        else Post status is NOT 'OPEN' (e.g. ACCEPTED)
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>User: 409 Conflict (Post is no longer open)
+        else Valid to Accept
+            Svc->>UserRepo: findById(runnerId)
+            activate UserRepo
+            UserRepo->>DB: SELECT * FROM USERS WHERE id = runnerId
+            activate DB
+            DB-->>UserRepo: User Entity (Runner)
+            deactivate DB
+            UserRepo-->>Svc: User
+            deactivate UserRepo
+
+            Svc->>Svc: Update post.status = 'ACCEPTED'<br/>Set acceptedBy = runner, acceptedAt = NOW()
+            Svc->>PostRepo: save(post)
+            activate PostRepo
+            PostRepo->>DB: UPDATE posts SET status = 'ACCEPTED', accepted_by = ?, accepted_at = NOW() WHERE id = ?
+            activate DB
+            DB-->>PostRepo: Updated Post
+            deactivate DB
+            PostRepo-->>Svc: Post Entity
+            deactivate PostRepo
+
+            Svc-->>Ctrl: PostResponseDTO
+            deactivate Svc
+            Ctrl-->>User: 200 OK<br/>ApiResponseDTO(status="SUCCESS", message="Post accepted successfully", data=PostResponseDTO)
+            deactivate Ctrl
+        end
+    end
+    end
