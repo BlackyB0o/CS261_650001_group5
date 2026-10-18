@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/verify.css">
 </head>
+
 <body>
 
     <header class="navbar">
@@ -27,16 +29,8 @@
 
             <form action="verify-otp.html" method="get">
                 <label for="phone">เบอร์โทรศัพท์</label>
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
-                    maxlength="10"
-                    pattern="[0-9]{10}"
-                    inputmode="numeric"
-                    required
-                >
+                <input type="tel" id="phone" name="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" maxlength="10"
+                    pattern="[0-9]{10}" inputmode="numeric" required>
 
                 <button type="submit" class="btn-full">
                     ส่งรหัส OTP
@@ -49,4 +43,5 @@
     </main>
 
 </body>
+
 </html>
