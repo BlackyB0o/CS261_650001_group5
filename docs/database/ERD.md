@@ -30,7 +30,6 @@ erDiagram
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
         varchar phone_number UK "NOT NULL"
-        varchar role "NOT NULL, DEFAULT USER"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
