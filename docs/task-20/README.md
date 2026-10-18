@@ -389,3 +389,218 @@ classDiagram
     PaymentServiceImpl ..> PaymentResponseDTO : creates
     ApiResponseDTO ..> PaymentResponseDTO : wraps
 ```
+
+## Sequence Diagrams
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User (RUNNER / BUYER)
+    participant Ctrl as PaymentController<br/>(/api/v1/orders/{orderId})
+    participant Svc as PaymentServiceImpl
+    participant OrderRepo as OrderRepository
+    participant PayRepo as PaymentRepository
+    participant FileSvc as FileStorageService
+    participant DB as PostgreSQL Database (PAYMENTS & ORDERS)
+
+    %% ==========================================
+    %% 1. Endpoint 1: PUT /api/v1/orders/{orderId}/price (Set Product Price)
+    %% ==========================================
+    rect rgb(240, 255, 240)
+    note over User, DB: 1. Endpoint 1: Set Product Price (PUT /api/v1/orders/{orderId}/price)
+    User->>Ctrl: PUT /api/v1/orders/{orderId}/price (SetProductPriceRequestDTO)
+    activate Ctrl
+    note right of User: Header: Bearer <JWT_TOKEN> (ผู้รับหิ้วเจ้าของรอบเท่านั้น)<br/>Body: productAmount (> 0.00)
+
+    alt Missing/Invalid Token
+        Ctrl-->>User: 401 Unauthorized (Invalid or missing token)
+    else Validation Failed (productAmount null or <= 0.00)
+        Ctrl-->>User: 400 Bad Request (ApiResponseDTO with FieldErrorDTO)
+    else Authorization & Validation Passed
+        Ctrl->>Svc: setProductPrice(runnerId, orderId, requestDTO)
+        activate Svc
+
+        Svc->>OrderRepo: findById(orderId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE id = orderId
+        activate DB
+        DB-->>OrderRepo: Order Entity / null
+        deactivate DB
+        OrderRepo-->>Svc: Optional<Order>
+        deactivate OrderRepo
+
+        alt Order Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>User: 404 Not Found (Order not found)
+        else User is NOT the runner of this order's delivery round
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>User: 403 Forbidden (You are not the owner of this round)
+        else Order status is NOT 'PENDING'
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>User: 409 Conflict (Order has already been paid)
+        else Order is PENDING & Valid
+            Svc->>PayRepo: findByOrderId(orderId)
+            activate PayRepo
+            PayRepo->>DB: SELECT * FROM PAYMENTS WHERE order_id = orderId
+            activate DB
+            DB-->>PayRepo: Payment Entity / null
+            deactivate DB
+            PayRepo-->>Svc: Optional<Payment>
+            deactivate PayRepo
+
+            Svc->>Svc: Read serviceFee from order.round.serviceFee<br/>Calculate totalAmount = productAmount + serviceFee<br/>Generate qrPayload = "CARRYHUB-PAY|{paymentId}|{totalAmount}"
+            
+            Svc->>PayRepo: save(payment)
+            activate PayRepo
+            PayRepo->>DB: INSERT / UPDATE PAYMENTS (order_id, product_amount, service_fee, total_amount, payment_method='QR_TRANSFER', payment_status='PENDING', qr_payload) VALUES (...)
+            activate DB
+            DB-->>PayRepo: Saved Payment
+            deactivate DB
+            PayRepo-->>Svc: Payment Entity
+            deactivate PayRepo
+
+            Svc-->>Ctrl: PaymentResponseDTO
+            deactivate Svc
+            Ctrl-->>User: 200 OK<br/>ApiResponseDTO(status="SUCCESS", message="Product price set successfully", data=PaymentResponseDTO)
+            deactivate Ctrl
+        end
+    end
+    end
+
+    %% ==========================================
+    %% 2. Endpoint 2: GET /api/v1/orders/{orderId}/payment (Get Order Payment)
+    %% ==========================================
+    rect rgb(240, 248, 255)
+    note over User, DB: 2. Endpoint 2: Get Order Payment (GET /api/v1/orders/{orderId}/payment)
+    User->>Ctrl: GET /api/v1/orders/{orderId}/payment
+    activate Ctrl
+    note right of User: Header: Bearer <JWT_TOKEN> (ผู้ฝากซื้อ หรือ ผู้รับหิ้วเจ้าของรอบ)
+
+    alt Missing/Invalid Token
+        Ctrl-->>User: 401 Unauthorized
+    else Authorized Token Passed
+        Ctrl->>Svc: getPayment(userId, orderId)
+        activate Svc
+
+        Svc->>OrderRepo: findById(orderId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE id = orderId
+        activate DB
+        DB-->>OrderRepo: Order Entity / null
+        deactivate DB
+        OrderRepo-->>Svc: Optional<Order>
+        deactivate OrderRepo
+
+        alt Order Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>User: 404 Not Found (Order not found)
+        else User is NEITHER Buyer NOR Runner of this order
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>User: 403 Forbidden (You are not allowed to view this payment)
+        else User Authorized
+            Svc->>PayRepo: findByOrderId(orderId)
+            activate PayRepo
+            PayRepo->>DB: SELECT * FROM PAYMENTS WHERE order_id = orderId
+            activate DB
+            DB-->>PayRepo: Payment Entity / null
+            deactivate DB
+            PayRepo-->>Svc: Optional<Payment>
+            deactivate PayRepo
+
+            alt Payment Not Set Yet
+                Svc-->>Ctrl: throw ResourceNotFoundException
+                Ctrl-->>User: 404 Not Found (Payment not found)
+            else Payment Found
+                Svc-->>Ctrl: PaymentResponseDTO
+                deactivate Svc
+                Ctrl-->>User: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=PaymentResponseDTO)
+                deactivate Ctrl
+            end
+        end
+    end
+    end
+
+    %% ==========================================
+    %% 3. Endpoint 3: POST /api/v1/orders/{orderId}/payment/slip (Submit Payment Slip)
+    %% ==========================================
+    rect rgb(255, 240, 245)
+    note over User, DB: 3. Endpoint 3: Submit Payment Slip (POST /api/v1/orders/{orderId}/payment/slip)
+    User->>Ctrl: POST /api/v1/orders/{orderId}/payment/slip (SubmitSlipRequestDTO)
+    activate Ctrl
+    note right of User: Header: Bearer <JWT_TOKEN> (ผู้ฝากซื้อเจ้าของออเดอร์เท่านั้น)<br/>Content-Type: multipart/form-data<br/>Parts: slipImage (file <= 5MB, JPEG/PNG), paidAmount
+
+    alt Missing/Invalid Token
+        Ctrl-->>User: 401 Unauthorized
+    else Validation Failed (File empty / > 5MB / Not JPEG or PNG / paidAmount != totalAmount)
+        Ctrl-->>User: 400 Bad Request (ApiResponseDTO with FieldErrorDTO)
+    else Authorization & Validation Passed
+        Ctrl->>Svc: submitSlip(buyerId, orderId, requestDTO)
+        activate Svc
+
+        Svc->>OrderRepo: findById(orderId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE id = orderId
+        activate DB
+        DB-->>OrderRepo: Order Entity / null
+        deactivate DB
+        OrderRepo-->>Svc: Optional<Order>
+        deactivate OrderRepo
+
+        alt Order Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>User: 404 Not Found (Order not found)
+        else User is NOT the buyer of this order
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>User: 403 Forbidden (You are not the owner of this order)
+        else Order status is NOT 'PENDING'
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>User: 409 Conflict (Order has already been paid)
+        else Order is Valid
+            Svc->>PayRepo: findByOrderId(orderId)
+            activate PayRepo
+            PayRepo->>DB: SELECT * FROM PAYMENTS WHERE order_id = orderId
+            activate DB
+            DB-->>PayRepo: Payment Entity / null
+            deactivate DB
+            PayRepo-->>Svc: Optional<Payment>
+            deactivate PayRepo
+
+            alt Payment Price Not Set Yet
+                Svc-->>Ctrl: throw IllegalStateException
+                Ctrl-->>User: 409 Conflict (Product price has not been set yet)
+            else Payment Entity Valid
+                %% Step 1: Save Slip Image File
+                Svc->>FileSvc: store(slipImage, "slips")
+                activate FileSvc
+                FileSvc-->>Svc: slipImageUrl (e.g. "/uploads/slips/5001-1761373800.jpg")
+                deactivate FileSvc
+
+                %% Step 2: Update Payment & Order Status in Single Transaction
+                Svc->>Svc: Generate transactionReference (e.g. "TXN-20261025-000123")<br/>Set paymentStatus = 'HELD', paidAt = NOW()<br/>Set orderStatus = 'PAID'
+
+                Svc->>PayRepo: save(payment)
+                activate PayRepo
+                PayRepo->>DB: UPDATE PAYMENTS SET payment_status = 'HELD', slip_image_url = ?, transaction_reference = ?, paid_at = NOW() WHERE id = ?
+                activate DB
+                DB-->>PayRepo: Updated Payment
+                deactivate DB
+                PayRepo-->>Svc: Payment Entity
+                deactivate PayRepo
+
+                Svc->>OrderRepo: save(order)
+                activate OrderRepo
+                OrderRepo->>DB: UPDATE ORDERS SET status = 'PAID' WHERE id = ?
+                activate DB
+                DB-->>OrderRepo: Updated Order
+                deactivate DB
+                OrderRepo-->>Svc: Order Entity
+                deactivate OrderRepo
+
+                Svc-->>Ctrl: PaymentResponseDTO
+                deactivate Svc
+                Ctrl-->>User: 201 Created<br/>ApiResponseDTO(status="SUCCESS", message="Payment confirmed successfully", data=PaymentResponseDTO)
+                deactivate Ctrl
+            end
+        end
+    end
+    end
