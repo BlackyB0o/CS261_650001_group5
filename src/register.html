@@ -35,7 +35,10 @@
 
                 <div class="form-group">
                     <label for="phone">เบอร์โทรศัพท์</label>
-                    <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+                    <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" 
+                    pattern="[0]{1}[0-9]{9}"
+                    title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0"
+                    required>
                 </div>
 
                 <div class="form-group">
