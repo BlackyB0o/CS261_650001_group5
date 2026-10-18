@@ -29,7 +29,10 @@
 
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
-                    <input type="password" id="password" placeholder="กรอกรหัสผ่าน" required>
+                    <input type="password" id="password" placeholder="กรอกรหัสผ่าน" 
+                    minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                        title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
+                        autocomplete="new-password" required>
                 </div>
 
                 <p><a href="forgot-password.html">ลืมรหัสผ่าน?</a></p>
