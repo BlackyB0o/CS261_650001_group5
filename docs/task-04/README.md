@@ -575,7 +575,7 @@ classDiagram
 
 ---
 
-## 9. Sequence Diagrams
+## Sequence Diagrams
 ### Sequence Diagram 1: Register (สมัครสมาชิก)
 ```mermaid
 sequenceDiagram
@@ -678,31 +678,77 @@ sequenceDiagram
     participant SMS as SmsSender
     participant DB as PostgreSQL
 
+    %% Forgot Password
     Client->>Controller: POST /api/v1/auth/password/forgot (phoneNumber)
+    activate Controller
     Controller->>Service: forgotPassword(ForgotPasswordRequestDTO)
+    activate Service
+
     Service->>UserDAO: findByPhoneNumber(phoneNumber)
+    activate UserDAO
     UserDAO->>DB: SELECT * FROM users WHERE phone_number = ?
+    activate DB
+    DB-->>UserDAO: User Data
+    deactivate DB
+    UserDAO-->>Service: Optional of User
+    deactivate UserDAO
+
     alt ไม่พบเบอร์
         Controller-->>Client: 404 Not Found
     end
-    Service->>OtpDAO: save(OtpVerification purpose RESET_PASSWORD)
-    OtpDAO->>DB: INSERT INTO otp_verifications
-    Service->>SMS: send(phoneNumber, OTP)
-    Service-->>Controller: OtpSentResponseDTO
-    Controller-->>Client: 200 OK (verificationId)
 
+    Service->>OtpDAO: save(OtpVerification purpose RESET_PASSWORD)
+    activate OtpDAO
+    OtpDAO->>DB: INSERT INTO otp_verifications
+    activate DB
+    DB-->>OtpDAO: Saved OtpVerification
+    deactivate DB
+    OtpDAO-->>Service: OtpVerification
+    deactivate OtpDAO
+
+    Service->>SMS: send(phoneNumber, OTP)
+    activate SMS
+    SMS-->>Service: void
+    deactivate SMS
+
+    Service-->>Controller: OtpSentResponseDTO
+    deactivate Service
+    Controller-->>Client: 200 OK (verificationId)
+    deactivate Controller
+
+    %% Reset Password
     Client->>Controller: POST /api/v1/auth/password/reset (ResetPasswordRequestDTO)
+    activate Controller
     Controller->>Service: resetPassword(ResetPasswordRequestDTO)
+    activate Service
+
     Service->>OtpDAO: findById(verificationId)
+    activate OtpDAO
     OtpDAO->>DB: SELECT * FROM otp_verifications WHERE id = ?
+    activate DB
+    DB-->>OtpDAO: OtpVerification
+    deactivate DB
+    OtpDAO-->>Service: OtpVerification
+    deactivate OtpDAO
+
     Service->>Service: ตรวจ purpose, หมดอายุ, จำนวนครั้ง, เทียบ OTP กับ otp_hash
     alt ตรวจไม่ผ่าน
-        Controller-->>Client: 400 or 429
+        Controller-->>Client: 400 or 429 Bad Request / Too Many Requests
     end
+
     Service->>Service: Hash new password (BCrypt)
     Service->>UserDAO: save(User with new password_hash)
+    activate UserDAO
     UserDAO->>DB: UPDATE users SET password_hash = ?
+    activate DB
+    DB-->>UserDAO: Updated User
+    deactivate DB
+    UserDAO-->>Service: User
+    deactivate UserDAO
+
     Service->>OtpDAO: save(verified_at = now)
     Service-->>Controller: success
+    deactivate Service
     Controller-->>Client: 200 OK (Password reset successfully)
-```
+    deactivate Controller
+
