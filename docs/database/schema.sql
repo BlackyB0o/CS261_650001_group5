@@ -7,7 +7,7 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT chk_phone_number 
-        CHECK (phone_number ~ '[0-9]{10}$')
+        CHECK (phone_number ~ '^[0-9]{10}$')
 );
 
 CREATE TABLE otp_verifications (
@@ -99,7 +99,7 @@ CREATE TABLE delivery_rounds (
     CONSTRAINT chk_delivery_rounds_status
         CHECK (status IN (
             'OPEN',
-            'FULL',
+            'COMPLETED',
             'CLOSED',
             'CANCELLED'
         ))
