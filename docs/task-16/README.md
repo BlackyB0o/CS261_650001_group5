@@ -457,3 +457,210 @@ classDiagram
     OrderResponseDTO "1" --> "1..*" OrderItemResponseDTO : items
     ApiResponseDTO ..> OrderResponseDTO : wraps
 ```
+
+## Sequence Diagrams
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Buyer as User (BUYER / RUNNER)
+    participant Ctrl as OrderController<br/>(/api/v1/orders)
+    participant Svc as OrderServiceImpl
+    participant UserRepo as UserRepository
+    participant RoundRepo as DeliveryRoundRepository
+    participant OrderRepo as OrderRepository
+    participant DB as PostgreSQL Database (ORDERS & ORDER_ITEMS)
+
+    %% ==========================================
+    %% 1. Endpoint 1: POST /api/v1/orders (Create Order)
+    %% ==========================================
+    rect rgb(240, 255, 240)
+    note over Buyer, DB: 1. Endpoint 1: Create Order (POST /api/v1/orders)
+    Buyer->>Ctrl: POST /api/v1/orders (CreateOrderRequestDTO)
+    activate Ctrl
+    note right of Buyer: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)<br/>Body: roundId, handoffMethod, handoffLocation, items[]
+
+    alt Missing/Invalid Token
+        Ctrl-->>Buyer: 401 Unauthorized (Invalid or missing token)
+    else Validation Failed (roundId/handoff null, items empty, quantity < 1)
+        Ctrl-->>Buyer: 400 Bad Request (ApiResponseDTO with FieldErrorDTO)
+    else Authorization & Validation Passed
+        Ctrl->>Svc: createOrder(buyerId, requestDTO)
+        activate Svc
+
+        %% Step 1: Validate Delivery Round
+        Svc->>RoundRepo: findById(roundId)
+        activate RoundRepo
+        RoundRepo->>DB: SELECT * FROM DELIVERY_ROUNDS WHERE id = roundId
+        activate DB
+        DB-->>RoundRepo: DeliveryRound Entity / null
+        deactivate DB
+        RoundRepo-->>Svc: Optional<DeliveryRound>
+        deactivate RoundRepo
+
+        alt Delivery Round Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>Buyer: 404 Not Found (Delivery round not found)
+        else User is the Runner of this Delivery Round (buyerId == runnerId)
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>Buyer: 403 Forbidden (You cannot order from your own round)
+        else Delivery Round status is NOT 'OPEN'
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>Buyer: 409 Conflict (Delivery round is not open)
+        else Delivery Round is OPEN & Valid
+            
+            %% Step 2: Fetch Buyer Info
+            Svc->>UserRepo: findById(buyerId)
+            activate UserRepo
+            UserRepo->>DB: SELECT * FROM USERS WHERE id = buyerId
+            activate DB
+            DB-->>UserRepo: User Entity (Buyer)
+            deactivate DB
+            UserRepo-->>Svc: User
+            deactivate UserRepo
+
+            %% Step 3: Create Order & OrderItems (Cascade All)
+            Svc->>Svc: Construct Order entity (status = 'PENDING')<br/>Construct OrderItem entities mapped to Order
+            
+            Svc->>OrderRepo: save(order)
+            activate OrderRepo
+            OrderRepo->>DB: INSERT INTO ORDERS (buyer_id, round_id, handoff_method, handoff_location, status) VALUES (...)
+            activate DB
+            DB-->>OrderRepo: Saved Order (with generated orderId)
+            deactivate DB
+            
+            OrderRepo->>DB: INSERT INTO ORDER_ITEMS (order_id, product_name, quantity, note) VALUES (...)
+            activate DB
+            DB-->>OrderRepo: Saved OrderItems
+            deactivate DB
+            
+            OrderRepo-->>Svc: Order Entity (with items)
+            deactivate OrderRepo
+
+            Svc-->>Ctrl: OrderResponseDTO
+            deactivate Svc
+            Ctrl-->>Buyer: 201 Created<br/>ApiResponseDTO(status="SUCCESS", message="Order created successfully", data=OrderResponseDTO)
+            deactivate Ctrl
+        end
+    end
+    end
+
+    %% ==========================================
+    %% 2. Endpoint 2: GET /api/v1/orders/my (Get My Orders)
+    %% ==========================================
+    rect rgb(240, 248, 255)
+    note over Buyer, DB: 2. Endpoint 2: Get My Orders (GET /api/v1/orders/my)
+    Buyer->>Ctrl: GET /api/v1/orders/my
+    activate Ctrl
+    note right of Buyer: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)
+
+    alt Missing/Invalid Token
+        Ctrl-->>Buyer: 401 Unauthorized
+    else Authorized
+        Ctrl->>Svc: getMyOrders(buyerId)
+        activate Svc
+        
+        Svc->>OrderRepo: findByBuyerIdOrderByCreatedAtDesc(buyerId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE buyer_id = ? ORDER BY created_at DESC
+        activate DB
+        DB-->>OrderRepo: List<Order> (with items)
+        deactivate DB
+        OrderRepo-->>Svc: List<Order>
+        deactivate OrderRepo
+
+        Svc-->>Ctrl: List<OrderResponseDTO>
+        deactivate Svc
+        Ctrl-->>Buyer: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<OrderResponseDTO>)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 3. Endpoint 3: GET /api/v1/orders?roundId={roundId} (Get Orders of a Round)
+    %% ==========================================
+    rect rgb(255, 250, 240)
+    note over Buyer, DB: 3. Endpoint 3: Get Orders of a Round (GET /api/v1/orders?roundId=101)
+    Buyer->>Ctrl: GET /api/v1/orders?roundId={roundId}
+    activate Ctrl
+    note right of Buyer: Header: Bearer <JWT_TOKEN> (ผู้หิ้วเจ้าของรอบนั้นๆ เท่านั้น)
+
+    alt Missing roundId Query Parameter
+        Ctrl-->>Buyer: 400 Bad Request (roundId is required)
+    else Missing/Invalid Token
+        Ctrl-->>Buyer: 401 Unauthorized
+    else Request Valid
+        Ctrl->>Svc: getOrdersByRound(runnerId, roundId)
+        activate Svc
+
+        Svc->>RoundRepo: findById(roundId)
+        activate RoundRepo
+        RoundRepo->>DB: SELECT * FROM DELIVERY_ROUNDS WHERE id = roundId
+        activate DB
+        DB-->>RoundRepo: DeliveryRound Entity / null
+        deactivate DB
+        RoundRepo-->>Svc: Optional<DeliveryRound>
+        deactivate RoundRepo
+
+        alt Delivery Round Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>Buyer: 404 Not Found (Delivery round not found)
+        else User is NOT the runner of this Delivery Round
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>Buyer: 403 Forbidden (You are not the owner of this delivery round)
+        else User is the Runner
+            Svc->>OrderRepo: findByRoundIdOrderByCreatedAtAsc(roundId)
+            activate OrderRepo
+            OrderRepo->>DB: SELECT * FROM ORDERS WHERE round_id = ? ORDER BY created_at ASC
+            activate DB
+            DB-->>OrderRepo: List<Order> (with items)
+            deactivate DB
+            OrderRepo-->>Svc: List<Order>
+            deactivate OrderRepo
+
+            Svc-->>Ctrl: List<OrderResponseDTO>
+            deactivate Svc
+            Ctrl-->>Buyer: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<OrderResponseDTO>)
+            deactivate Ctrl
+        end
+    end
+    end
+
+    %% ==========================================
+    %% 4. Endpoint 4: GET /api/v1/orders/{orderId} (Get Order Detail)
+    %% ==========================================
+    rect rgb(245, 245, 245)
+    note over Buyer, DB: 4. Endpoint 4: Get Order Detail (GET /api/v1/orders/{orderId})
+    Buyer->>Ctrl: GET /api/v1/orders/{orderId}
+    activate Ctrl
+    note right of Buyer: Header: Bearer <JWT_TOKEN> (ผู้ฝากซื้อเจ้าของออเดอร์ หรือ ผู้รับหิ้วเจ้าของรอบ)
+
+    alt Missing/Invalid Token
+        Ctrl-->>Buyer: 401 Unauthorized
+    else Authorized Token Passed
+        Ctrl->>Svc: getOrder(userId, orderId)
+        activate Svc
+
+        Svc->>OrderRepo: findById(orderId)
+        activate OrderRepo
+        OrderRepo->>DB: SELECT * FROM ORDERS WHERE id = orderId
+        activate DB
+        DB-->>OrderRepo: Order Entity / null
+        deactivate DB
+        OrderRepo-->>Svc: Optional<Order>
+        deactivate OrderRepo
+
+        alt Order Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>Buyer: 404 Not Found (Order not found)
+        else User is NEITHER the Buyer of this order NOR the Runner of the round
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>Buyer: 403 Forbidden (You are not allowed to view this order)
+        else User Authorized
+            Svc-->>Ctrl: OrderResponseDTO
+            deactivate Svc
+            Ctrl-->>Buyer: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=OrderResponseDTO)
+            deactivate Ctrl
+        end
+    end
+    end
