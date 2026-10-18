@@ -25,7 +25,7 @@
             <h1>ยืนยันเบอร์โทรศัพท์</h1>
             <p>กรอกเบอร์โทรศัพท์เพื่อรับรหัส OTP</p>
 
-            <form action="verify-otp.html" method="get">
+            <form action="verify-otp.html" method="post">
                 <label for="phone">เบอร์โทรศัพท์</label>
                 <input
                     type="tel"
@@ -33,8 +33,9 @@
                     name="phone"
                     placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
                     maxlength="10"
-                    pattern="[0-9]{10}"
+                    pattern="[0]{1}[0-9]{9}"
                     inputmode="numeric"
+                    title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0"
                     required
                 >
 
