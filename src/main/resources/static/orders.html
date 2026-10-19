@@ -56,6 +56,12 @@
                     <span class="tab-count" id="carrier-count">3</span>
                 </button>
 
+                <button class="orders-tab" data-tab="posts">
+                    <span class="tab-icon">📝</span>
+                    โพสต์ของฉัน
+                    <span class="tab-count" id="posts-count">0</span>
+                </button>
+
                 <button class="orders-tab" data-tab="round-orders">
                     <span class="tab-icon">🛒</span>
                     รายการฝากหิ้วจากรอบ
@@ -187,6 +193,18 @@
                     </article>
 
                 </div>
+            </div>
+
+            <div class="orders-panel" id="posts-panel">
+                <div class="orders-section-heading">
+                    <div>
+                        <h2>โพสต์หาคนรับหิ้วของฉัน</h2>
+                        <p>ดูโพสต์และสถานะผู้รับงานที่คุณสร้างไว้</p>
+                    </div>
+                    <a href="create-buyer-post.html" class="create-order-btn">+ สร้างโพสต์</a>
+                </div>
+                <p id="my-posts-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div id="my-posts-list" class="orders-list" aria-live="polite"></div>
             </div>
 
             <div class="orders-panel" id="carrier-panel">
@@ -543,8 +561,11 @@
             });
         });
 
-        if (window.location.hash === "#rounds-panel") {
+        const panel = window.location.hash.slice(1);
+        if (panel === "rounds-panel") {
             document.querySelector('[data-tab="rounds"]').click();
+        } else if (panel === "posts-panel") {
+            document.querySelector('[data-tab="posts"]').click();
         }
 
         function updateCounts() {
@@ -560,6 +581,7 @@
     </script>
 
     <script src="/js/my-rounds.js"></script>
+    <script src="/js/my-posts.js"></script>
     <script src="/js/guest-access.js"></script>
 </body>
 

@@ -4,94 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รายละเอียดโพสต์ | CarryHub</title>
+    <title>โพสต์ของฉัน | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/buyer-post-detail.css">
 </head>
 
 <body>
-
     <header class="navbar">
         <a href="index.html" class="logo">CarryHub</a>
-
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
             <a href="buyer-posts.html">หาคนรับหิ้ว</a>
-            <a href="orders.html">รายการของฉัน</a>
+            <a href="orders.html#posts-panel">โพสต์ของฉัน</a>
             <a href="profile.html">โปรไฟล์</a>
         </nav>
     </header>
 
     <main class="container post-detail-container">
-        <section class="post-detail-card">
+        <a href="orders.html#posts-panel" class="back-link">← กลับไปโพสต์ของฉัน</a>
+        <p id="my-post-message" class="form-message" role="status" aria-live="polite" hidden></p>
 
+        <section id="my-post-content" class="post-detail-card" hidden>
             <div class="post-detail-header">
-                <span class="post-status">กำลังหาคนรับหิ้ว</span>
-                <span class="post-id">โพสต์ #BP001</span>
+                <span id="my-post-status" class="post-status"></span>
+                <span id="my-post-id" class="post-id"></span>
             </div>
-
-            <h1>ฝากซื้อเครื่องดื่ม</h1>
-
-            <p class="post-description">
-                ต้องการคนช่วยซื้อเครื่องดื่มจากร้านชานมหน้ามหาวิทยาลัย
-            </p>
-
+            <h1 id="my-post-title"></h1>
+            <p id="my-post-product" class="post-description"></p>
             <div class="post-divider"></div>
-
-            <h2>รายละเอียดสินค้า</h2>
-
+            <h2>รายละเอียดโพสต์</h2>
             <div class="post-info">
-                <div class="info-item">
-                    <span class="info-label">ร้านค้า</span>
-                    <strong>ร้านชานมหน้ามหาวิทยาลัย</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="info-label">สินค้า</span>
-                    <strong>ชานม 2 แก้ว</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="info-label">ผู้ฝากซื้อ</span>
-                    <strong>นัท</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="info-label">วันที่ต้องการ</span>
-                    <strong>15 ตุลาคม 2026</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="info-label">เวลาที่ต้องการ</span>
-                    <strong>12:00 น.</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="info-label">สถานที่รับสินค้า</span>
-                    <strong>จุดนัดรับหน้ามหาวิทยาลัย</strong>
-                </div>
+                <div class="info-item"><span class="info-label">ร้านค้า</span><strong id="my-post-shop"></strong></div>
+                <div class="info-item"><span class="info-label">จำนวน</span><strong id="my-post-quantity"></strong></div>
+                <div class="info-item"><span class="info-label">วันที่ต้องการ</span><strong id="my-post-date"></strong></div>
+                <div class="info-item"><span class="info-label">สถานที่รับสินค้า</span><strong id="my-post-location"></strong></div>
+                <div class="info-item"><span class="info-label">ค่าหิ้ว</span><strong id="my-post-fee"></strong></div>
+                <div class="info-item"><span class="info-label">งบประมาณ</span><strong id="my-post-budget"></strong></div>
+                <div class="info-item"><span class="info-label">ผู้รับงาน</span><strong id="my-post-accepted-by"></strong></div>
+                <div class="info-item"><span class="info-label">วันที่รับงาน</span><strong id="my-post-accepted-at"></strong></div>
             </div>
-
             <div class="post-note">
-                <h3>หมายเหตุจากผู้ฝากซื้อ</h3>
-                <p>ต้องการชานม 2 แก้ว หากมีข้อสงสัยเกี่ยวกับรายการ สามารถติดต่อผู้ฝากซื้อเพื่อยืนยันรายละเอียดได้</p>
+                <h3>รายละเอียดเพิ่มเติม</h3>
+                <p id="my-post-additional"></p>
             </div>
-
-            <div class="post-actions">
-                <a href="buyer-posts.html" class="btn btn-outline">
-                    กลับไปหน้ารายการโพสต์
-                </a>
-            </div>
-
         </section>
-
     </main>
 
     <footer class="footer">
-        <p>© 2026 CarryHub</p>
+        <p class="footer-text">© 2026 CarryHub</p>
     </footer>
 
+    <script src="/js/my-post-detail.js"></script>
     <script src="/js/guest-access.js"></script>
 </body>
 
