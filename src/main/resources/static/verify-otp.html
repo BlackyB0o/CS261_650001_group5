@@ -74,10 +74,12 @@
             document.getElementById("back-link").href = "http://localhost:8081/login.html";
             document.getElementById("back-link").textContent = "เปิดหน้าเข้าสู่ระบบ";
         } else {
-            const otpContext = new URLSearchParams(window.location.hash.slice(1));
-            const contextVerificationId = otpContext.get("verificationId");
-            const contextPurpose = otpContext.get("purpose");
-            const contextMaskedPhoneNumber = otpContext.get("maskedPhoneNumber");
+            const queryContext = new URLSearchParams(window.location.search);
+            const fragmentContext = new URLSearchParams(window.location.hash.slice(1));
+            const contextVerificationId = queryContext.get("verificationId")
+                || fragmentContext.get("verificationId");
+            const contextPurpose = queryContext.get("purpose")
+                || fragmentContext.get("purpose");
 
             try {
                 const savedVerificationId = contextVerificationId
@@ -101,8 +103,7 @@
                         verifyButton.textContent = "ยืนยันรหัส OTP";
                     }
 
-                    const maskedPhoneNumber = contextMaskedPhoneNumber
-                        || sessionStorage.getItem("carryhub.maskedPhoneNumber")
+                    const maskedPhoneNumber = sessionStorage.getItem("carryhub.maskedPhoneNumber")
                         || localStorage.getItem("carryhub.maskedPhoneNumber");
                     if (maskedPhoneNumber) {
                         otpDescription.textContent =
@@ -296,17 +297,14 @@
                 console.warn("Could not persist resent OTP context across tabs; continuing with this tab's session.", error);
             }
 
-            const otpContext = new URLSearchParams({
+            const resentOtpContext = new URLSearchParams({
                 verificationId: String(verificationId),
                 purpose: otpPurpose
             });
-            if (result.data.maskedPhoneNumber) {
-                otpContext.set("maskedPhoneNumber", result.data.maskedPhoneNumber);
-            }
             window.history.replaceState(
                 null,
                 "",
-                window.location.pathname + window.location.search + "#" + otpContext.toString()
+                window.location.pathname + "?" + resentOtpContext.toString()
             );
 
             if (result.data.maskedPhoneNumber) {
