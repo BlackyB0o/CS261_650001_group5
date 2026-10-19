@@ -8825,6 +8825,7 @@ body {
     border-radius: 9px;
     font-size: 13px;
     line-height: 1.7;
+    white-space: pre-line;
 }
 
 .form-message[hidden] {
@@ -8835,6 +8836,12 @@ body {
     color: #278653;
     background: #e8f7ed;
     border: 1px solid #c9ecd4;
+}
+
+.error-message {
+    color: #a33a32;
+    background: #fff0ef;
+    border: 1px solid #f0c8c5;
 }
 
 @media (max-width: 650px) {
