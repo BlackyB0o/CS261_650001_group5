@@ -63,11 +63,11 @@
             <div class="rounds-search-heading">
                 <div>
                     <h2>ค้นหารอบรับหิ้ว</h2>
-                    <p>ค้นหาจากชื่อร้านค้า สินค้า หรือวันที่ต้องการรับสินค้า</p>
+                    <p>ค้นหาจากชื่อร้านค้า สถานที่ หรือผู้รับหิ้ว และกรองตามวันรับสินค้า</p>
                 </div>
             </div>
 
-            <form action="rounds.html" method="get" class="rounds-search-form">
+            <form id="round-search-form" class="rounds-search-form">
 
                 <div class="rounds-form-group">
                     <label for="keyword">ชื่อร้านหรือสินค้า</label>
@@ -97,156 +97,11 @@
                     <p>เลือกรอบที่ตรงกับความต้องการของคุณ</p>
                 </div>
 
-                <span class="rounds-count">3 รอบ</span>
+                <span id="rounds-count" class="rounds-count">กำลังโหลด...</span>
             </div>
 
-            <div class="rounds-list">
-
-                <article class="round-card">
-
-                    <div class="round-card-top">
-                        <div class="round-category-icon">DR</div>
-
-                        <span class="round-status">
-                            เปิดรับออเดอร์
-                        </span>
-                    </div>
-
-                    <div class="round-card-content">
-                        <h3>รอบร้านชานม</h3>
-
-                        <p class="round-shop-name">
-                            ร้านชานมหน้ามหาวิทยาลัย
-                        </p>
-
-                        <div class="round-divider"></div>
-
-                        <div class="round-info-list">
-
-                            <div class="round-info-row">
-                                <span>ผู้รับหิ้ว</span>
-                                <strong>สมชาย</strong>
-                            </div>
-
-                            <div class="round-info-row">
-                                <span>เวลาปิดรับ</span>
-                                <strong>12:00 น.</strong>
-                            </div>
-
-                            <div class="round-info-row">
-                                <span>ค่าบริการ</span>
-                                <strong class="round-service-fee">10 บาท / รายการ</strong>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="round-card-footer">
-                        <a href="round-detail.html" class="round-detail-btn">
-                            ดูรายละเอียด
-                            <span>→</span>
-                        </a>
-                    </div>
-
-                </article>
-
-                <article class="round-card">
-
-                    <div class="round-card-top">
-                        <div class="round-category-icon food">FD</div>
-
-                        <span class="round-status">
-                            เปิดรับออเดอร์
-                        </span>
-                    </div>
-
-                    <div class="round-card-content">
-                        <h3>รอบร้านอาหาร</h3>
-
-                        <p class="round-shop-name">
-                            ร้านอาหารตามสั่ง
-                        </p>
-
-                        <div class="round-divider"></div>
-
-                        <div class="round-info-list">
-
-                            <div class="round-info-row">
-                                <span>ผู้รับหิ้ว</span>
-                                <strong>มานะ</strong>
-                            </div>
-
-                            <div class="round-info-row">
-                                <span>เวลาปิดรับ</span>
-                                <strong>13:00 น.</strong>
-                            </div>
-
-                            <div class="round-info-row">
-                                <span>ค่าบริการ</span>
-                                <strong class="round-service-fee">15 บาท / รายการ</strong>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="round-card-footer">
-                        <a href="round-detail.html" class="round-detail-btn">
-                            ดูรายละเอียด
-                            <span>→</span>
-                        </a>
-                    </div>
-
-                </article>
-
-                <article class="round-card">
-
-                    <div class="round-card-top">
-                        <div class="round-category-icon bakery">BK</div>
-
-                        <span class="round-status">
-                            เปิดรับออเดอร์
-                        </span>
-                    </div>
-
-                    <div class="round-card-content">
-                        <h3>รอบร้านเบเกอรี</h3>
-
-                        <p class="round-shop-name">
-                            ร้านเบเกอรีใกล้มหาวิทยาลัย
-                        </p>
-
-                        <div class="round-divider"></div>
-
-                        <div class="round-info-list">
-
-                            <div class="round-info-row">
-                                <span>ผู้รับหิ้ว</span>
-                                <strong>สุดา</strong>
-                            </div>
-
-                            <div class="round-info-row">
-                                <span>เวลาปิดรับ</span>
-                                <strong>15:00 น.</strong>
-                            </div>
-
-                            <div class="round-info-row">
-                                <span>ค่าบริการ</span>
-                                <strong class="round-service-fee">10 บาท / รายการ</strong>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="round-card-footer">
-                        <a href="round-detail.html" class="round-detail-btn">
-                            ดูรายละเอียด
-                            <span>→</span>
-                        </a>
-                    </div>
-
-                </article>
-
-            </div>
+            <p id="rounds-message" class="form-message" role="status" aria-live="polite" hidden></p>
+            <div id="rounds-list" class="rounds-list" aria-live="polite"></div>
 
         </section>
 
@@ -268,6 +123,7 @@
         <p>CarryHub © 2026</p>
     </footer>
 
+    <script src="/js/rounds.js"></script>
     <script src="/js/guest-access.js"></script>
 </body>
 

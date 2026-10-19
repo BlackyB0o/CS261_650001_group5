@@ -439,101 +439,12 @@
                         <p>จัดการรอบที่คุณเปิด และตรวจสอบรายการที่มีคนฝากซื้อ</p>
                     </div>
 
-                    <a href="rounds.html" class="create-order-btn">
+                    <a href="create-round.html" class="create-order-btn">
                         + สร้างรอบรับหิ้ว
                     </a>
                 </div>
-                <div class="orders-list">
-
-                    <article class="order-card">
-                        <div class="order-card-header">
-                            <div>
-                                <span class="order-label">หมายเลขออเดอร์</span>
-                                <h3>RD001</h3>
-                            </div>
-
-                            <span class="round-status status-open">
-                                เปิดรับฝากซื้อ
-                            </span>
-                        </div>
-
-                        <div class="order-card-body">
-                            <div class="order-shop-icon">CH</div>
-
-                            <div class="order-product-info">
-                                <h4>รอบรับหิ้วชานม</h4>
-                                <p class="order-carrier">ร้านชานมหน้ามหาวิทยาลัย</p>
-                            </div>
-                        </div>
-
-                        <div class="my-round-bottom">
-                            <div class="round-request-summary">
-                                <span class="request-icon">📋</span>
-                                <div>
-                                    <strong>4 รายการ</strong>
-                                    <p>ที่มีคนฝากซื้อในรอบนี้</p>
-                                </div>
-                            </div>
-
-                            <div class="my-round-actions">
-                                <a href="round-requests.html?id=RD001" class="btn btn-primary">
-                                    ดูคนฝากซื้อ
-                                </a>
-
-                                <a href="my-round-detailod.html" class="btn btn-outline">
-                                    ดูรายละเอียดรอบ
-                                </a>
-                            </div>
-                        </div>
-
-                    </article>
-
-                    <article class="order-card">
-                        <div class="order-card-header">
-                            <div>
-                                <span class="order-label">หมายเลขออเดอร์</span>
-                                <h3>RD002</h3>
-                            </div>
-
-                            <span class="round-status status-open">
-                                เปิดรับฝากซื้อ
-                            </span>
-                        </div>
-
-                        <div class="order-card-body">
-                            <div class="order-shop-icon">CH</div>
-
-                            <div class="order-product-info">
-                                <h4>รอบรับหิ้วชานม</h4>
-                                <p class="order-carrier">ร้านชานมหน้ามหาวิทยาลัย</p>
-                            </div>
-                        </div>
-
-                        <div class="my-round-bottom">
-                            <div class="round-request-summary">
-                                <span class="request-icon">📋</span>
-                                <div>
-                                    <strong>1 รายการ</strong>
-                                    <p>ที่มีคนฝากซื้อในรอบนี้</p>
-                                </div>
-                            </div>
-
-                            <div class="my-round-actions">
-                                <a href="round-requests.html?id=RD001" class="btn btn-primary">
-                                    ดูคนฝากซื้อ
-                                </a>
-
-                                <a href="my-round-detailod.html" class="btn btn-outline">
-                                    ดูรายละเอียดรอบ
-                                </a>
-                            </div>
-                        </div>
-
-                    </article>
-
-
-
-                </div>
+                <p id="my-rounds-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div class="orders-list" id="my-rounds-list" aria-live="polite"></div>
 
             </div>
         </section>
@@ -632,6 +543,10 @@
             });
         });
 
+        if (window.location.hash === "#rounds-panel") {
+            document.querySelector('[data-tab="rounds"]').click();
+        }
+
         function updateCounts() {
             const buyerCards = document.querySelectorAll("#buyer-panel .order-card").length;
             const carrierCards = document.querySelectorAll("#carrier-panel .order-card").length;
@@ -644,6 +559,7 @@
         updateCounts();
     </script>
 
+    <script src="/js/my-rounds.js"></script>
     <script src="/js/guest-access.js"></script>
 </body>
 
