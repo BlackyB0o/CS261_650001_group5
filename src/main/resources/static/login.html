@@ -38,6 +38,12 @@
 
                 <p><a href="forgot-password.html">ลืมรหัสผ่าน?</a></p>
 
+                <p id="login-origin-message" class="form-message error-message" hidden>
+                    กรุณาเข้าสู่ระบบผ่าน
+                    <a href="http://localhost:8081/login.html">http://localhost:8081/login.html</a>
+                    เพื่อเชื่อมต่อ API และยืนยัน OTP
+                </p>
+
                 <p id="login-message" class="form-message" role="status" aria-live="polite" hidden></p>
 
                 <button id="login-button" type="submit" class="btn btn-primary btn-full">
@@ -60,6 +66,12 @@
         const loginForm = document.getElementById("login-form");
         const loginButton = document.getElementById("login-button");
         const loginMessage = document.getElementById("login-message");
+        const loginOriginMessage = document.getElementById("login-origin-message");
+
+        if (window.location.protocol === "file:") {
+            loginOriginMessage.hidden = false;
+            loginButton.disabled = true;
+        }
 
         function showLoginMessage(message) {
             loginMessage.textContent = message;
@@ -69,6 +81,11 @@
 
         loginForm.addEventListener("submit", async function (event) {
             event.preventDefault();
+            if (window.location.protocol === "file:") {
+                loginOriginMessage.hidden = false;
+                return;
+            }
+
             loginButton.disabled = true;
             loginButton.textContent = "กำลังตรวจสอบ...";
             loginMessage.hidden = true;
@@ -116,6 +133,17 @@
             }
 
             try {
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    result.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not store OTP context in this tab; passing it to the OTP page directly.", error);
+            }
+
+            try {
                 localStorage.setItem("carryhub.verificationId", String(verificationId));
                 localStorage.setItem("carryhub.otpPurpose", "LOGIN");
                 localStorage.setItem(
@@ -123,13 +151,15 @@
                     result.data.maskedPhoneNumber || ""
                 );
             } catch (error) {
-                showLoginMessage("ส่ง OTP แล้ว แต่ไม่สามารถเปิดหน้ายืนยันได้ กรุณาเปิดพื้นที่จัดเก็บข้อมูลแล้วลองอีกครั้ง");
-                loginButton.disabled = false;
-                loginButton.textContent = "เข้าสู่ระบบ";
-                return;
+                console.warn("Could not persist OTP context across tabs; continuing with this tab's session.", error);
             }
 
-            window.location.href = "verify-otp.html";
+            const otpContext = new URLSearchParams({
+                verificationId: String(verificationId),
+                purpose: "LOGIN",
+                maskedPhoneNumber: result.data.maskedPhoneNumber || ""
+            });
+            window.location.assign("/verify-otp.html#" + otpContext.toString());
         });
     </script>
 </body>
