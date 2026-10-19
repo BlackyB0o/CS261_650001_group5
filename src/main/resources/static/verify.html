@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ยืนยันเบอร์โทรศัพท์ | CarryHub</title>
+    <title>ขอรหัส OTP | CarryHub</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/verify.css">
 </head>
@@ -22,23 +22,14 @@
     <main class="verify-container">
         <div class="verify-card">
 
-            <div class="verify-step">ขั้นตอนที่ 1 จาก 2</div>
+            <div class="verify-step">การยืนยันบัญชี</div>
 
-            <h1>ยืนยันเบอร์โทรศัพท์</h1>
-            <p>กรอกเบอร์โทรศัพท์เพื่อรับรหัส OTP</p>
+            <h1>ขอรหัส OTP</h1>
+            <p>เพื่อความปลอดภัย ระบบจะส่งรหัส OTP หลังจากคุณสมัครสมาชิกหรือเข้าสู่ระบบด้วยบัญชีของคุณ</p>
+            <p>ไม่สามารถขอรหัส OTP ด้วยเบอร์โทรศัพท์เพียงอย่างเดียวได้</p>
 
-            <form action="verify-otp.html" method="post">
-                <label for="phone">เบอร์โทรศัพท์</label>
-                <input type="tel" id="phone" name="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" maxlength="10"
-                    pattern="[0]{1}[0-9]{9}" inputmode="numeric"
-                    title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0" required>
-
-                <button type="submit" class="btn-full">
-                    ส่งรหัส OTP
-                </button>
-            </form>
-
-            <a href="register.html" class="back-link">ย้อนกลับ</a>
+            <a href="login.html" class="back-link">เข้าสู่ระบบและขอรหัส OTP</a>
+            <a href="register.html" class="back-link">สมัครสมาชิก</a>
 
         </div>
     </main>
