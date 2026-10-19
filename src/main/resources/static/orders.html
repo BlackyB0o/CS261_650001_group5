@@ -65,7 +65,7 @@
                 <button class="orders-tab" data-tab="round-orders">
                     <span class="tab-icon">🛒</span>
                     รายการฝากหิ้วจากรอบ
-                    <span class="tab-count" id="round-orders-count">2</span>
+                    <span class="tab-count" id="round-orders-count">0</span>
                 </button>
 
                 <button class="orders-tab" data-tab="rounds">
@@ -375,79 +375,8 @@
                     </a>
                 </div>
 
-                <div class="orders-list">
-
-                    <article class="order-card">
-                        <div class="order-card-header">
-                            <div>
-                                <span class="order-label">หมายเลขออเดอร์</span>
-                                <h3>RO001</h3>
-                            </div>
-
-                            <span class="order-status order-status-processing">
-                                กำลังดำเนินการ
-                            </span>
-                        </div>
-
-                        <div class="order-card-body">
-                            <div class="order-shop-icon">CH</div>
-
-                            <div class="order-product-info">
-                                <h4>ร้านชานมหน้ามหาวิทยาลัย</h4>
-                                <p>ชานม 2 แก้ว</p>
-                                <p class="order-carrier">รอบรับหิ้ว: RD001</p>
-                                <p class="order-carrier">ผู้รับหิ้ว: สมชาย</p>
-                            </div>
-                        </div>
-
-                        <div class="order-card-footer">
-                            <div class="order-price">
-                                <span>ยอดรวม</span>
-                                <strong>100 บาท</strong>
-                            </div>
-
-                            <a href="order-detail.html" class="order-detail-btn">
-                                ดูรายละเอียด <span>→</span>
-                            </a>
-                        </div>
-                    </article>
-
-                    <article class="order-card">
-                        <div class="order-card-header">
-                            <div>
-                                <span class="order-label">หมายเลขออเดอร์</span>
-                                <h3>RO002</h3>
-                            </div>
-
-                            <span class="order-status order-status-completed">
-                                ส่งมอบสินค้าแล้ว
-                            </span>
-                        </div>
-
-                        <div class="order-card-body">
-                            <div class="order-shop-icon">CH</div>
-
-                            <div class="order-product-info">
-                                <h4>ร้านอาหารตามสั่ง</h4>
-                                <p>ข้าวผัด 1 กล่อง</p>
-                                <p class="order-carrier">รอบรับหิ้ว: RD002</p>
-                                <p class="order-carrier">ผู้รับหิ้ว: มานะ</p>
-                            </div>
-                        </div>
-
-                        <div class="order-card-footer">
-                            <div class="order-price">
-                                <span>ยอดรวม</span>
-                                <strong>75 บาท</strong>
-                            </div>
-
-                            <a href="order-detail.html" class="order-detail-btn">
-                                ดูรายละเอียด <span>→</span>
-                            </a>
-                        </div>
-                    </article>
-
-                </div>
+                <p id="my-orders-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div id="my-orders-list" class="orders-list" aria-live="polite"></div>
             </div>
             <div class="orders-panel" id="rounds-panel">
 
@@ -566,6 +495,8 @@
             document.querySelector('[data-tab="rounds"]').click();
         } else if (panel === "posts-panel") {
             document.querySelector('[data-tab="posts"]').click();
+        } else if (panel === "round-orders-panel") {
+            document.querySelector('[data-tab="round-orders"]').click();
         }
 
         function updateCounts() {
@@ -581,6 +512,7 @@
     </script>
 
     <script src="/js/my-rounds.js"></script>
+    <script src="/js/my-orders.js"></script>
     <script src="/js/my-posts.js"></script>
     <script src="/js/guest-access.js"></script>
 </body>
