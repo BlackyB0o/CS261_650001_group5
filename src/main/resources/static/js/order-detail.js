@@ -432,6 +432,12 @@
         const roundsLink = element("a", "order-proof-btn", "ดูรอบรับหิ้ว");
         roundsLink.href = "/round-detail.html?roundId=" + encodeURIComponent(order.roundId);
         actions.append(ordersLink, roundsLink);
+        if (order.status === "PAID" || order.status === "COMPLETED") {
+            const completionLink = element("a", "order-proof-btn",
+                order.status === "COMPLETED" ? "ดูหลักฐานการรับสินค้า" : "ยืนยันรับสินค้า");
+            completionLink.href = "/delivery-proof.html?orderId=" + encodeURIComponent(order.orderId);
+            actions.appendChild(completionLink);
+        }
         main.append(breadcrumb, header, section, handoff, actions);
 
         const userId = currentUserId();
