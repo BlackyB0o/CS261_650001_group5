@@ -54,6 +54,7 @@
         const resendButton = document.getElementById("resend-button");
         let verificationId;
         let otpPurpose = "LOGIN";
+        let returnTo = "";
 
         function showOtpMessage(message, success) {
             otpMessage.textContent = message;
@@ -80,6 +81,10 @@
                 || fragmentContext.get("verificationId");
             const contextPurpose = queryContext.get("purpose")
                 || fragmentContext.get("purpose");
+            returnTo = queryContext.get("returnTo") || "";
+            if (returnTo.charAt(0) !== "/" || returnTo.indexOf("//") === 0) {
+                returnTo = "";
+            }
 
             try {
                 const savedVerificationId = contextVerificationId
@@ -215,7 +220,10 @@
                 console.warn("Could not clear the completed OTP verification state.", error);
             }
 
-            window.location.href = "index.html";
+            const destination = returnTo ? new URL(returnTo, window.location.origin) : null;
+            window.location.href = destination && destination.origin === window.location.origin
+                ? destination.href
+                : "index.html";
         });
 
         resendButton.addEventListener("click", async function () {
@@ -301,6 +309,9 @@
                 verificationId: String(verificationId),
                 purpose: otpPurpose
             });
+            if (returnTo) {
+                resentOtpContext.set("returnTo", returnTo);
+            }
             window.history.replaceState(
                 null,
                 "",
@@ -318,6 +329,7 @@
         });
     </script>
 
+    <script src="/js/guest-access.js"></script>
 </body>
 
 </html>
