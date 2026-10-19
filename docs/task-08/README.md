@@ -17,7 +17,7 @@
 ### Endpoint 1: Create Delivery Round (สร้างรอบหิ้ว)
 - **URL:** `/api/v1/delivery-rounds`
 - **Method:** `POST`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`RUNNER` Only)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ต้องเข้าสู่ระบบ ผู้ใช้ทุกคนเปิดรอบได้)
 - **Content-Type:** `application/json`
 - **Request Body:**
 ```json
@@ -63,7 +63,6 @@
 |---|---|---|
 | `400 Bad Request` | ข้อมูลไม่ครบหรือไม่ถูกต้อง (ไม่บันทึกรอบ) | `Validation failed` พร้อม `errors` ระบุ field |
 | `401 Unauthorized` | ไม่ส่ง token หรือ token ไม่ถูกต้อง | `Invalid or missing token` |
-| `403 Forbidden` | ผู้ใช้ไม่ได้มี role `RUNNER` | `Only RUNNER can create delivery rounds` |
 
 ตัวอย่าง `400`:
 ```json
@@ -80,7 +79,7 @@
 ### Endpoint 2: Get Delivery Rounds (ดึงรายการรอบหิ้ว)
 - **URL:** `/api/v1/delivery-rounds?status=OPEN`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ผู้ใช้ที่เข้าสู่ระบบทุก role)
+- **Headers:** ไม่ต้องใช้ token (Guest ดูได้)
 - **Query Parameter:** `status` (ไม่บังคับ) ค่าที่ใช้ได้คือ `OPEN`, `CLOSED`, `COMPLETED`, `CANCELLED` ถ้าไม่ส่งมาจะได้เฉพาะรอบ `OPEN`
 - **การเรียงลำดับ:** `scheduledAt` จากใกล้ที่สุดไปไกลที่สุด
 - **Response (200 OK):**
@@ -101,27 +100,27 @@
   ]
 }
 ```
-- **Error:** `400` เมื่อ `status` ไม่อยู่ในค่าที่กำหนด, `401` เมื่อไม่มี token
+- **Error:** `400` เมื่อ `status` ไม่อยู่ในค่าที่กำหนด
 
 ### Endpoint 3: Get My Delivery Rounds (ประวัติรอบหิ้วของฉัน)
 - **URL:** `/api/v1/delivery-rounds/my`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`RUNNER` Only)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ต้องเข้าสู่ระบบ)
 - **ผลลัพธ์:** ทุกรอบของผู้รับหิ้วที่ล็อกอินอยู่ ทุกสถานะ เรียงจาก `scheduledAt` ล่าสุดไปเก่าสุด
 - **Response (200 OK):** รูปแบบ `data` เป็น array ของรอบเหมือน Endpoint 2
-- **Error:** `401` เมื่อไม่มี token, `403` เมื่อไม่ใช่ `RUNNER`
+- **Error:** `401` เมื่อไม่มี token
 
 ### Endpoint 4: Get Delivery Round Detail (รายละเอียดรอบหิ้ว)
 - **URL:** `/api/v1/delivery-rounds/{roundId}`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ผู้ใช้ที่เข้าสู่ระบบทุก role)
+- **Headers:** ไม่ต้องใช้ token (Guest ดูได้)
 - **Response (200 OK):** `data` เป็นรอบเดียว รูปแบบเหมือนใน Endpoint 1
-- **Error:** `401` เมื่อไม่มี token, `404` (`Delivery round not found`) เมื่อไม่พบรอบ
+- **Error:** `404` (`Delivery round not found`) เมื่อไม่พบรอบ
 
 ### Endpoint 5: Update Delivery Round Status (อัปเดตสถานะรอบหิ้ว)
 - **URL:** `/api/v1/delivery-rounds/{roundId}/status`
 - **Method:** `PATCH`
-- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (`RUNNER` เจ้าของรอบเท่านั้น)
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (เจ้าของรอบเท่านั้น)
 - **Content-Type:** `application/json`
 - **Request Body:**
 ```json
@@ -156,7 +155,7 @@
 |---|---|---|
 | `400 Bad Request` | `status` ว่างหรือไม่อยู่ในค่าที่กำหนด | `Validation failed` |
 | `401 Unauthorized` | ไม่ส่ง token หรือ token ไม่ถูกต้อง | `Invalid or missing token` |
-| `403 Forbidden` | ไม่ใช่ `RUNNER` หรือไม่ใช่เจ้าของรอบนี้ | `You are not the owner of this delivery round` |
+| `403 Forbidden` | ไม่ใช่เจ้าของรอบนี้ | `You are not the owner of this delivery round` |
 | `404 Not Found` | ไม่พบรอบตาม `roundId` | `Delivery round not found` |
 | `409 Conflict` | เปลี่ยนสถานะไม่ตรงตามตารางด้านบน | `Cannot change status from COMPLETED to OPEN` |
 
@@ -386,7 +385,6 @@ classDiagram
     class User {
         -Long id
         -String fullName
-        -String role
     }
     class CreateDeliveryRoundRequestDTO
     class UpdateRoundStatusRequestDTO
@@ -414,3 +412,203 @@ classDiagram
     ApiResponseDTO ..> DeliveryRoundResponseDTO : wraps
     ApiResponseDTO ..> RoundStatusResponseDTO : wraps
 ```
+
+## Sequence Diagrams
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Runner as User / Guest
+    participant Ctrl as DeliveryRoundController<br/>(/api/v1/delivery-rounds)
+    participant Svc as DeliveryRoundServiceImpl
+    participant UserRepo as UserRepository
+    participant RoundRepo as DeliveryRoundRepository
+    participant DB as PostgreSQL Database (DELIVERY_ROUNDS)
+
+    %% ==========================================
+    %% 1. Endpoint 1: POST /api/v1/delivery-rounds (Create Delivery Round)
+    %% ==========================================
+    rect rgb(240, 255, 240)
+    note over Runner, DB: 1. Endpoint 1: Create Delivery Round (POST /api/v1/delivery-rounds)
+    Runner->>Ctrl: POST /api/v1/delivery-rounds (CreateDeliveryRoundRequestDTO)
+    activate Ctrl
+    note right of Runner: Header: Bearer <JWT_TOKEN> (ผู้ใช้ทุกคนเปิดรอบได้)<br/>Body: storeName, locationName, scheduledAt, serviceFee
+
+    alt Missing/Invalid Token
+        Ctrl-->>Runner: 401 Unauthorized (Invalid or missing token)
+    else Validation Failed (Blank store/location, scheduledAt in past, serviceFee < 0)
+        Ctrl-->>Runner: 400 Bad Request (ApiResponseDTO with FieldErrorDTO)
+    else Authorization & Validation Passed
+        Ctrl->>Svc: createRound(runnerId, requestDTO)
+        activate Svc
+
+        Svc->>UserRepo: findById(runnerId)
+        activate UserRepo
+        UserRepo->>DB: SELECT * FROM USERS WHERE id = runnerId
+        activate DB
+        DB-->>UserRepo: User Entity (Runner)
+        deactivate DB
+        UserRepo-->>Svc: Optional<User>
+        deactivate UserRepo
+
+        Svc->>Svc: Construct DeliveryRound entity (status = 'OPEN')
+        Svc->>RoundRepo: save(deliveryRound)
+        activate RoundRepo
+        RoundRepo->>DB: INSERT INTO DELIVERY_ROUNDS (runner_id, store_name, location_name, scheduled_at, service_fee, status) VALUES (...)
+        activate DB
+        DB-->>RoundRepo: Saved DeliveryRound (with generated roundId)
+        deactivate DB
+        RoundRepo-->>Svc: DeliveryRound Entity
+        deactivate RoundRepo
+
+        Svc-->>Ctrl: DeliveryRoundResponseDTO
+        deactivate Svc
+        Ctrl-->>Runner: 201 Created<br/>ApiResponseDTO(status="SUCCESS", message="Delivery round created successfully", data=DeliveryRoundResponseDTO)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 2. Endpoint 2: GET /api/v1/delivery-rounds (Get Delivery Rounds)
+    %% ==========================================
+    rect rgb(240, 248, 255)
+    note over Runner, DB: 2. Endpoint 2: Get Delivery Rounds (GET /api/v1/delivery-rounds?status=OPEN)
+    Runner->>Ctrl: GET /api/v1/delivery-rounds?status={status}
+    activate Ctrl
+    note right of Runner: Header: ไม่ต้องใช้ Token (Guest ดูได้)<br/>Query Param: status (Default 'OPEN')
+
+    alt Invalid status parameter
+        Ctrl-->>Runner: 400 Bad Request
+    else Status Valid
+        Ctrl->>Svc: getRounds(status)
+        activate Svc
+        Svc->>RoundRepo: findByStatusOrderByScheduledAtAsc(status)
+        activate RoundRepo
+        RoundRepo->>DB: SELECT * FROM DELIVERY_ROUNDS WHERE status = ? ORDER BY scheduled_at ASC
+        activate DB
+        DB-->>RoundRepo: List<DeliveryRound>
+        deactivate DB
+        RoundRepo-->>Svc: List<DeliveryRound>
+        deactivate RoundRepo
+
+        Svc-->>Ctrl: List<DeliveryRoundResponseDTO>
+        deactivate Svc
+        Ctrl-->>Runner: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<DeliveryRoundResponseDTO>)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 3. Endpoint 3: GET /api/v1/delivery-rounds/my (Get My Delivery Rounds)
+    %% ==========================================
+    rect rgb(255, 250, 240)
+    note over Runner, DB: 3. Endpoint 3: Get My Delivery Rounds (GET /api/v1/delivery-rounds/my)
+    Runner->>Ctrl: GET /api/v1/delivery-rounds/my
+    activate Ctrl
+    note right of Runner: Header: Bearer <JWT_TOKEN> (ต้องล็อกอิน)
+
+    alt Missing/Invalid Token
+        Ctrl-->>Runner: 401 Unauthorized
+    else Authorized
+        Ctrl->>Svc: getMyRounds(runnerId)
+        activate Svc
+        Svc->>RoundRepo: findByRunnerIdOrderByScheduledAtDesc(runnerId)
+        activate RoundRepo
+        RoundRepo->>DB: SELECT * FROM DELIVERY_ROUNDS WHERE runner_id = ? ORDER BY scheduled_at DESC
+        activate DB
+        DB-->>RoundRepo: List<DeliveryRound>
+        deactivate DB
+        RoundRepo-->>Svc: List<DeliveryRound>
+        deactivate RoundRepo
+
+        Svc-->>Ctrl: List<DeliveryRoundResponseDTO>
+        deactivate Svc
+        Ctrl-->>Runner: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<DeliveryRoundResponseDTO>)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 4. Endpoint 4: GET /api/v1/delivery-rounds/{roundId} (Get Delivery Round Detail)
+    %% ==========================================
+    rect rgb(245, 245, 245)
+    note over Runner, DB: 4. Endpoint 4: Get Delivery Round Detail (GET /api/v1/delivery-rounds/{roundId})
+    Runner->>Ctrl: GET /api/v1/delivery-rounds/{roundId}
+    activate Ctrl
+    note right of Runner: Header: ไม่ต้องใช้ Token (Guest ดูได้)
+
+    Ctrl->>Svc: getRound(roundId)
+    activate Svc
+    Svc->>RoundRepo: findById(roundId)
+    activate RoundRepo
+    RoundRepo->>DB: SELECT * FROM DELIVERY_ROUNDS WHERE id = roundId
+    activate DB
+    DB-->>RoundRepo: DeliveryRound Entity / null
+    deactivate DB
+    RoundRepo-->>Svc: Optional<DeliveryRound>
+    deactivate RoundRepo
+
+    alt Delivery Round Not Found
+        Svc-->>Ctrl: throw ResourceNotFoundException
+        Ctrl-->>Runner: 404 Not Found (Delivery round not found)
+    else Found
+        Svc-->>Ctrl: DeliveryRoundResponseDTO
+        deactivate Svc
+        Ctrl-->>Runner: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=DeliveryRoundResponseDTO)
+        deactivate Ctrl
+    end
+    end
+
+    %% ==========================================
+    %% 5. Endpoint 5: PATCH /api/v1/delivery-rounds/{roundId}/status (Update Delivery Round Status)
+    %% ==========================================
+    rect rgb(255, 240, 245)
+    note over Runner, DB: 5. Endpoint 5: Update Delivery Round Status (PATCH /api/v1/delivery-rounds/{roundId}/status)
+    Runner->>Ctrl: PATCH /api/v1/delivery-rounds/{roundId}/status (UpdateRoundStatusRequestDTO)
+    activate Ctrl
+    note right of Runner: Header: Bearer <JWT_TOKEN> (เจ้าของรอบเท่านั้น)<br/>Body: status ('CLOSED', 'COMPLETED', 'CANCELLED')
+
+    alt Missing/Invalid Token
+        Ctrl-->>Runner: 401 Unauthorized
+    else Validation Failed (status is blank or invalid value)
+        Ctrl-->>Runner: 400 Bad Request
+    else Basic Validation Passed
+        Ctrl->>Svc: updateStatus(runnerId, roundId, requestDTO)
+        activate Svc
+
+        Svc->>RoundRepo: findById(roundId)
+        activate RoundRepo
+        RoundRepo->>DB: SELECT * FROM DELIVERY_ROUNDS WHERE id = roundId
+        activate DB
+        DB-->>RoundRepo: DeliveryRound Entity / null
+        deactivate DB
+        RoundRepo-->>Svc: Optional<DeliveryRound>
+        deactivate RoundRepo
+
+        alt Delivery Round Not Found
+            Svc-->>Ctrl: throw ResourceNotFoundException
+            Ctrl-->>Runner: 404 Not Found (Delivery round not found)
+        else User is NOT the owner of this delivery round
+            Svc-->>Ctrl: throw AccessDeniedException
+            Ctrl-->>Runner: 403 Forbidden (You are not the owner of this delivery round)
+        else Invalid Status Transition (e.g., COMPLETED -> OPEN)
+            Svc-->>Ctrl: throw IllegalStateException
+            Ctrl-->>Runner: 409 Conflict (Cannot change status from current state)
+        else Valid Transition
+            Svc->>Svc: Update deliveryRound.status = newStatus
+            Svc->>RoundRepo: save(deliveryRound)
+            activate RoundRepo
+            RoundRepo->>DB: UPDATE DELIVERY_ROUNDS SET status = ? WHERE id = ?
+            activate DB
+            DB-->>RoundRepo: Updated DeliveryRound
+            deactivate DB
+            RoundRepo-->>Svc: DeliveryRound Entity
+            deactivate RoundRepo
+
+            Svc-->>Ctrl: RoundStatusResponseDTO
+            deactivate Svc
+            Ctrl-->>Runner: 200 OK<br/>ApiResponseDTO(status="SUCCESS", message="Delivery round status updated successfully", data=RoundStatusResponseDTO)
+            deactivate Ctrl
+        end
+    end
+    end
