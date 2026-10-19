@@ -145,3 +145,17 @@ Entity ที่ map กับตารางชื่อ `orders` ต้อง�
 - Spring Security (ใช้ `PasswordEncoder` สำหรับ BCrypt และตรวจ JWT)
 - PostgreSQL JDBC driver
 - ไลบรารี JWT (เช่น `jjwt`)
+
+---
+
+## 7. โค้ดชั้น API ที่มีอยู่แล้ว (Controller, DTO, Entity, Repository)
+
+| เรื่อง | ข้อตกลง |
+|---|---|
+| ผู้ใช้จาก JWT | Controller อ่านด้วย `@RequestAttribute("userId")` (ค่าคงที่ `RequestAttributes.USER_ID`) JWT filter ของ Task04 ต้องตรวจ token แล้วเรียก `request.setAttribute("userId", userId)` ถ้าไม่มี attribute นี้ระบบตอบ `401 Invalid or missing token` ให้เอง |
+| endpoint ของ Guest | ไม่ใช้ `userId` ใน Controller (ดูข้อ 2) JWT filter ต้องไม่ปฏิเสธคำขอที่ไม่มี token บน endpoint เหล่านี้ |
+| error จาก Service | โยน `ApiException` ด้วย factory เช่น `ApiException.notFound("Order not found")`, `forbidden(...)`, `conflict(...)`, `tooManyRequests(...)`, `validation("paidAmount", "must equal the total amount (100.00)")` `GlobalExceptionHandler` แปลงเป็นรูปแบบในข้อ 3 |
+| Validation | ใช้ Bean Validation ใน DTO (error ออกเป็น `400` พร้อม `errors`) ไฟล์รูปใช้ `@ImageFile` (ต้องแนบ, JPEG/PNG, ไม่เกิน 5 MB) |
+| Service ชั่วคราว | `config/Default*ServiceConfig` ให้ Service ที่ยังไม่เขียนตอบ `501 Not implemented yet` เมื่อมี `@Service` จริงของ interface นั้น ตัวชั่วคราวจะถูกข้ามเอง |
+| ฐานข้อมูล | ตารางสร้างจาก `docs/database/schema.sql` และ `schema_orders.sql` (`spring.jpa.hibernate.ddl-auto=none`) Entity map ชื่อ column ตรงกับไฟล์ SQL |
+
