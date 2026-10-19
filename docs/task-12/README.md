@@ -1,7 +1,8 @@
 # Task12: US12 - ผู้ฝากหิ้วโพสต์หาคนรับหิ้ว (API, API Class Diagram, DTO, DAO)
 
-> ใช้ร่วมกับ [API Conventions](../common/API-CONVENTIONS.md) และ [ERD](../database/ERD.md) (ตาราง `POSTS`)
+> ใช้ร่วมกับ [API Conventions](../common/API-CONVENTIONS.md) และ [ERD](../database/ERD.md) / [schema.sql](../database/schema.sql) (ตาราง `POSTS`)
 > โพสต์เป็นช่องทางแยกจากรอบหิ้ว (Task08) ผู้ใช้โพสต์ได้โดยไม่ต้องรอใครเปิดรอบ และผู้ใช้คนอื่นกด "รับงาน" ได้
+> ฟิลด์ของโพสต์อ้างอิงตามหน้า `create-buyer-post` ของ UI และตาราง `posts` ใน `docs/database/schema.sql`
 
 ## 0. เงื่อนไขจาก User Story ที่ API ต้องรองรับ
 
@@ -11,6 +12,8 @@
 | 2. กรอกข้อมูลที่จำเป็นไม่ครบ ระบบแจ้งเตือนและไม่อนุญาตให้โพสต์ | ไม่บันทึก และบอกว่าช่องไหนขาด | `400 Bad Request` |
 
 **กติกาสิทธิ์:** ไม่มี role ผู้ใช้ทุกคนโพสต์และรับงานได้ Guest (ยังไม่เข้าสู่ระบบ) ดูโพสต์ได้อย่างเดียว
+
+> **หมายเหตุเรื่องรูปสินค้า:** หน้า `create-buyer-post` มีช่องอัปโหลดรูปสินค้า แต่ตาราง `posts` ยังไม่มี column เก็บรูป Sprint 1 จึงยังไม่รับรูปในโพสต์ ถ้าต้องการให้เก็บรูปต้องเพิ่ม column ในตารางก่อน แล้วค่อยเพิ่ม field ใน API
 
 ---
 
@@ -24,22 +27,32 @@
 - **Request Body:**
 ```json
 {
-  "productDetail": "ชานมไข่มุก 2 แก้ว หวานน้อย",
+  "postTitle": "ฝากซื้อชานมไข่มุก",
   "shopName": "ร้านชานมหน้าประตูทางเข้า",
-  "location": "ประตูทางเข้ามหาวิทยาลัย",
-  "receivingDetail": "รับของที่หน้าตึกวิศวกรรมศาสตร์ ช่วงเที่ยง"
+  "productDetail": "ชานมไข่มุก หวานน้อย",
+  "quantity": 2,
+  "carryFee": 20.00,
+  "desiredDate": "2026-10-25",
+  "location": "ตึกวิศวกรรมศาสตร์ มธ.รังสิต",
+  "budget": 120.00,
+  "additionalDetails": "รับของช่วงเที่ยง"
 }
 ```
-*(หมายเหตุ: ทั้ง 4 field บังคับส่ง และ `buyerId` ไม่ต้องส่ง ระบบอ่านจาก JWT)*
+*(หมายเหตุ: `buyerId` ไม่ต้องส่ง ระบบอ่านจาก JWT ส่วน `budget` และ `additionalDetails` ไม่บังคับ)*
 
 **กติกาตรวจข้อมูล**
 
 | Field | กติกา | ตัวอย่าง message |
 |---|---|---|
-| `productDetail` | ห้ามว่าง ไม่เกิน 500 ตัวอักษร | `must not be blank` |
-| `shopName` | ห้ามว่าง ไม่เกิน 100 ตัวอักษร | `must not be blank` |
+| `postTitle` | ห้ามว่าง ไม่เกิน 255 ตัวอักษร | `must not be blank` |
+| `shopName` | ห้ามว่าง ไม่เกิน 255 ตัวอักษร | `must not be blank` |
+| `productDetail` | ห้ามว่าง | `must not be blank` |
+| `quantity` | ห้ามว่าง และต้อง ≥ 1 | `must not be null` / `must be greater than or equal to 1` |
+| `carryFee` | ห้ามว่าง และต้อง ≥ 0.00 | `must not be null` / `must be greater than or equal to 0.00` |
+| `desiredDate` | ห้ามว่าง และต้องเป็นวันนี้หรืออนาคต (`yyyy-MM-dd`) | `must not be null` / `must be today or a future date` |
 | `location` | ห้ามว่าง ไม่เกิน 255 ตัวอักษร | `must not be blank` |
-| `receivingDetail` | ห้ามว่าง ไม่เกิน 500 ตัวอักษร | `must not be blank` |
+| `budget` | ไม่บังคับ ถ้าส่งต้อง ≥ 0.00 | `must be greater than or equal to 0.00` |
+| `additionalDetails` | ไม่บังคับ | - |
 
 - **Response (201 Created):**
 ```json
@@ -48,10 +61,15 @@
   "message": "Post created successfully",
   "data": {
     "postId": 1,
-    "productDetail": "ชานมไข่มุก 2 แก้ว หวานน้อย",
+    "postTitle": "ฝากซื้อชานมไข่มุก",
     "shopName": "ร้านชานมหน้าประตูทางเข้า",
-    "location": "ประตูทางเข้ามหาวิทยาลัย",
-    "receivingDetail": "รับของที่หน้าตึกวิศวกรรมศาสตร์ ช่วงเที่ยง",
+    "productDetail": "ชานมไข่มุก หวานน้อย",
+    "quantity": 2,
+    "carryFee": 20.00,
+    "desiredDate": "2026-10-25",
+    "location": "ตึกวิศวกรรมศาสตร์ มธ.รังสิต",
+    "budget": 120.00,
+    "additionalDetails": "รับของช่วงเที่ยง",
     "status": "OPEN",
     "buyerId": 2,
     "buyerName": "Somchai Jaidee",
@@ -74,7 +92,7 @@
   "status": "ERROR",
   "message": "Validation failed",
   "errors": [
-    { "field": "productDetail", "message": "must not be blank" },
+    { "field": "postTitle", "message": "must not be blank" },
     { "field": "location", "message": "must not be blank" }
   ]
 }
@@ -106,27 +124,7 @@
 - **Headers:** `Authorization: Bearer <JWT_TOKEN>` (ต้องเข้าสู่ระบบ)
 - **Request Body:** ไม่มี (ผู้รับงานอ่านจาก JWT)
 - **สิ่งที่ระบบทำ:** เปลี่ยนสถานะโพสต์ `OPEN` เป็น `ACCEPTED` และบันทึก `accepted_by`, `accepted_at`
-- **Response (200 OK):**
-```json
-{
-  "status": "SUCCESS",
-  "message": "Post accepted successfully",
-  "data": {
-    "postId": 1,
-    "productDetail": "ชานมไข่มุก 2 แก้ว หวานน้อย",
-    "shopName": "ร้านชานมหน้าประตูทางเข้า",
-    "location": "ประตูทางเข้ามหาวิทยาลัย",
-    "receivingDetail": "รับของที่หน้าตึกวิศวกรรมศาสตร์ ช่วงเที่ยง",
-    "status": "ACCEPTED",
-    "buyerId": 2,
-    "buyerName": "Somchai Jaidee",
-    "acceptedBy": 1,
-    "acceptedByName": "Naphat Thongkao",
-    "acceptedAt": "2026-10-15T20:30:00",
-    "createdAt": "2026-10-15T20:00:00"
-  }
-}
-```
+- **Response (200 OK):** `message` = `Post accepted successfully` และ `data` เป็น `PostResponseDTO` ที่ `status` = `ACCEPTED` พร้อม `acceptedBy`, `acceptedByName`, `acceptedAt`
 
 | HTTP Status | เงื่อนไข | ตัวอย่าง message |
 |---|---|---|
@@ -148,17 +146,27 @@ classDiagram
         +acceptPost(Long postId) ResponseEntity~ApiResponseDTO~
     }
     class CreatePostRequestDTO {
-        +String productDetail
+        +String postTitle
         +String shopName
+        +String productDetail
+        +Integer quantity
+        +BigDecimal carryFee
+        +LocalDate desiredDate
         +String location
-        +String receivingDetail
+        +BigDecimal budget
+        +String additionalDetails
     }
     class PostResponseDTO {
         +Long postId
-        +String productDetail
+        +String postTitle
         +String shopName
+        +String productDetail
+        +Integer quantity
+        +BigDecimal carryFee
+        +LocalDate desiredDate
         +String location
-        +String receivingDetail
+        +BigDecimal budget
+        +String additionalDetails
         +String status
         +Long buyerId
         +String buyerName
@@ -185,13 +193,22 @@ classDiagram
 `ApiResponseDTO<T>` และ `FieldErrorDTO` ใช้ร่วมกันทุก task ดูที่ [API Conventions](../common/API-CONVENTIONS.md)
 
 1. **`CreatePostRequestDTO`**
-   - `productDetail`: String (Not Blank, Max 500)
-   - `shopName`: String (Not Blank, Max 100)
+   - `postTitle`: String (Not Blank, Max 255)
+   - `shopName`: String (Not Blank, Max 255)
+   - `productDetail`: String (Not Blank)
+   - `quantity`: Integer (Not Null, Min 1)
+   - `carryFee`: BigDecimal (Not Null, Min 0.00)
+   - `desiredDate`: LocalDate (Not Null, วันนี้หรืออนาคต)
    - `location`: String (Not Blank, Max 255)
-   - `receivingDetail`: String (Not Blank, Max 500)
+   - `budget`: BigDecimal (ไม่บังคับ, Min 0.00)
+   - `additionalDetails`: String (ไม่บังคับ)
 2. **`PostResponseDTO`**
    - `postId`: Long
-   - `productDetail`, `shopName`, `location`, `receivingDetail`: String
+   - `postTitle`, `shopName`, `productDetail`, `location`: String
+   - `quantity`: Integer
+   - `carryFee`, `budget`: BigDecimal
+   - `desiredDate`: LocalDate
+   - `additionalDetails`: String
    - `status`: String (`OPEN` เมื่อสร้างใหม่, `ACCEPTED` เมื่อมีคนรับ)
    - `buyerId`: Long (เจ้าของโพสต์ จาก JWT)
    - `buyerName`: String (จาก `USERS.full_name`)
@@ -203,21 +220,27 @@ classDiagram
 ```mermaid
 classDiagram
     class CreatePostRequestDTO {
-        -String productDetail
+        -String postTitle
         -String shopName
+        -String productDetail
+        -Integer quantity
+        -BigDecimal carryFee
+        -LocalDate desiredDate
         -String location
-        -String receivingDetail
-        +getProductDetail() String
-        +getShopName() String
-        +getLocation() String
-        +getReceivingDetail() String
+        -BigDecimal budget
+        -String additionalDetails
     }
     class PostResponseDTO {
         -Long postId
-        -String productDetail
+        -String postTitle
         -String shopName
+        -String productDetail
+        -Integer quantity
+        -BigDecimal carryFee
+        -LocalDate desiredDate
         -String location
-        -String receivingDetail
+        -BigDecimal budget
+        -String additionalDetails
         -String status
         -Long buyerId
         -String buyerName
@@ -225,18 +248,6 @@ classDiagram
         -String acceptedByName
         -LocalDateTime acceptedAt
         -LocalDateTime createdAt
-        +getPostId() Long
-        +getProductDetail() String
-        +getShopName() String
-        +getLocation() String
-        +getReceivingDetail() String
-        +getStatus() String
-        +getBuyerId() Long
-        +getBuyerName() String
-        +getAcceptedBy() Long
-        +getAcceptedByName() String
-        +getAcceptedAt() LocalDateTime
-        +getCreatedAt() LocalDateTime
     }
 ```
 
@@ -250,16 +261,23 @@ classDiagram
 |---|---|---|
 | `id` | `id` | PK, auto increment |
 | `buyer` (`User`) | `buyer_id` | FK → `USERS.id` (`@ManyToOne`), NOT NULL |
-| `productDetail` | `product_detail` | NOT NULL |
+| `postTitle` | `post_title` | NOT NULL |
 | `shopName` | `shop_name` | NOT NULL |
+| `productDetail` | `product_detail` | NOT NULL (TEXT) |
+| `quantity` | `quantity` | NOT NULL, > 0 |
+| `carryFee` | `carry_fee` | NOT NULL, >= 0 |
+| `desiredDate` | `desired_date` | NOT NULL |
 | `location` | `location` | NOT NULL |
-| `receivingDetail` | `receiving_detail` | NOT NULL |
-| `status` | `status` | NOT NULL, DEFAULT `OPEN` (`OPEN`, `ACCEPTED`) |
+| `budget` | `budget` | ว่างได้ ถ้ามีต้อง >= 0 |
+| `additionalDetails` | `additional_details` | ว่างได้ (TEXT) |
+| `status` | `status` | NOT NULL, DEFAULT `OPEN` (Sprint 1 ใช้ `OPEN`, `ACCEPTED` ส่วน `COMPLETED`, `CANCELLED` มีใน schema สำหรับอนาคต) |
+| `acceptedBy` (`User`) | `accepted_by` | FK → `USERS.id` (`@ManyToOne`), ว่างได้ ต้องไม่ใช่เจ้าของโพสต์ |
+| `acceptedAt` | `accepted_at` | ว่างได้ ต้องมีค่าพร้อมกับ `accepted_by` |
 | `createdAt` | `created_at` | NOT NULL, DEFAULT CURRENT_TIMESTAMP |
-| `acceptedBy` (`User`) | `accepted_by` | FK → `USERS.id` (`@ManyToOne`), ว่างได้ |
-| `acceptedAt` | `accepted_at` | ว่างได้ |
 
 ความสัมพันธ์: `USERS` 1 ──< `POSTS` (เจ้าของโพสต์) และ `USERS` 0..1 ──< `POSTS` (ผู้รับงาน) ตรงกับ ERD กลาง
+
+> **ER ต้องแก้ให้ตรง:** `ERD.md` ตาราง `POSTS` ยังเป็นฟิลด์ชุดเก่า (`product_detail`, `shop_name`, `location`, `receiving_detail`) ต้องปรับเป็นชุดเดียวกับตารางข้างบนและ `schema.sql` (เพิ่ม `post_title`, `quantity`, `carry_fee`, `desired_date`, `budget`, `additional_details` และเอา `receiving_detail` ออก)
 
 ### Repository
 - **Interface:** `PostRepository` (extends `JpaRepository<Post, Long>`)
@@ -282,14 +300,19 @@ classDiagram
     class Post {
         -Long id
         -User buyer
-        -String productDetail
+        -String postTitle
         -String shopName
+        -String productDetail
+        -Integer quantity
+        -BigDecimal carryFee
+        -LocalDate desiredDate
         -String location
-        -String receivingDetail
+        -BigDecimal budget
+        -String additionalDetails
         -String status
-        -LocalDateTime createdAt
         -User acceptedBy
         -LocalDateTime acceptedAt
+        -LocalDateTime createdAt
     }
     class User {
         -Long id
@@ -342,14 +365,19 @@ classDiagram
     class Post {
         -Long id
         -User buyer
-        -String productDetail
+        -String postTitle
         -String shopName
+        -String productDetail
+        -Integer quantity
+        -BigDecimal carryFee
+        -LocalDate desiredDate
         -String location
-        -String receivingDetail
+        -BigDecimal budget
+        -String additionalDetails
         -String status
-        -LocalDateTime createdAt
         -User acceptedBy
         -LocalDateTime acceptedAt
+        -LocalDateTime createdAt
     }
     class User {
         -Long id
@@ -383,7 +411,7 @@ classDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as User (BUYER / RUNNER / Guest)
+    actor User as User (ผู้ใช้ทุกคน / Guest)
     participant Ctrl as PostController<br/>(/api/v1/posts)
     participant Svc as PostServiceImpl
     participant UserRepo as UserRepository
@@ -397,7 +425,7 @@ sequenceDiagram
     note over User, DB: 1. Endpoint 1: Create Post (POST /api/v1/posts)
     User->>Ctrl: POST /api/v1/posts (CreatePostRequestDTO)
     activate Ctrl
-    note right of User: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)<br/>Body: productDetail, shopName, location, receivingDetail
+    note right of User: Header: Bearer <JWT_TOKEN> (ต้องเข้าสู่ระบบ)<br/>Body: postTitle, shopName, productDetail, quantity, carryFee, desiredDate, location (+ budget, additionalDetails ไม่บังคับ)
 
     alt Missing/Invalid Token
         Ctrl-->>User: 401 Unauthorized (Invalid or missing token)
@@ -419,7 +447,7 @@ sequenceDiagram
         Svc->>Svc: Construct Post entity (status = 'OPEN', acceptedBy = null, acceptedAt = null)
         Svc->>PostRepo: save(post)
         activate PostRepo
-        PostRepo->>DB: INSERT INTO posts (buyer_id, product_detail, shop_name, location, receiving_detail, status) VALUES (...)
+        PostRepo->>DB: INSERT INTO posts (buyer_id, post_title, shop_name, product_detail, quantity, carry_fee, desired_date, location, budget, additional_details, status) VALUES (...)
         activate DB
         DB-->>PostRepo: Saved Post (with generated postId)
         deactivate DB
@@ -580,3 +608,4 @@ sequenceDiagram
         end
     end
     end
+```
