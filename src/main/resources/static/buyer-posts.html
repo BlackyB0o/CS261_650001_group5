@@ -58,13 +58,14 @@
             <div class="buyer-posts-section-heading">
                 <div>
                     <h2>โพสต์ทั้งหมด</h2>
-                    <p>ค้นหาโพสต์ที่คุณต้องการ แล้วดูรายละเอียดเพิ่มเติม</p>
+                    <p>ค้นหาโพสต์ที่เปิดรับคนช่วยซื้อ แล้วดูรายละเอียดเพิ่มเติม</p>
                 </div>
 
-                <span class="buyer-posts-count">3 โพสต์</span>
+                <span id="buyer-posts-count" class="buyer-posts-count">กำลังโหลด...</span>
             </div>
 
-            <div class="buyer-posts-list">
+            <p id="buyer-posts-message" class="form-message" role="status" aria-live="polite" hidden></p>
+            <div id="buyer-posts-list" class="buyer-posts-list">
 
                 <article class="buyer-post-card">
 
@@ -216,6 +217,7 @@
         <p>CarryHub © 2026</p>
     </footer>
 
+    <script src="/js/buyer-posts.js"></script>
     <script src="/js/guest-access.js"></script>
 </body>
 
