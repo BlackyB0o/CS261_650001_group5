@@ -474,6 +474,10 @@ form input[type="submit"] {
     gap: 12px;
 }
 
+.verify-card form[hidden] {
+    display: none;
+}
+
 .verify-card label {
     font-size: 14px;
     font-weight: 600;
@@ -507,6 +511,36 @@ form input[type="submit"] {
 
 .verify-card .btn-full:hover {
     background: #df6d12;
+}
+
+.verify-card .btn-full:disabled,
+.otp-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.otp-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.otp-actions a,
+.otp-actions button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #777777;
+    font: inherit;
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.otp-actions a:hover,
+.otp-actions button:not(:disabled):hover {
+    color: #f58220;
 }
 
 .back-link {
