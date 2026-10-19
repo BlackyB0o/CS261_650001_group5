@@ -158,9 +158,14 @@
                 verificationId: String(verificationId),
                 purpose: "LOGIN"
             });
+            const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+            if (returnTo && returnTo.charAt(0) === "/" && returnTo.indexOf("//") !== 0) {
+                otpContext.set("returnTo", returnTo);
+            }
             window.location.assign("/verify-otp.html?" + otpContext.toString());
         });
     </script>
+    <script src="/js/guest-access.js"></script>
 </body>
 
 </html>
