@@ -5,6 +5,7 @@
         "buyer-post-review.html",
         "buyer-post-success.html",
         "create-buyer-post.html",
+        "create-order.html",
         "create-round.html",
         "delivery-proof.html",
         "my-buyer-post-detail.html",

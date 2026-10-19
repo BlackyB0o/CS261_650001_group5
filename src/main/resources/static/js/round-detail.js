@@ -1,7 +1,9 @@
 (function () {
     const message = document.getElementById("round-detail-message");
     const detailContent = document.getElementById("round-detail-content");
+    const createOrderLink = document.getElementById("create-order-link");
     const roundId = new URLSearchParams(window.location.search).get("roundId");
+    createOrderLink.style.display = "none";
 
     function setText(id, value) {
         document.getElementById(id).textContent = value == null || value === "" ? "-" : value;
@@ -54,6 +56,11 @@
             setText("round-detail-fee", Number(round.serviceFee).toLocaleString("th-TH") + " บาท / รายการ");
             setText("round-detail-location", round.locationName);
             setText("round-detail-current-status", round.status);
+            if (round.status === "OPEN") {
+                createOrderLink.href = "create-order.html?roundId=" + encodeURIComponent(round.roundId);
+                createOrderLink.hidden = false;
+                createOrderLink.style.display = "";
+            }
             message.hidden = true;
             detailContent.hidden = false;
         })
