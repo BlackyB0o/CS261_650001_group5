@@ -22,21 +22,21 @@
             <h1>สร้างบัญชี CarryHub</h1>
             <p>ลงทะเบียนเพื่อเริ่มใช้งาน</p>
 
-            <form action="verify.html">
+            <form id="register-form">
                 <div class="form-group">
                     <label for="fullname">ชื่อ-นามสกุล</label>
-                    <input type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุล" required>
+                    <input type="text" id="fullname" name="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">อีเมล</label>
-                    <input type="email" id="email" placeholder="example@email.com" required>
+                    <input type="email" id="email" name="email" placeholder="example@email.com" required>
                 </div>
 
                 <div class="form-group">
                     <label for="phone">เบอร์โทรศัพท์</label>
-                    <input type="tel" id="phone" name="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" maxlength="10"
-                        pattern="[0]{1}[0-9]{9}" inputmode="numeric"
+                    <input type="tel" id="phone" name="phoneNumber" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
+                        maxlength="10" pattern="[0]{1}[0-9]{9}" inputmode="numeric"
                         title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0" required>
                 </div>
 
@@ -51,12 +51,13 @@
 
                 <div class="form-group">
                     <label for="confirm-password">ยืนยันรหัสผ่าน</label>
-                    <input type="password" id="confirm-password" name="confirm-password"
-                        placeholder="กรอกรหัสผ่านอีกครั้ง" minlength="8" autocomplete="new-password" required>
+                    <input type="password" id="confirm-password" placeholder="กรอกรหัสผ่านอีกครั้ง" minlength="8"
+                        autocomplete="new-password" required>
                 </div>
 
+                <p id="register-message" class="form-message" role="status" aria-live="polite" hidden></p>
 
-                <button type="submit" class="btn btn-primary btn-full">
+                <button id="register-button" type="submit" class="btn btn-primary btn-full">
                     ลงทะเบียน
                 </button>
             </form>
@@ -71,6 +72,100 @@
     <footer class="footer">
         <p>© 2026 CarryHub</p>
     </footer>
+
+    <script>
+        const registerForm = document.getElementById("register-form");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+        const registerButton = document.getElementById("register-button");
+        const registerMessage = document.getElementById("register-message");
+
+        function validatePasswordConfirmation() {
+            confirmPasswordInput.setCustomValidity(
+                confirmPasswordInput.value === passwordInput.value
+                    ? ""
+                    : "รหัสผ่านไม่ตรงกัน"
+            );
+        }
+
+        passwordInput.addEventListener("input", validatePasswordConfirmation);
+        confirmPasswordInput.addEventListener("input", validatePasswordConfirmation);
+
+        function showRegisterMessage(message, success) {
+            registerMessage.textContent = message;
+            registerMessage.className = "form-message " + (success ? "success-message" : "error-message");
+            registerMessage.hidden = false;
+        }
+
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            validatePasswordConfirmation();
+
+            registerButton.disabled = true;
+            registerButton.textContent = "กำลังลงทะเบียน...";
+            registerMessage.hidden = true;
+
+            let response;
+            try {
+                response = await fetch("/api/v1/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("email").value.trim(),
+                        password: passwordInput.value,
+                        fullName: document.getElementById("fullname").value.trim(),
+                        phoneNumber: document.getElementById("phone").value.trim()
+                    })
+                });
+            } catch (error) {
+                showRegisterMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", false);
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                showRegisterMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง", false);
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            if (!response.ok || !result || result.status !== "SUCCESS") {
+                const fieldLabels = {
+                    email: "อีเมล",
+                    password: "รหัสผ่าน",
+                    fullName: "ชื่อ-นามสกุล",
+                    phoneNumber: "เบอร์โทรศัพท์"
+                };
+                const fieldErrors = Array.isArray(result && result.errors)
+                    ? result.errors
+                        .filter(function (item) {
+                            return item && typeof item.field === "string" && typeof item.message === "string";
+                        })
+                        .map(function (item) {
+                            return (fieldLabels[item.field] || item.field) + ": " + item.message;
+                        })
+                    : [];
+                const message = result && typeof result.message === "string"
+                    ? result.message
+                    : "ลงทะเบียนไม่สำเร็จ (HTTP " + response.status + ")";
+
+                showRegisterMessage([message].concat(fieldErrors).join("\n"), false);
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            showRegisterMessage("สมัครสมาชิกสำเร็จแล้ว กรุณาเข้าสู่ระบบเพื่อใช้งาน CarryHub", true);
+            registerButton.textContent = "ลงทะเบียนสำเร็จ";
+        });
+    </script>
 </body>
 
 </html>
