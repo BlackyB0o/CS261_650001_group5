@@ -156,10 +156,9 @@
 
             const otpContext = new URLSearchParams({
                 verificationId: String(verificationId),
-                purpose: "LOGIN",
-                maskedPhoneNumber: result.data.maskedPhoneNumber || ""
+                purpose: "LOGIN"
             });
-            window.location.assign("/verify-otp.html#" + otpContext.toString());
+            window.location.assign("/verify-otp.html?" + otpContext.toString());
         });
     </script>
 </body>
