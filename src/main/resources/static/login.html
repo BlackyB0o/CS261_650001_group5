@@ -23,23 +23,24 @@
             <h1>ยินดีต้อนรับกลับมา</h1>
             <p>เข้าสู่ระบบเพื่อใช้งาน CarryHub</p>
 
-            <form action="index.html">
+            <form id="login-form">
                 <div class="form-group">
-                    <label for="email">อีเมล</label>
-                    <input type="email" id="email" placeholder="กรอกอีเมลของคุณ" required>
+                    <label for="identifier">อีเมลหรือเบอร์โทรศัพท์</label>
+                    <input type="text" id="identifier" name="identifier" placeholder="กรอกอีเมลหรือเบอร์โทรศัพท์"
+                        autocomplete="username" required>
                 </div>
 
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
-                    <input type="password" id="password" placeholder="กรอกรหัสผ่าน" minlength="8"
-                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
-                        title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
-                        autocomplete="new-password" required>
+                    <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน"
+                        autocomplete="current-password" required>
                 </div>
 
                 <p><a href="forgot-password.html">ลืมรหัสผ่าน?</a></p>
 
-                <button type="submit" class="btn btn-primary btn-full">
+                <p id="login-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <button id="login-button" type="submit" class="btn btn-primary btn-full">
                     เข้าสู่ระบบ
                 </button>
             </form>
@@ -54,6 +55,82 @@
     <footer class="footer">
         <p>© 2026 CarryHub</p>
     </footer>
+
+    <script>
+        const loginForm = document.getElementById("login-form");
+        const loginButton = document.getElementById("login-button");
+        const loginMessage = document.getElementById("login-message");
+
+        function showLoginMessage(message) {
+            loginMessage.textContent = message;
+            loginMessage.className = "form-message error-message";
+            loginMessage.hidden = false;
+        }
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            loginButton.disabled = true;
+            loginButton.textContent = "กำลังตรวจสอบ...";
+            loginMessage.hidden = true;
+
+            let response;
+            try {
+                response = await fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: document.getElementById("identifier").value.trim(),
+                        password: document.getElementById("password").value
+                    })
+                });
+            } catch (error) {
+                showLoginMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง");
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                showLoginMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง");
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            const verificationId = result && result.data && result.data.verificationId;
+            if (!response.ok || !result || result.status !== "SUCCESS"
+                || !Number.isInteger(verificationId) || verificationId <= 0) {
+                showLoginMessage(
+                    result && typeof result.message === "string"
+                        ? result.message
+                        : "เข้าสู่ระบบไม่สำเร็จ (HTTP " + response.status + ")"
+                );
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            try {
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    result.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                showLoginMessage("ส่ง OTP แล้ว แต่ไม่สามารถเปิดหน้ายืนยันได้ กรุณาเปิดพื้นที่จัดเก็บข้อมูลแล้วลองอีกครั้ง");
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            window.location.href = "verify-otp.html";
+        });
+    </script>
 </body>
 
 </html>

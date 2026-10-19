@@ -162,8 +162,76 @@
                 return;
             }
 
-            showRegisterMessage("สมัครสมาชิกสำเร็จแล้ว กรุณาเข้าสู่ระบบเพื่อใช้งาน CarryHub", true);
-            registerButton.textContent = "ลงทะเบียนสำเร็จ";
+            registerButton.textContent = "กำลังส่งรหัส OTP...";
+
+            let loginResponse;
+            try {
+                loginResponse = await fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: document.getElementById("email").value.trim(),
+                        password: passwordInput.value
+                    })
+                });
+            } catch (error) {
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จแล้ว แต่ส่ง OTP ไม่สำเร็จ กรุณาเข้าสู่ระบบเพื่อขอรหัส OTP",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            let loginResult;
+            try {
+                loginResult = await loginResponse.json();
+            } catch (error) {
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จแล้ว แต่เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ กรุณาเข้าสู่ระบบเพื่อขอรหัส OTP",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            const verificationId = loginResult && loginResult.data && loginResult.data.verificationId;
+            if (!loginResponse.ok || !loginResult || loginResult.status !== "SUCCESS"
+                || !Number.isInteger(verificationId) || verificationId <= 0) {
+                const message = loginResult && typeof loginResult.message === "string"
+                    ? loginResult.message
+                    : "ไม่สามารถส่ง OTP ได้ (HTTP " + loginResponse.status + ")";
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จแล้ว แต่ส่ง OTP ไม่สำเร็จ: " + message
+                    + " กรุณาเข้าสู่ระบบเพื่อขอรหัส OTP",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            try {
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    loginResult.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จและส่ง OTP แล้ว แต่เปิดหน้ายืนยันไม่ได้ กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            window.location.href = "verify-otp.html";
         });
     </script>
 </body>
