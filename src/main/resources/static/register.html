@@ -22,27 +22,28 @@
             <h1>สร้างบัญชี CarryHub</h1>
             <p>ลงทะเบียนเพื่อเริ่มใช้งาน</p>
 
-            <form id="register-form" method="post">
+            <form id="register-form" method="post" onsubmit="return false;">
                 <div class="form-group">
                     <label for="fullname">ชื่อ-นามสกุล</label>
-                    <input type="text" id="fullname" name="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
+                    <input type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุล" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">อีเมล</label>
-                    <input type="email" id="email" name="email" placeholder="example@email.com" required>
+                    <input type="email" id="email" placeholder="example@email.com" required>
                 </div>
 
                 <div class="form-group">
                     <label for="phone">เบอร์โทรศัพท์</label>
-                    <input type="tel" id="phone" name="phoneNumber" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
+                    <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
                         maxlength="10" pattern="[0]{1}[0-9]{9}" inputmode="numeric"
                         title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0" required>
+                    <small id="phone-hint" aria-live="polite">กรอกตัวเลข 10 หลัก โดยเริ่มต้นด้วย 0</small>
                 </div>
 
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
-                    <input type="password" id="password" name="password" placeholder="อย่างน้อย 8 ตัวอักษร"
+                    <input type="password" id="password" placeholder="อย่างน้อย 8 ตัวอักษร"
                         minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
                         title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
                         autocomplete="new-password" required>
@@ -77,6 +78,8 @@
         const registerForm = document.getElementById("register-form");
         const passwordInput = document.getElementById("password");
         const confirmPasswordInput = document.getElementById("confirm-password");
+        const phoneInput = document.getElementById("phone");
+        const phoneHint = document.getElementById("phone-hint");
         const registerButton = document.getElementById("register-button");
         const registerMessage = document.getElementById("register-message");
 
@@ -90,6 +93,19 @@
 
         passwordInput.addEventListener("input", validatePasswordConfirmation);
         confirmPasswordInput.addEventListener("input", validatePasswordConfirmation);
+
+        phoneInput.addEventListener("input", function () {
+            const isValid = /^0[0-9]{9}$/.test(phoneInput.value);
+            phoneInput.setCustomValidity(
+                isValid || phoneInput.value === ""
+                    ? ""
+                    : "กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลข 10 หลัก โดยเริ่มต้นด้วยเลข 0"
+            );
+            phoneHint.textContent = isValid || phoneInput.value === ""
+                ? "กรอกตัวเลข 10 หลัก โดยเริ่มต้นด้วย 0"
+                : "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักและเริ่มต้นด้วย 0";
+            phoneHint.classList.toggle("error-text", !isValid && phoneInput.value !== "");
+        });
 
         function showRegisterMessage(message, success) {
             registerMessage.textContent = message;
@@ -217,6 +233,7 @@
 
             try {
                 sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", "LOGIN");
                 sessionStorage.setItem(
                     "carryhub.maskedPhoneNumber",
                     loginResult.data.maskedPhoneNumber || ""

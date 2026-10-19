@@ -38,7 +38,7 @@
             </form>
 
             <div class="otp-actions">
-                <a href="login.html">ย้อนกลับไปเข้าสู่ระบบ</a>
+                <a id="back-link" href="login.html">ย้อนกลับไปเข้าสู่ระบบ</a>
                 <button id="resend-button" type="button" disabled>ขอรหัสใหม่</button>
             </div>
 
@@ -53,6 +53,7 @@
         const verifyButton = document.getElementById("verify-button");
         const resendButton = document.getElementById("resend-button");
         let verificationId;
+        let otpPurpose = "LOGIN";
 
         function showOtpMessage(message, success) {
             otpMessage.textContent = message;
@@ -67,11 +68,20 @@
 
         try {
             const savedVerificationId = sessionStorage.getItem("carryhub.verificationId");
+            otpPurpose = sessionStorage.getItem("carryhub.otpPurpose") || "LOGIN";
             const parsedVerificationId = Number(savedVerificationId);
             if (savedVerificationId && Number.isInteger(parsedVerificationId) && parsedVerificationId > 0) {
                 verificationId = parsedVerificationId;
                 otpForm.hidden = false;
                 resendButton.disabled = false;
+
+                if (otpPurpose === "RESET_PASSWORD") {
+                    document.querySelector(".verify-step").textContent = "รีเซ็ตรหัสผ่าน";
+                    document.querySelector("h1").textContent = "ยืนยัน OTP";
+                    document.getElementById("back-link").href = "forgot-password.html";
+                    document.getElementById("back-link").textContent = "กลับไปขอรหัสใหม่";
+                    verifyButton.textContent = "ยืนยันรหัส OTP";
+                }
 
                 const maskedPhoneNumber = sessionStorage.getItem("carryhub.maskedPhoneNumber");
                 if (maskedPhoneNumber) {
@@ -97,6 +107,22 @@
             setButtonState(verifyButton, true, "กำลังตรวจสอบ...");
             resendButton.disabled = true;
             otpMessage.hidden = true;
+
+            if (otpPurpose === "RESET_PASSWORD") {
+                try {
+                    sessionStorage.setItem("carryhub.resetOtp", otpInput.value.trim());
+                } catch (error) {
+                    showOtpMessage(
+                        "ไม่สามารถเก็บข้อมูลการยืนยันได้ กรุณาเปิดพื้นที่จัดเก็บข้อมูลแล้วลองใหม่",
+                        false
+                    );
+                    setButtonState(verifyButton, false, "ยืนยันรหัส OTP");
+                    resendButton.disabled = false;
+                    return;
+                }
+                window.location.href = "reset-password.html";
+                return;
+            }
 
             let response;
             try {
@@ -153,7 +179,9 @@
 
             try {
                 sessionStorage.removeItem("carryhub.verificationId");
+                sessionStorage.removeItem("carryhub.otpPurpose");
                 sessionStorage.removeItem("carryhub.maskedPhoneNumber");
+                sessionStorage.removeItem("carryhub.resetOtp");
             } catch (error) {
                 console.warn("Could not clear the completed OTP verification state.", error);
             }
@@ -214,6 +242,7 @@
             try {
                 verificationId = newVerificationId;
                 sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", otpPurpose);
                 sessionStorage.setItem(
                     "carryhub.maskedPhoneNumber",
                     result.data.maskedPhoneNumber || ""
