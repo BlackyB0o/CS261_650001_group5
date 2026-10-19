@@ -148,14 +148,17 @@ Entity ที่ map กับตารางชื่อ `orders` ต้อง�
 
 ---
 
-## 7. โค้ดชั้น API ที่มีอยู่แล้ว (Controller, DTO, Entity, Repository)
+## 7. โค้ดที่ใช้งานได้จริง (Controller, DTO, Entity, Repository, Service)
 
 | เรื่อง | ข้อตกลง |
 |---|---|
-| ผู้ใช้จาก JWT | Controller อ่านด้วย `@RequestAttribute("userId")` (ค่าคงที่ `RequestAttributes.USER_ID`) JWT filter ของ Task04 ต้องตรวจ token แล้วเรียก `request.setAttribute("userId", userId)` ถ้าไม่มี attribute นี้ระบบตอบ `401 Invalid or missing token` ให้เอง |
-| endpoint ของ Guest | ไม่ใช้ `userId` ใน Controller (ดูข้อ 2) JWT filter ต้องไม่ปฏิเสธคำขอที่ไม่มี token บน endpoint เหล่านี้ |
-| error จาก Service | โยน `ApiException` ด้วย factory เช่น `ApiException.notFound("Order not found")`, `forbidden(...)`, `conflict(...)`, `tooManyRequests(...)`, `validation("paidAmount", "must equal the total amount (100.00)")` `GlobalExceptionHandler` แปลงเป็นรูปแบบในข้อ 3 |
-| Validation | ใช้ Bean Validation ใน DTO (error ออกเป็น `400` พร้อม `errors`) ไฟล์รูปใช้ `@ImageFile` (ต้องแนบ, JPEG/PNG, ไม่เกิน 5 MB) |
-| Service ชั่วคราว | `config/Default*ServiceConfig` ให้ Service ที่ยังไม่เขียนตอบ `501 Not implemented yet` เมื่อมี `@Service` จริงของ interface นั้น ตัวชั่วคราวจะถูกข้ามเอง |
-| ฐานข้อมูล | ตารางสร้างจาก `docs/database/schema.sql` และ `schema_orders.sql` (`spring.jpa.hibernate.ddl-auto=none`) Entity map ชื่อ column ตรงกับไฟล์ SQL |
-
+| ผู้ใช้จาก JWT | `JwtAuthFilter` ตรวจ `Authorization: Bearer <token>` แล้วตั้ง request attribute `userId` Controller อ่านด้วย `@RequestAttribute("userId")` ถ้าไม่มี token หรือ token ผิด endpoint ที่ต้องล็อกอินตอบ `401 Invalid or missing token` เอง endpoint ของ Guest ใช้ได้ตามปกติ |
+| JWT | HS256 มีเฉพาะ `userId` อายุ 24 ชั่วโมง secret ตั้งที่ `APP_JWT_SECRET` (มีค่าเริ่มต้นสำหรับ dev) |
+| รหัสผ่าน | เก็บแบบ hash (PBKDF2-HmacSHA256 มี salt) ใน `users.password_hash` |
+| OTP | Sprint 1 ไม่ส่ง SMS จริง `MockSmsSender` พิมพ์ OTP ลง log ของแอป เช่น `[MOCK SMS] to 0812345678: CarryHub OTP: 123456` ดูได้จาก terminal ที่รันแอป หรือ `docker compose logs app` |
+| error จาก Service | โยน `ApiException` เช่น `ApiException.notFound("Order not found")`, `forbidden(...)`, `conflict(...)`, `tooManyRequests(...)`, `validation("paidAmount", "...")` `GlobalExceptionHandler` แปลงเป็นรูปแบบในข้อ 3 |
+| Validation | Bean Validation ใน DTO (error ออกเป็น `400` พร้อม `errors`) ไฟล์รูปใช้ `@ImageFile` (ต้องแนบ, JPEG/PNG, ไม่เกิน 5 MB) |
+| ไฟล์ที่อัปโหลด | เก็บในโฟลเดอร์ `uploads/` (`APP_UPLOAD_DIR`) เปิดดูได้ที่ `http://host:port/uploads/...` ตามค่า `slipImageUrl` / `evidenceImageUrl` |
+| CORS | เปิดให้หน้าเว็บจากที่อื่น (เช่น Live Server) เรียก `/api/**` ได้ |
+| ฐานข้อมูล | `spring.jpa.hibernate.ddl-auto=update` สร้างตารางตาม Entity อัตโนมัติ ชื่อ column ตรงกับ `docs/database/schema.sql` |
+| ทดสอบ API | ไฟล์ `docs/api-test.http` (ใช้กับ VS Code extension REST Client) ไล่ flow ครบตั้งแต่สมัครจนปิดออเดอร์ |
