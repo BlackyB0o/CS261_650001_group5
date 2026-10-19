@@ -67,8 +67,8 @@
         }
 
         try {
-            const savedVerificationId = sessionStorage.getItem("carryhub.verificationId");
-            otpPurpose = sessionStorage.getItem("carryhub.otpPurpose") || "LOGIN";
+            const savedVerificationId = localStorage.getItem("carryhub.verificationId");
+            otpPurpose = localStorage.getItem("carryhub.otpPurpose") || "LOGIN";
             const parsedVerificationId = Number(savedVerificationId);
             if (savedVerificationId && Number.isInteger(parsedVerificationId) && parsedVerificationId > 0) {
                 verificationId = parsedVerificationId;
@@ -83,7 +83,7 @@
                     verifyButton.textContent = "ยืนยันรหัส OTP";
                 }
 
-                const maskedPhoneNumber = sessionStorage.getItem("carryhub.maskedPhoneNumber");
+                const maskedPhoneNumber = localStorage.getItem("carryhub.maskedPhoneNumber");
                 if (maskedPhoneNumber) {
                     otpDescription.textContent =
                         "กรอกรหัสยืนยัน 6 หลักที่ส่งไปยังเบอร์ " + maskedPhoneNumber;
@@ -178,9 +178,9 @@
             }
 
             try {
-                sessionStorage.removeItem("carryhub.verificationId");
-                sessionStorage.removeItem("carryhub.otpPurpose");
-                sessionStorage.removeItem("carryhub.maskedPhoneNumber");
+                localStorage.removeItem("carryhub.verificationId");
+                localStorage.removeItem("carryhub.otpPurpose");
+                localStorage.removeItem("carryhub.maskedPhoneNumber");
                 sessionStorage.removeItem("carryhub.resetOtp");
             } catch (error) {
                 console.warn("Could not clear the completed OTP verification state.", error);
@@ -241,9 +241,9 @@
 
             try {
                 verificationId = newVerificationId;
-                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
-                sessionStorage.setItem("carryhub.otpPurpose", otpPurpose);
-                sessionStorage.setItem(
+                localStorage.setItem("carryhub.verificationId", String(verificationId));
+                localStorage.setItem("carryhub.otpPurpose", otpPurpose);
+                localStorage.setItem(
                     "carryhub.maskedPhoneNumber",
                     result.data.maskedPhoneNumber || ""
                 );

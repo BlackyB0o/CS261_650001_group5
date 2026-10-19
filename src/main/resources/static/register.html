@@ -232,9 +232,9 @@
             }
 
             try {
-                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
-                sessionStorage.setItem("carryhub.otpPurpose", "LOGIN");
-                sessionStorage.setItem(
+                localStorage.setItem("carryhub.verificationId", String(verificationId));
+                localStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                localStorage.setItem(
                     "carryhub.maskedPhoneNumber",
                     loginResult.data.maskedPhoneNumber || ""
                 );
