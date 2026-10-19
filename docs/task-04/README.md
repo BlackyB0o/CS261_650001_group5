@@ -32,7 +32,7 @@
 ---
 
 ## 2. UI Prototype
-- หน้าที่เกี่ยวข้อง: `register`, `login`, `verify` (กรอกเบอร์), `verify-otp` (กรอก OTP 6 หลัก), `forgot-password`, `reset-password`
+- หน้าที่เกี่ยวข้อง: `register`, `login`, `verify-otp` (กรอก OTP 6 หลัก), `forgot-password`, `reset-password`
 - **Figma Design Link:** [Task04 - Register & Login UI Prototype](https://www.figma.com/)
 
 ---
@@ -751,4 +751,3 @@ sequenceDiagram
     deactivate Service
     Controller-->>Client: 200 OK (Password reset successfully)
     deactivate Controller
-

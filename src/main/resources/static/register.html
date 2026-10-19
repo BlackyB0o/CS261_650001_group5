@@ -232,6 +232,17 @@
             }
 
             try {
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    loginResult.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not store OTP context in this tab; passing it to the OTP page directly.", error);
+            }
+
+            try {
                 localStorage.setItem("carryhub.verificationId", String(verificationId));
                 localStorage.setItem("carryhub.otpPurpose", "LOGIN");
                 localStorage.setItem(
@@ -239,16 +250,15 @@
                     loginResult.data.maskedPhoneNumber || ""
                 );
             } catch (error) {
-                showRegisterMessage(
-                    "สมัครสมาชิกสำเร็จและส่ง OTP แล้ว แต่เปิดหน้ายืนยันไม่ได้ กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ",
-                    false
-                );
-                registerButton.disabled = false;
-                registerButton.textContent = "ลงทะเบียน";
-                return;
+                console.warn("Could not persist OTP context across tabs; continuing with this tab's session.", error);
             }
 
-            window.location.href = "verify-otp.html";
+            const otpContext = new URLSearchParams({
+                verificationId: String(verificationId),
+                purpose: "LOGIN",
+                maskedPhoneNumber: loginResult.data.maskedPhoneNumber || ""
+            });
+            window.location.assign("/verify-otp.html#" + otpContext.toString());
         });
     </script>
 </body>
