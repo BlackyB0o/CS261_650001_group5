@@ -573,6 +573,10 @@ form input[type="submit"] {
     line-height: 1.5;
 }
 
+.form-group small.error-text {
+    color: #a33a32;
+}
+
 .review-card {
     width: 100%;
     max-width: 600px;
@@ -8863,6 +8867,10 @@ body {
 }
 
 .form-message[hidden] {
+    display: none;
+}
+
+#reset-password-form[hidden] {
     display: none;
 }
 
