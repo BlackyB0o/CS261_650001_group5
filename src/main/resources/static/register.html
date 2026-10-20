@@ -5,6 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สมัครสมาชิก | CarryHub</title>
+    <script>
+        (function () {
+            const submittedFields = new URLSearchParams(window.location.search);
+            const isStaleRegisterSubmission = ["fullname", "email", "phone", "password"]
+                .some(function (field) {
+                    return submittedFields.has(field);
+                });
+            if (!isStaleRegisterSubmission) {
+                return;
+            }
+
+            window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+            window.carryHubStaleRegistration = {
+                fullName: submittedFields.get("fullname") || "",
+                email: submittedFields.get("email") || "",
+                phone: submittedFields.get("phone") || "",
+                password: submittedFields.get("password") || ""
+            };
+        })();
+    </script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -22,7 +42,7 @@
             <h1>สร้างบัญชี CarryHub</h1>
             <p>ลงทะเบียนเพื่อเริ่มใช้งาน</p>
 
-            <form id="register-form" method="post" onsubmit="return false;">
+            <form id="register-form" action="/api/v1/auth/register" method="post" onsubmit="return false;">
                 <div class="form-group">
                     <label for="fullname">ชื่อ-นามสกุล</label>
                     <input type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุล" required>
@@ -111,6 +131,19 @@
             registerMessage.textContent = message;
             registerMessage.className = "form-message " + (success ? "success-message" : "error-message");
             registerMessage.hidden = false;
+        }
+
+        const staleRegistration = window.carryHubStaleRegistration;
+        if (staleRegistration) {
+            const submittedValues = staleRegistration;
+            document.getElementById("fullname").value = submittedValues.fullName;
+            document.getElementById("email").value = submittedValues.email;
+            phoneInput.value = submittedValues.phone;
+            phoneInput.dispatchEvent(new Event("input"));
+            passwordInput.value = submittedValues.password;
+            confirmPasswordInput.value = submittedValues.password;
+            validatePasswordConfirmation();
+            delete window.carryHubStaleRegistration;
         }
 
         registerForm.addEventListener("submit", async function (event) {
@@ -259,6 +292,16 @@
             });
             window.location.assign("/verify-otp.html?" + otpContext.toString());
         });
+
+        if (staleRegistration && staleRegistration.password) {
+            showRegisterMessage("กำลังส่งข้อมูลสมัครสมาชิกที่ค้างจากหน้าเดิม...", true);
+            registerForm.requestSubmit(registerButton);
+        } else if (staleRegistration) {
+            showRegisterMessage(
+                "ข้อมูลถูกส่งจากหน้าเดิมแต่ไม่มีรหัสผ่านให้ใช้ กรุณากรอกรหัสผ่านและยืนยันอีกครั้ง",
+                false
+            );
+        }
     </script>
 </body>
 
