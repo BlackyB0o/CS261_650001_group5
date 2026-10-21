@@ -28,7 +28,7 @@
   "serviceFee": 20.00
 }
 ```
-*(หมายเหตุ: ทั้ง 4 field บังคับส่ง `runnerId` ไม่ต้องส่ง ระบบอ่านจาก JWT และรอบที่สร้างใหม่มีสถานะ `OPEN` เสมอ)*
+*(หมายเหตุ: ส่งทั้ง 4 field ตามตัวอย่าง ไม่ต้องส่ง `runnerId`; ระบบอ่านผู้รับหิ้วจาก JWT และรอบที่สร้างใหม่มีสถานะ `OPEN` เสมอ)*
 
 **กติกาตรวจข้อมูล**
 
@@ -158,6 +158,13 @@
 | `403 Forbidden` | ไม่ใช่เจ้าของรอบนี้ | `You are not the owner of this delivery round` |
 | `404 Not Found` | ไม่พบรอบตาม `roundId` | `Delivery round not found` |
 | `409 Conflict` | เปลี่ยนสถานะไม่ตรงตามตารางด้านบน | `Cannot change status from COMPLETED to OPEN` |
+
+### หน้าเว็บที่เชื่อมต่อ API
+- `rounds.html` เรียก Endpoint 2 และค้นหา/กรองข้อมูลที่โหลดแล้ว
+- `round-detail.html?roundId=...` เรียก Endpoint 4
+- `create-round.html` เรียก Endpoint 1 โดยส่ง JWT และข้อมูล 4 field ตามสัญญา
+- ส่วน “รอบรับหิ้วของฉัน” ใน `orders.html` เรียก Endpoint 3
+- `my-round-detailod.html?roundId=...` แสดงรายละเอียดและเรียก Endpoint 5 สำหรับเปลี่ยนสถานะตาม transition ที่อนุญาต
 
 ---
 

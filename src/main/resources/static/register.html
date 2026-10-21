@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก | CarryHub</title>
+    <script>
+        (function () {
+            const submittedFields = new URLSearchParams(window.location.search);
+            const isStaleRegisterSubmission = ["fullname", "email", "phone", "password"]
+                .some(function (field) {
+                    return submittedFields.has(field);
+                });
+            if (!isStaleRegisterSubmission) {
+                return;
+            }
+
+            window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+            window.carryHubStaleRegistration = {
+                fullName: submittedFields.get("fullname") || "",
+                email: submittedFields.get("email") || "",
+                phone: submittedFields.get("phone") || "",
+                password: submittedFields.get("password") || ""
+            };
+        })();
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="auth-card">
+            <h1>สร้างบัญชี CarryHub</h1>
+            <p>ลงทะเบียนเพื่อเริ่มใช้งาน</p>
+
+            <form id="register-form" action="/api/v1/auth/register" method="post" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="fullname">ชื่อ-นามสกุล</label>
+                    <input type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุล" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">อีเมล</label>
+                    <input type="email" id="email" placeholder="example@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">เบอร์โทรศัพท์</label>
+                    <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
+                        maxlength="10" pattern="[0]{1}[0-9]{9}" inputmode="numeric"
+                        title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0" required>
+                    <small id="phone-hint" aria-live="polite">กรอกตัวเลข 10 หลัก โดยเริ่มต้นด้วย 0</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน</label>
+                    <input type="password" id="password" placeholder="อย่างน้อย 8 ตัวอักษร"
+                        minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                        title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
+                        autocomplete="new-password" required>
+                    <small>ใช้ตัวพิมพ์ใหญ่ พิมพ์เล็ก และตัวเลข</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">ยืนยันรหัสผ่าน</label>
+                    <input type="password" id="confirm-password" placeholder="กรอกรหัสผ่านอีกครั้ง" minlength="8"
+                        autocomplete="new-password" required>
+                </div>
+
+                <p id="register-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <button id="register-button" type="submit" class="btn btn-primary btn-full">
+                    ลงทะเบียน
+                </button>
+            </form>
+
+            <p class="text-center">
+                มีบัญชีอยู่แล้ว?
+                <a href="login.html">เข้าสู่ระบบ</a>
+            </p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CarryHub</p>
+    </footer>
+
+    <script>
+        const registerForm = document.getElementById("register-form");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+        const phoneInput = document.getElementById("phone");
+        const phoneHint = document.getElementById("phone-hint");
+        const registerButton = document.getElementById("register-button");
+        const registerMessage = document.getElementById("register-message");
+
+        function validatePasswordConfirmation() {
+            confirmPasswordInput.setCustomValidity(
+                confirmPasswordInput.value === passwordInput.value
+                    ? ""
+                    : "รหัสผ่านไม่ตรงกัน"
+            );
+        }
+
+        passwordInput.addEventListener("input", validatePasswordConfirmation);
+        confirmPasswordInput.addEventListener("input", validatePasswordConfirmation);
+
+        phoneInput.addEventListener("input", function () {
+            const isValid = /^0[0-9]{9}$/.test(phoneInput.value);
+            phoneInput.setCustomValidity(
+                isValid || phoneInput.value === ""
+                    ? ""
+                    : "กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลข 10 หลัก โดยเริ่มต้นด้วยเลข 0"
+            );
+            phoneHint.textContent = isValid || phoneInput.value === ""
+                ? "กรอกตัวเลข 10 หลัก โดยเริ่มต้นด้วย 0"
+                : "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักและเริ่มต้นด้วย 0";
+            phoneHint.classList.toggle("error-text", !isValid && phoneInput.value !== "");
+        });
+
+        function showRegisterMessage(message, success) {
+            registerMessage.textContent = message;
+            registerMessage.className = "form-message " + (success ? "success-message" : "error-message");
+            registerMessage.hidden = false;
+        }
+
+        const staleRegistration = window.carryHubStaleRegistration;
+        if (staleRegistration) {
+            const submittedValues = staleRegistration;
+            document.getElementById("fullname").value = submittedValues.fullName;
+            document.getElementById("email").value = submittedValues.email;
+            phoneInput.value = submittedValues.phone;
+            phoneInput.dispatchEvent(new Event("input"));
+            passwordInput.value = submittedValues.password;
+            confirmPasswordInput.value = submittedValues.password;
+            validatePasswordConfirmation();
+            delete window.carryHubStaleRegistration;
+        }
+
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            validatePasswordConfirmation();
+
+            registerButton.disabled = true;
+            registerButton.textContent = "กำลังลงทะเบียน...";
+            registerMessage.hidden = true;
+
+            let response;
+            try {
+                response = await fetch("/api/v1/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("email").value.trim(),
+                        password: passwordInput.value,
+                        fullName: document.getElementById("fullname").value.trim(),
+                        phoneNumber: document.getElementById("phone").value.trim()
+                    })
+                });
+            } catch (error) {
+                showRegisterMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", false);
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                showRegisterMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง", false);
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            if (!response.ok || !result || result.status !== "SUCCESS") {
+                const fieldLabels = {
+                    email: "อีเมล",
+                    password: "รหัสผ่าน",
+                    fullName: "ชื่อ-นามสกุล",
+                    phoneNumber: "เบอร์โทรศัพท์"
+                };
+                const fieldErrors = Array.isArray(result && result.errors)
+                    ? result.errors
+                        .filter(function (item) {
+                            return item && typeof item.field === "string" && typeof item.message === "string";
+                        })
+                        .map(function (item) {
+                            return (fieldLabels[item.field] || item.field) + ": " + item.message;
+                        })
+                    : [];
+                const message = result && typeof result.message === "string"
+                    ? result.message
+                    : "ลงทะเบียนไม่สำเร็จ (HTTP " + response.status + ")";
+
+                showRegisterMessage([message].concat(fieldErrors).join("\n"), false);
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            registerButton.textContent = "กำลังส่งรหัส OTP...";
+
+            let loginResponse;
+            try {
+                loginResponse = await fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: document.getElementById("email").value.trim(),
+                        password: passwordInput.value
+                    })
+                });
+            } catch (error) {
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จแล้ว แต่ส่ง OTP ไม่สำเร็จ กรุณาเข้าสู่ระบบเพื่อขอรหัส OTP",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            let loginResult;
+            try {
+                loginResult = await loginResponse.json();
+            } catch (error) {
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จแล้ว แต่เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ กรุณาเข้าสู่ระบบเพื่อขอรหัส OTP",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            const verificationId = loginResult && loginResult.data && loginResult.data.verificationId;
+            if (!loginResponse.ok || !loginResult || loginResult.status !== "SUCCESS"
+                || !Number.isInteger(verificationId) || verificationId <= 0) {
+                const message = loginResult && typeof loginResult.message === "string"
+                    ? loginResult.message
+                    : "ไม่สามารถส่ง OTP ได้ (HTTP " + loginResponse.status + ")";
+                showRegisterMessage(
+                    "สมัครสมาชิกสำเร็จแล้ว แต่ส่ง OTP ไม่สำเร็จ: " + message
+                    + " กรุณาเข้าสู่ระบบเพื่อขอรหัส OTP",
+                    false
+                );
+                registerButton.disabled = false;
+                registerButton.textContent = "ลงทะเบียน";
+                return;
+            }
+
+            try {
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    loginResult.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not store OTP context in this tab; passing it to the OTP page directly.", error);
+            }
+
+            try {
+                localStorage.setItem("carryhub.verificationId", String(verificationId));
+                localStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                localStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    loginResult.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not persist OTP context across tabs; continuing with this tab's session.", error);
+            }
+
+            const otpContext = new URLSearchParams({
+                verificationId: String(verificationId),
+                purpose: "LOGIN"
+            });
+            window.location.assign("/verify-otp.html?" + otpContext.toString());
+        });
+
+        if (staleRegistration && staleRegistration.password) {
+            showRegisterMessage("กำลังส่งข้อมูลสมัครสมาชิกที่ค้างจากหน้าเดิม...", true);
+            registerForm.requestSubmit(registerButton);
+        } else if (staleRegistration) {
+            showRegisterMessage(
+                "ข้อมูลถูกส่งจากหน้าเดิมแต่ไม่มีรหัสผ่านให้ใช้ กรุณากรอกรหัสผ่านและยืนยันอีกครั้ง",
+                false
+            );
+        }
+    </script>
+</body>
+
+</html>

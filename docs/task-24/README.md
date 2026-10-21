@@ -540,3 +540,15 @@ sequenceDiagram
         end
     end
     end
+```
+
+## 6. Static HTML integration
+
+| UI surface | Task 24 endpoint |
+|---|---|
+| `order-detail.html?orderId=...` links to `delivery-proof.html?orderId=...` | Opens the order's receipt-confirmation page |
+| `delivery-proof.html?orderId=...` | `GET /api/v1/orders/{orderId}` and `GET /api/v1/orders/{orderId}/completion` |
+| Buyer submits receipt evidence on `delivery-proof.html` | `POST /api/v1/orders/{orderId}/completion` (multipart `evidenceImage`) |
+
+The buyer can submit a JPEG/PNG image up to 5 MB only after payment. The page displays the completion result, evidence link, released amount, and released payment/order statuses from the API.
+*** End of File

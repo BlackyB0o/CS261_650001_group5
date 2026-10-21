@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รอบรับหิ้ว | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rounds.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html" class="active">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="rounds-container">
+
+        <section class="rounds-hero">
+            <div class="rounds-hero-content">
+                <p class="rounds-eyebrow">FIND YOUR ROUND</p>
+
+                <h1>รอบรับหิ้วทั้งหมด</h1>
+
+                <p class="rounds-hero-description">
+                    อยากฝากซื้ออะไร ลองค้นหารอบรับหิ้วที่ตรงกับร้านค้า
+                    และเวลาที่คุณต้องการ แล้วสั่งซื้อได้ง่าย ๆ ในที่เดียว
+                </p>
+
+                <a href="create-round.html" class="rounds-create-btn">
+                    <span>+</span>
+                    สร้างรอบรับหิ้ว
+                </a>
+            </div>
+
+            <div class="rounds-hero-illustration">
+                <div class="rounds-illustration-card">
+                    <span class="rounds-illustration-label">CarryHub</span>
+
+                    <div class="rounds-illustration-bag">CH</div>
+
+                    <div class="rounds-illustration-line"></div>
+                    <div class="rounds-illustration-line short"></div>
+
+                    <div class="rounds-illustration-tag">
+                        ฝากซื้อได้ง่าย ๆ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounds-search-card">
+
+            <div class="rounds-search-heading">
+                <div>
+                    <h2>ค้นหารอบรับหิ้ว</h2>
+                    <p>ค้นหาจากชื่อร้านค้า สถานที่ หรือผู้รับหิ้ว และกรองตามวันรับสินค้า</p>
+                </div>
+            </div>
+
+            <form id="round-search-form" class="rounds-search-form">
+
+                <div class="rounds-form-group">
+                    <label for="keyword">ชื่อร้านหรือสินค้า</label>
+
+                    <input type="text" id="keyword" name="keyword" placeholder="เช่น ร้านชานม ร้านอาหาร">
+                </div>
+
+                <div class="rounds-form-group">
+                    <label for="date">วันที่รับสินค้า</label>
+
+                    <input type="date" id="date" name="date">
+                </div>
+
+                <button type="submit" class="rounds-search-btn">
+                    ค้นหา
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="rounds-content">
+
+            <div class="rounds-section-heading">
+                <div>
+                    <h2>รอบรับหิ้วที่เปิดอยู่</h2>
+                    <p>เลือกรอบที่ตรงกับความต้องการของคุณ</p>
+                </div>
+
+                <span id="rounds-count" class="rounds-count">กำลังโหลด...</span>
+            </div>
+
+            <p id="rounds-message" class="form-message" role="status" aria-live="polite" hidden></p>
+            <div id="rounds-list" class="rounds-list" aria-live="polite"></div>
+
+        </section>
+
+        <section class="rounds-bottom">
+            <div>
+                <h2>หารอบที่ต้องการไม่เจอ?</h2>
+                <p>สร้างโพสต์เพื่อหาคนรับหิ้วสินค้าที่คุณต้องการได้เลย</p>
+            </div>
+
+            <a href="create-buyer-post.html" class="rounds-bottom-btn">
+                โพสต์หาคนรับหิ้ว
+                <span>→</span>
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+    <script src="/js/rounds.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

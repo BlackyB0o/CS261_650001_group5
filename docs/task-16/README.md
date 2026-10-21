@@ -543,6 +543,7 @@ sequenceDiagram
             deactivate Ctrl
         end
     end
+
     end
 
     %% ==========================================
@@ -621,12 +622,12 @@ sequenceDiagram
             Svc-->>Ctrl: List<OrderResponseDTO>
             deactivate Svc
             Ctrl-->>Buyer: 200 OK<br/>ApiResponseDTO(status="SUCCESS", data=List<OrderResponseDTO>)
-            deactivate Ctrl
-        end
-    end
-    end
+                    deactivate Ctrl
+                end
+            end
+            end
 
-    %% ==========================================
+            %% ==========================================
     %% 4. Endpoint 4: GET /api/v1/orders/{orderId} (Get Order Detail)
     %% ==========================================
     rect rgb(245, 245, 245)
@@ -664,3 +665,15 @@ sequenceDiagram
         end
     end
     end
+```
+
+## 6. Static HTML integration
+
+| UI surface | Task 16 endpoint |
+|---|---|
+| `create-order.html` (opened from an OPEN round detail) | `POST /api/v1/orders` |
+| `orders.html#round-orders-panel` | `GET /api/v1/orders/my` |
+| `my-round-detailod.html?roundId=...` | `GET /api/v1/orders?roundId=...` (owner only) |
+| `order-detail.html?orderId=...` | `GET /api/v1/orders/{orderId}` (buyer or round owner) |
+
+All order operations use the logged-in user's bearer token. Order IDs and item data are rendered from the API response; the create form submits only the documented request fields.
