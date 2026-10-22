@@ -27,107 +27,29 @@
             <div class="form-heading">
                 <a href="rounds.html" class="back-link">← กลับไปรอบรับหิ้ว</a>
                 <h1>สร้างรอบรับหิ้ว</h1>
-<<<<<<< HEAD
-                <p>กรอกรายละเอียดรอบรับหิ้วและเพิ่มรูปเมนู เพื่อให้ผู้ฝากซื้อเลือกสินค้าได้ง่ายขึ้น</p>
-            </div>
-
-            <form action="round-review.html" method="get">
-=======
                 <p>กรอกชื่อร้าน สถานที่ วันเวลารับสินค้า และค่าบริการเพื่อเปิดรอบรับหิ้ว</p>
             </div>
 
             <form id="create-round-form">
                 <p id="create-round-message" class="form-message" role="status" aria-live="polite" hidden></p>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 
                 <div class="form-section">
                     <h2>ข้อมูลรอบรับหิ้ว</h2>
                     <p class="section-description">ระบุข้อมูลพื้นฐานของรอบรับหิ้วที่ต้องการเปิด</p>
 
                     <div class="form-group">
-<<<<<<< HEAD
-                        <label for="round-name">ชื่อรอบรับหิ้ว <span class="required">*</span></label>
-                        <input type="text" id="round-name" name="round-name" placeholder="เช่น รอบร้านชานมช่วงเที่ยง"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="shop">ชื่อร้านค้า <span class="required">*</span></label>
-                        <input type="text" id="shop" name="shop" placeholder="กรอกชื่อร้านค้า" required>
-=======
                         <label for="shop">ชื่อร้านค้า <span class="required">*</span></label>
                         <input type="text" id="shop" name="storeName" placeholder="กรอกชื่อร้านค้า" maxlength="255" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="form-group">
                         <label for="location">สถานที่รับสินค้า <span class="required">*</span></label>
                         <input type="text" id="location" name="location" placeholder="เช่น หน้าร้าน หรืออาคารที่นัดรับ"
-<<<<<<< HEAD
-                            required>
-=======
                             maxlength="255" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
                 </div>
 
                 <div class="form-section">
-<<<<<<< HEAD
-                    <h2>วันเวลาและจำนวนออเดอร์</h2>
-                    <p class="section-description">กำหนดวันไปรับสินค้า เวลาปิดรับ และจำนวนที่รับได้</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="date">วันที่ไปรับสินค้า <span class="required">*</span></label>
-                            <input type="date" id="date" name="date" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="deadline">เวลาปิดรับออเดอร์ <span class="required">*</span></label>
-                            <input type="time" id="deadline" name="deadline" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="capacity">จำนวนออเดอร์ที่รับได้ <span class="required">*</span></label>
-                            <input type="number" id="capacity" name="capacity" min="1" placeholder="เช่น 10" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="fee">ค่าบริการต่อรายการ (บาท) <span class="required">*</span></label>
-                            <input type="number" id="fee" name="fee" min="0" placeholder="เช่น 10" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>รูปเมนูสินค้า</h2>
-                    <p class="section-description">เพิ่มรูปเมนูจากร้านค้า
-                        เพื่อให้ผู้ฝากซื้อเห็นรายการสินค้าที่สามารถสั่งได้</p>
-
-                    <label for="menu-image" class="image-upload-box">
-                        <span class="upload-icon">＋</span>
-                        <span class="upload-title">เพิ่มรูปเมนู</span>
-                        <span class="upload-hint">คลิกเพื่อเลือกรูปจากอุปกรณ์ของคุณ</span>
-                        <span class="upload-format">รองรับไฟล์ JPG, PNG และ WEBP</span>
-                    </label>
-
-                    <input type="file" id="menu-image" name="menu-image" accept="image/jpeg,image/png,image/webp"
-                        multiple>
-
-                    <div id="image-preview" class="image-preview"></div>
-                </div>
-
-                <div class="form-section">
-                    <h2>รายละเอียดเพิ่มเติม</h2>
-                    <p class="section-description">แจ้งข้อมูลอื่น ๆ ที่ผู้ฝากซื้อควรทราบก่อนสั่งสินค้า</p>
-
-                    <div class="form-group">
-                        <label for="details">รายละเอียดเพิ่มเติม</label>
-                        <textarea id="details" name="details" rows="4"
-                            placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขการสั่งซื้อ"></textarea>
-=======
                     <h2>วันเวลาและค่าบริการ</h2>
                     <p class="section-description">กำหนดวันและเวลาที่จะไปรับสินค้า พร้อมค่าบริการต่อรายการ</p>
 
@@ -139,18 +61,12 @@
                     <div class="form-group">
                         <label for="fee">ค่าบริการต่อรายการ (บาท) <span class="required">*</span></label>
                         <input type="number" id="fee" name="serviceFee" min="0" step="0.01" placeholder="เช่น 10" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
                 </div>
 
                 <div class="form-actions">
-<<<<<<< HEAD
-                    <button type="submit" class="btn btn-primary">
-                        ตรวจสอบรายละเอียด
-=======
                     <button id="create-round-button" type="submit" class="btn btn-primary">
                         เปิดรอบรับหิ้ว
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </button>
 
                     <a href="rounds.html" class="btn btn-outline">
@@ -168,46 +84,8 @@
         <p>© 2026 CarryHub</p>
     </footer>
 
-<<<<<<< HEAD
-    <script>
-        const menuImage = document.getElementById("menu-image");
-        const imagePreview = document.getElementById("image-preview");
-
-        menuImage.addEventListener("change", function () {
-            imagePreview.innerHTML = "";
-
-            Array.from(this.files).forEach(function (file) {
-                if (!file.type.startsWith("image/")) {
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = function (event) {
-                    const item = document.createElement("div");
-                    item.className = "preview-item";
-
-                    const image = document.createElement("img");
-                    image.src = event.target.result;
-                    image.alt = file.name;
-
-                    const fileName = document.createElement("p");
-                    fileName.textContent = file.name;
-
-                    item.appendChild(image);
-                    item.appendChild(fileName);
-                    imagePreview.appendChild(item);
-                };
-
-                reader.readAsDataURL(file);
-            });
-        });
-    </script>
-
-=======
     <script src="/js/create-round.js"></script>
     <script src="/js/guest-access.js"></script>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 </body>
 
 </html>

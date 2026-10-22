@@ -474,13 +474,10 @@ form input[type="submit"] {
     gap: 12px;
 }
 
-<<<<<<< HEAD
-=======
 .verify-card form[hidden] {
     display: none;
 }
 
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 .verify-card label {
     font-size: 14px;
     font-weight: 600;
@@ -516,8 +513,6 @@ form input[type="submit"] {
     background: #df6d12;
 }
 
-<<<<<<< HEAD
-=======
 .verify-card .btn-full:disabled,
 .otp-actions button:disabled {
     cursor: not-allowed;
@@ -548,7 +543,6 @@ form input[type="submit"] {
     color: #f58220;
 }
 
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 .back-link {
     display: block;
     text-align: center;
@@ -579,13 +573,10 @@ form input[type="submit"] {
     line-height: 1.5;
 }
 
-<<<<<<< HEAD
-=======
 .form-group small.error-text {
     color: #a33a32;
 }
 
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 .review-card {
     width: 100%;
     max-width: 600px;
@@ -8872,38 +8863,29 @@ body {
     border-radius: 9px;
     font-size: 13px;
     line-height: 1.7;
-<<<<<<< HEAD
-=======
     white-space: pre-line;
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 }
 
 .form-message[hidden] {
     display: none;
 }
 
-<<<<<<< HEAD
-=======
 #reset-password-form[hidden] {
     display: none;
 }
 
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 .success-message {
     color: #278653;
     background: #e8f7ed;
     border: 1px solid #c9ecd4;
 }
 
-<<<<<<< HEAD
-=======
 .error-message {
     color: #a33a32;
     background: #fff0ef;
     border: 1px solid #f0c8c5;
 }
 
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 @media (max-width: 650px) {
     .report-detail-container {
         width: calc(100% - 28px);
@@ -10145,9 +10127,4 @@ body {
     margin: 0;
     padding: 18px 0;
     max-width: none;
-<<<<<<< HEAD
 }
-
-=======
-}
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962

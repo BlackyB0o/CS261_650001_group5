@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สมัครสมาชิก | CarryHub</title>
-<<<<<<< HEAD
-=======
     <script>
         (function () {
             const submittedFields = new URLSearchParams(window.location.search);
@@ -27,7 +25,6 @@
             };
         })();
     </script>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -45,11 +42,7 @@
             <h1>สร้างบัญชี CarryHub</h1>
             <p>ลงทะเบียนเพื่อเริ่มใช้งาน</p>
 
-<<<<<<< HEAD
-            <form action="verify.html">
-=======
             <form id="register-form" action="/api/v1/auth/register" method="post" onsubmit="return false;">
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 <div class="form-group">
                     <label for="fullname">ชื่อ-นามสกุล</label>
                     <input type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุล" required>
@@ -62,25 +55,15 @@
 
                 <div class="form-group">
                     <label for="phone">เบอร์โทรศัพท์</label>
-<<<<<<< HEAD
-                    <input type="tel" id="phone" name="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก" maxlength="10"
-                        pattern="[0]{1}[0-9]{9}" inputmode="numeric"
-                        title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0" required>
-=======
                     <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์ 10 หลัก"
                         maxlength="10" pattern="[0]{1}[0-9]{9}" inputmode="numeric"
                         title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก โดยเริ่มต้นด้วยเลข 0" required>
                     <small id="phone-hint" aria-live="polite">กรอกตัวเลข 10 หลัก โดยเริ่มต้นด้วย 0</small>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 </div>
 
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
-<<<<<<< HEAD
-                    <input type="password" id="password" name="password" placeholder="อย่างน้อย 8 ตัวอักษร"
-=======
                     <input type="password" id="password" placeholder="อย่างน้อย 8 ตัวอักษร"
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
                         title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
                         autocomplete="new-password" required>
@@ -89,14 +72,6 @@
 
                 <div class="form-group">
                     <label for="confirm-password">ยืนยันรหัสผ่าน</label>
-<<<<<<< HEAD
-                    <input type="password" id="confirm-password" name="confirm-password"
-                        placeholder="กรอกรหัสผ่านอีกครั้ง" minlength="8" autocomplete="new-password" required>
-                </div>
-
-
-                <button type="submit" class="btn btn-primary btn-full">
-=======
                     <input type="password" id="confirm-password" placeholder="กรอกรหัสผ่านอีกครั้ง" minlength="8"
                         autocomplete="new-password" required>
                 </div>
@@ -104,7 +79,6 @@
                 <p id="register-message" class="form-message" role="status" aria-live="polite" hidden></p>
 
                 <button id="register-button" type="submit" class="btn btn-primary btn-full">
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     ลงทะเบียน
                 </button>
             </form>
@@ -119,8 +93,6 @@
     <footer class="footer">
         <p>© 2026 CarryHub</p>
     </footer>
-<<<<<<< HEAD
-=======
 
     <script>
         const registerForm = document.getElementById("register-form");
@@ -331,7 +303,6 @@
             );
         }
     </script>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 </body>
 
 </html>

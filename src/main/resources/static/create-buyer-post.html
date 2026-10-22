@@ -30,17 +30,11 @@
 
                 <h1>สร้างโพสต์หาคนรับหิ้ว</h1>
                 <p>กรอกรายละเอียดสินค้าที่ต้องการ เพื่อให้ผู้รับหิ้วสามารถติดต่อหรือรับงานได้</p>
-<<<<<<< HEAD
-            </div>
-
-            <form action="buyer-post-review.html" method="get">
-=======
                 <p>ขณะนี้ระบบยังไม่รองรับการบันทึกรูปสินค้าในโพสต์</p>
             </div>
 
             <form id="create-post-form">
                 <p id="create-post-message" class="form-message" role="status" aria-live="polite" hidden></p>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 
                 <div class="form-section">
                     <h2>ข้อมูลสินค้า</h2>
@@ -52,36 +46,23 @@
                         <label for="post-title">
                             ชื่อโพสต์ <span class="required">*</span>
                         </label>
-<<<<<<< HEAD
-                        <input type="text" id="post-title" name="post-title" placeholder="เช่น ฝากซื้อเครื่องดื่ม"
-                            required>
-=======
                         <input type="text" id="post-title" name="postTitle" maxlength="255"
                             placeholder="เช่น ฝากซื้อเครื่องดื่ม" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="form-group">
                         <label for="shop-name">
                             ชื่อร้านค้า <span class="required">*</span>
                         </label>
-<<<<<<< HEAD
-                        <input type="text" id="shop-name" name="shop-name" placeholder="กรอกชื่อร้านค้า" required>
-=======
                         <input type="text" id="shop-name" name="shopName" maxlength="255"
                             placeholder="กรอกชื่อร้านค้า" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="form-group">
                         <label for="product">
                             รายการสินค้า <span class="required">*</span>
                         </label>
-<<<<<<< HEAD
-                        <textarea id="product" name="product" rows="4"
-=======
                         <textarea id="product" name="productDetail" rows="4"
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                             placeholder="ระบุชื่อสินค้า รุ่น รสชาติ หรือรายละเอียดที่ต้องการ" required></textarea>
                     </div>
 
@@ -89,11 +70,7 @@
                         <label for="quantity">
                             จำนวนสินค้า <span class="required">*</span>
                         </label>
-<<<<<<< HEAD
-                        <input type="number" id="quantity" name="quantity" min="1" placeholder="ระบุจำนวนสินค้า"
-=======
                         <input type="number" id="quantity" name="quantity" min="1" step="1" placeholder="ระบุจำนวนสินค้า"
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                             required>
                     </div>
                     <div class="form-group">
@@ -104,27 +81,6 @@
                             required>
                     </div>
 
-<<<<<<< HEAD
-                    <div class="form-group">
-                        <label for="product-images">รูปภาพสินค้า</label>
-                        <p class="section-description">
-                            เพิ่มรูปสินค้าเพื่อให้ผู้รับหิ้วเข้าใจสิ่งที่ต้องการได้ชัดเจนขึ้น
-                        </p>
-
-                        <label for="product-images" class="image-upload-box">
-                            <span class="upload-icon">＋</span>
-                            <span class="upload-title">เพิ่มรูปสินค้า</span>
-                            <span class="upload-hint">คลิกเพื่อเลือกรูปจากอุปกรณ์ของคุณ</span>
-                            <span class="upload-format">รองรับไฟล์ JPG, PNG และ WEBP</span>
-                        </label>
-
-                        <input type="file" id="product-images" name="product-images"
-                            accept="image/jpeg,image/png,image/webp" multiple>
-
-                        <div id="image-preview" class="image-preview"></div>
-                    </div>
-=======
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 </div>
 
                 <div class="form-section">
@@ -138,23 +94,15 @@
                             <label for="date">
                                 วันที่ต้องการรับสินค้า <span class="required">*</span>
                             </label>
-<<<<<<< HEAD
-                            <input type="date" id="date" name="date" required>
-=======
                             <input type="date" id="date" name="desiredDate" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
 
                         <div class="form-group">
                             <label for="location">
                                 สถานที่รับสินค้า <span class="required">*</span>
                             </label>
-<<<<<<< HEAD
-                            <input type="text" id="location" name="location" placeholder="เช่น หน้าคณะ" required>
-=======
                             <input type="text" id="location" name="location" maxlength="255"
                                 placeholder="เช่น หน้าคณะ" required>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
                     </div>
                 </div>
@@ -167,32 +115,19 @@
 
                     <div class="form-group">
                         <label for="budget">งบประมาณค่าสินค้า (บาท)</label>
-<<<<<<< HEAD
-                        <input type="number" id="budget" name="budget" min="0" placeholder="ระบุงบประมาณ">
-=======
                         <input type="number" id="budget" name="budget" min="0" step="0.01" placeholder="ระบุงบประมาณ">
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="form-group">
                         <label for="details">รายละเอียดเพิ่มเติม</label>
-<<<<<<< HEAD
-                        <textarea id="details" name="details" rows="4"
-=======
                         <textarea id="details" name="additionalDetails" rows="4"
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                             placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขเพิ่มเติม"></textarea>
                     </div>
                 </div>
 
                 <div class="form-actions">
-<<<<<<< HEAD
-                    <button type="submit" class="btn btn-primary">
-                        ตรวจสอบรายละเอียด
-=======
                     <button id="create-post-button" type="submit" class="btn btn-primary">
                         สร้างโพสต์
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </button>
 
                     <a href="buyer-posts.html" class="btn btn-outline">
@@ -210,47 +145,9 @@
         <p>CarryHub © 2026</p>
     </footer>
 
-<<<<<<< HEAD
-    <script>
-        const productImages = document.getElementById("product-images");
-        const imagePreview = document.getElementById("image-preview");
-
-        productImages.addEventListener("change", function () {
-            imagePreview.innerHTML = "";
-
-            Array.from(this.files).forEach(function (file) {
-                if (!file.type.startsWith("image/")) {
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = function (event) {
-                    const item = document.createElement("div");
-                    item.className = "preview-item";
-
-                    const image = document.createElement("img");
-                    image.src = event.target.result;
-                    image.alt = file.name;
-
-                    const fileName = document.createElement("p");
-                    fileName.textContent = file.name;
-
-                    item.appendChild(image);
-                    item.appendChild(fileName);
-                    imagePreview.appendChild(item);
-                };
-
-                reader.readAsDataURL(file);
-            });
-        });
-    </script>
-
-=======
 
     <script src="/js/create-post.js"></script>
     <script src="/js/guest-access.js"></script>
->>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 </body>
 
 </html>
