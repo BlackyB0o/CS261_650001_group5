@@ -23,10 +23,18 @@
 
     <main class="proof-container">
 
+<<<<<<< HEAD
         <div class="proof-breadcrumb">
             <a href="orders.html">รายการสั่งซื้อ</a>
             <span>/</span>
             <a href="order-detail.html">รายละเอียดออเดอร์</a>
+=======
+        <p id="completion-message" class="form-message" role="status" aria-live="polite" hidden></p>
+        <div class="proof-breadcrumb">
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <span>/</span>
+            <a id="completion-order-link" href="orders.html#round-orders-panel">รายละเอียดออเดอร์</a>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
             <span>/</span>
             <span>หลักฐานการส่งมอบ</span>
         </div>
@@ -35,6 +43,7 @@
             <div class="proof-heading-icon">CH</div>
 
             <div>
+<<<<<<< HEAD
                 <p class="proof-eyebrow">ORDER CH001</p>
                 <h1>ยืนยันการส่งมอบสินค้า</h1>
                 <p class="proof-subtitle">
@@ -43,6 +52,16 @@
             </div>
 
             <span class="proof-status">รอการส่งมอบ</span>
+=======
+                <p id="completion-order-label" class="proof-eyebrow">ORDER</p>
+                <h1>ยืนยันว่าได้รับสินค้าแล้ว</h1>
+                <p class="proof-subtitle">
+                        แนบรูปหลักฐานเพื่อยืนยันการรับสินค้าและปิดออเดอร์
+                </p>
+            </div>
+
+            <span id="completion-order-status" class="proof-status">กำลังโหลด...</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
         </section>
 
         <div class="proof-layout">
@@ -52,35 +71,61 @@
                 <section class="proof-card">
                     <div class="proof-card-heading">
                         <div>
+<<<<<<< HEAD
                             <h2>ข้อมูลการส่งมอบ</h2>
                             <p>ตรวจสอบรายละเอียดก่อนยืนยันการส่งมอบ</p>
+=======
+                            <h2>ข้อมูลออเดอร์</h2>
+                            <p>ตรวจสอบรายละเอียดก่อนยืนยันรับสินค้า</p>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
                     </div>
 
                     <div class="proof-info-list">
                         <div class="proof-info-row">
                             <span class="proof-info-label">หมายเลขออเดอร์</span>
+<<<<<<< HEAD
                             <span class="proof-info-value">CH001</span>
                         </div>
 
                         <div class="proof-info-row">
                             <span class="proof-info-label">ร้านค้า</span>
                             <span class="proof-info-value">ร้านชานมหน้ามหาวิทยาลัย</span>
+=======
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">รอบรับหิ้ว</span>
+                            <span class="proof-info-value">-</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
 
                         <div class="proof-info-row">
                             <span class="proof-info-label">ผู้รับหิ้ว</span>
+<<<<<<< HEAD
                             <span class="proof-info-value">สมชาย</span>
+=======
+                            <span class="proof-info-value">-</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
 
                         <div class="proof-info-row">
                             <span class="proof-info-label">ผู้ฝากซื้อ</span>
+<<<<<<< HEAD
                             <span class="proof-info-value">นัท</span>
+=======
+                            <span class="proof-info-value">-</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
 
                         <div class="proof-info-row">
                             <span class="proof-info-label">สถานที่ส่งมอบ</span>
+<<<<<<< HEAD
                             <span class="proof-info-value">จุดนัดรับหน้ามหาวิทยาลัย</span>
+=======
+                            <span class="proof-info-value">-</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         </div>
                     </div>
                 </section>
@@ -88,6 +133,7 @@
                 <section class="proof-card">
                     <div class="proof-card-heading">
                         <div>
+<<<<<<< HEAD
                             <h2>หลักฐานการส่งมอบ</h2>
                             <p>แนบรูปภาพเพื่อใช้เป็นหลักฐานยืนยันการส่งสินค้า</p>
                         </div>
@@ -111,6 +157,23 @@
                                 placeholder="ระบุรายละเอียดเพิ่มเติมเกี่ยวกับการส่งมอบ (ถ้ามี)"></textarea>
                         </div>
 
+=======
+                            <h2>หลักฐานการรับสินค้า</h2>
+                            <p>แนบรูปภาพเพื่อใช้เป็นหลักฐานยืนยันว่าคุณได้รับสินค้าแล้ว</p>
+                        </div>
+                    </div>
+
+                    <form id="completion-form">
+                        <label class="proof-upload-area" for="evidence-image">
+                            <div class="proof-upload-icon">+</div>
+                            <h3>แนบรูปภาพหลักฐาน</h3>
+                            <p>คลิกเพื่อเลือกภาพจากอุปกรณ์ของคุณ</p>
+                            <span>JPEG หรือ PNG, ขนาดไม่เกิน 5 MB</span>
+                            <input type="file" id="evidence-image" name="evidenceImage" accept="image/jpeg,image/png" required>
+                        </label>
+
+                        <p id="completion-form-message" class="form-message" role="status" aria-live="polite" hidden></p>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                         <div class="proof-notice">
                             <span class="proof-notice-mark">!</span>
                             <p>
@@ -120,12 +183,21 @@
                         </div>
 
                         <div class="proof-actions">
+<<<<<<< HEAD
                             <a href="order-detail.html" class="proof-btn proof-btn-secondary">
                                 กลับ
                             </a>
 
                             <button type="submit" class="proof-btn proof-btn-primary">
                                 ยืนยันการส่งมอบ
+=======
+                            <a id="completion-back-link" href="orders.html#round-orders-panel" class="proof-btn proof-btn-secondary">
+                                กลับ
+                            </a>
+
+                            <button id="completion-submit" type="submit" class="proof-btn proof-btn-primary">
+                                ยืนยันว่าได้รับสินค้า
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                             </button>
                         </div>
 
@@ -141,24 +213,40 @@
 
                     <div class="proof-summary-id">
                         <span>หมายเลขออเดอร์</span>
+<<<<<<< HEAD
                         <strong>CH001</strong>
+=======
+                        <strong id="completion-summary-id">-</strong>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="proof-summary-status">
                         <span class="proof-status-dot"></span>
+<<<<<<< HEAD
                         รอการยืนยันการส่งมอบ
+=======
+                        <span id="completion-summary-status">กำลังโหลด...</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="proof-summary-divider"></div>
 
                     <div class="proof-summary-row">
                         <span>สถานะหลักฐาน</span>
+<<<<<<< HEAD
                         <span>ยังไม่แนบรูปภาพ</span>
+=======
+                        <span id="completion-evidence-status">ยังไม่แนบรูปภาพ</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
 
                     <div class="proof-summary-row">
                         <span>สถานที่รับสินค้า</span>
+<<<<<<< HEAD
                         <span>หน้ามหาวิทยาลัย</span>
+=======
+                        <span id="completion-location">-</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     </div>
                 </section>
 
@@ -181,6 +269,11 @@
         <p>CarryHub © 2026</p>
     </footer>
 
+<<<<<<< HEAD
+=======
+    <script src="/js/delivery-proof.js"></script>
+    <script src="/js/guest-access.js"></script>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 </body>
 
 </html>

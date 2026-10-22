@@ -56,10 +56,23 @@
                     <span class="tab-count" id="carrier-count">3</span>
                 </button>
 
+<<<<<<< HEAD
                 <button class="orders-tab" data-tab="round-orders">
                     <span class="tab-icon">🛒</span>
                     รายการฝากหิ้วจากรอบ
                     <span class="tab-count" id="round-orders-count">2</span>
+=======
+                <button class="orders-tab" data-tab="posts">
+                    <span class="tab-icon">📝</span>
+                    โพสต์ของฉัน
+                    <span class="tab-count" id="posts-count">0</span>
+                </button>
+
+                <button class="orders-tab" data-tab="round-orders">
+                    <span class="tab-icon">🛒</span>
+                    รายการฝากหิ้วจากรอบ
+                    <span class="tab-count" id="round-orders-count">0</span>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 </button>
 
                 <button class="orders-tab" data-tab="rounds">
@@ -189,6 +202,21 @@
                 </div>
             </div>
 
+<<<<<<< HEAD
+=======
+            <div class="orders-panel" id="posts-panel">
+                <div class="orders-section-heading">
+                    <div>
+                        <h2>โพสต์หาคนรับหิ้วของฉัน</h2>
+                        <p>ดูโพสต์และสถานะผู้รับงานที่คุณสร้างไว้</p>
+                    </div>
+                    <a href="create-buyer-post.html" class="create-order-btn">+ สร้างโพสต์</a>
+                </div>
+                <p id="my-posts-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div id="my-posts-list" class="orders-list" aria-live="polite"></div>
+            </div>
+
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
             <div class="orders-panel" id="carrier-panel">
 
                 <div class="orders-section-heading">
@@ -357,6 +385,7 @@
                     </a>
                 </div>
 
+<<<<<<< HEAD
                 <div class="orders-list">
 
                     <article class="order-card">
@@ -430,6 +459,10 @@
                     </article>
 
                 </div>
+=======
+                <p id="my-orders-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div id="my-orders-list" class="orders-list" aria-live="polite"></div>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
             </div>
             <div class="orders-panel" id="rounds-panel">
 
@@ -439,6 +472,7 @@
                         <p>จัดการรอบที่คุณเปิด และตรวจสอบรายการที่มีคนฝากซื้อ</p>
                     </div>
 
+<<<<<<< HEAD
                     <a href="rounds.html" class="create-order-btn">
                         + สร้างรอบรับหิ้ว
                     </a>
@@ -534,6 +568,14 @@
 
 
                 </div>
+=======
+                    <a href="create-round.html" class="create-order-btn">
+                        + สร้างรอบรับหิ้ว
+                    </a>
+                </div>
+                <p id="my-rounds-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div class="orders-list" id="my-rounds-list" aria-live="polite"></div>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 
             </div>
         </section>
@@ -632,6 +674,18 @@
             });
         });
 
+<<<<<<< HEAD
+=======
+        const panel = window.location.hash.slice(1);
+        if (panel === "rounds-panel") {
+            document.querySelector('[data-tab="rounds"]').click();
+        } else if (panel === "posts-panel") {
+            document.querySelector('[data-tab="posts"]').click();
+        } else if (panel === "round-orders-panel") {
+            document.querySelector('[data-tab="round-orders"]').click();
+        }
+
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
         function updateCounts() {
             const buyerCards = document.querySelectorAll("#buyer-panel .order-card").length;
             const carrierCards = document.querySelectorAll("#carrier-panel .order-card").length;
@@ -644,6 +698,13 @@
         updateCounts();
     </script>
 
+<<<<<<< HEAD
+=======
+    <script src="/js/my-rounds.js"></script>
+    <script src="/js/my-orders.js"></script>
+    <script src="/js/my-posts.js"></script>
+    <script src="/js/guest-access.js"></script>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 </body>
 
 </html>

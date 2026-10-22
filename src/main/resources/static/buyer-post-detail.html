@@ -10,10 +10,15 @@
 </head>
 
 <body>
+<<<<<<< HEAD
 
     <header class="navbar">
         <a href="index.html" class="logo">CarryHub</a>
 
+=======
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
@@ -24,6 +29,7 @@
     </header>
 
     <main class="container post-detail-container">
+<<<<<<< HEAD
 
         <a href="buyer-posts.html" class="back-link">
             ← กลับไปหน้าโพสต์หาคนรับหิ้ว
@@ -44,11 +50,25 @@
 
             <div class="post-divider"></div>
 
+=======
+        <a href="buyer-posts.html" class="back-link">← กลับไปหน้าโพสต์หาคนรับหิ้ว</a>
+        <p id="post-detail-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+        <section id="post-detail-content" class="post-detail-card" hidden>
+            <div class="post-detail-header">
+                <span id="post-detail-status" class="post-status"></span>
+                <span id="post-detail-id" class="post-id"></span>
+            </div>
+            <h1 id="post-detail-title"></h1>
+            <p id="post-detail-description" class="post-description"></p>
+            <div class="post-divider"></div>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
             <h2>รายละเอียดสินค้า</h2>
 
             <div class="post-info">
                 <div class="info-item">
                     <span class="info-label">ร้านค้า</span>
+<<<<<<< HEAD
                     <strong>ร้านชานมหน้ามหาวิทยาลัย</strong>
                 </div>
 
@@ -75,10 +95,46 @@
                 <div class="info-item">
                     <span class="info-label">สถานที่รับสินค้า</span>
                     <strong>จุดนัดรับหน้ามหาวิทยาลัย</strong>
+=======
+                    <strong id="post-detail-shop"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">สินค้าและจำนวน</span>
+                    <strong id="post-detail-product"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ผู้ฝากซื้อ</span>
+                    <strong id="post-detail-buyer"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">วันที่ต้องการ</span>
+                    <strong id="post-detail-date"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">สถานที่รับสินค้า</span>
+                    <strong id="post-detail-location"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ค่าหิ้วที่เสนอ</span>
+                    <strong id="post-detail-fee"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">งบประมาณ</span>
+                    <strong id="post-detail-budget"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ผู้รับงาน</span>
+                    <strong id="post-detail-accepted-by"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">วันที่รับงาน</span>
+                    <strong id="post-detail-accepted-at"></strong>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 </div>
             </div>
 
             <div class="post-note">
+<<<<<<< HEAD
                 <h3>หมายเหตุจากผู้ฝากซื้อ</h3>
                 <p>ต้องการชานม 2 แก้ว หากมีข้อสงสัยเกี่ยวกับรายการ สามารถติดต่อผู้ฝากซื้อเพื่อยืนยันรายละเอียดได้</p>
             </div>
@@ -104,3 +160,25 @@
 </body>
 
 </html>
+=======
+                <h3>รายละเอียดเพิ่มเติม</h3>
+                <p id="post-detail-additional"></p>
+            </div>
+
+            <div id="post-detail-actions" class="post-actions" hidden>
+                <button id="accept-post-button" type="button" class="btn btn-primary">รับงานนี้</button>
+                <a href="buyer-posts.html" class="btn btn-outline">กลับไปหน้ารายการโพสต์</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/buyer-post-detail.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962

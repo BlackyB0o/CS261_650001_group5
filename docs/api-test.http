@@ -1,0 +1,274 @@
+# ทดสอบ API ทั้ง flow ด้วย VS Code extension "REST Client" (กด Send Request เหนือแต่ละ request ทีละอัน จากบนลงล่าง)
+# รันผ่าน Docker ใช้พอร์ต 8081 / รันด้วย ./mvnw spring-boot:run ใช้พอร์ต 8080
+@baseUrl = http://localhost:8081/api/v1
+
+# OTP ไม่ส่ง SMS จริง ให้ดูใน log ของแอป (docker compose logs app หรือ terminal ที่รันแอป)
+# บรรทัดหน้าตาแบบนี้: [MOCK SMS] to 0811111111: CarryHub OTP: 123456
+# แล้วเอาเลข 6 หลักมาใส่ตรงนี้ก่อนกด verify
+@otpRunner = 000000
+@otpBuyer = 000000
+@otpReset = 000000
+
+########## Task04: สมัคร / login / OTP ##########
+
+### 1. สมัครผู้ใช้ A (จะเป็นคนเปิดรอบ) ถ้าเคยสมัครแล้วจะได้ 409 ข้ามได้
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "runner@test.com",
+  "password": "Password123",
+  "fullName": "Runner One",
+  "phoneNumber": "0811111111"
+}
+
+### 2. สมัครผู้ใช้ B (จะเป็นคนฝากหิ้ว)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "buyer@test.com",
+  "password": "Password123",
+  "fullName": "Buyer Two",
+  "phoneNumber": "0822222222"
+}
+
+### 3. สมัครข้อมูลผิด (ควรได้ 400 พร้อมรายการ field)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "abc",
+  "password": "123"
+}
+
+### 4. login A ขั้นที่ 1 (ได้ verificationId แล้วไปดู OTP ใน log ใส่ที่ @otpRunner)
+# @name loginRunner
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "runner@test.com",
+  "password": "Password123"
+}
+
+### 5. login A ขั้นที่ 2 ยืนยัน OTP (ได้ token)
+# @name verifyRunner
+POST {{baseUrl}}/auth/otp/verify
+Content-Type: application/json
+
+{
+  "verificationId": {{loginRunner.response.body.data.verificationId}},
+  "otp": "{{otpRunner}}"
+}
+
+### 6. login B ขั้นที่ 1 (ใช้เบอร์โทรแทนอีเมลก็ได้) แล้วใส่ OTP ที่ @otpBuyer
+# @name loginBuyer
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "0822222222",
+  "password": "Password123"
+}
+
+### 7. login B ขั้นที่ 2
+# @name verifyBuyer
+POST {{baseUrl}}/auth/otp/verify
+Content-Type: application/json
+
+{
+  "verificationId": {{loginBuyer.response.body.data.verificationId}},
+  "otp": "{{otpBuyer}}"
+}
+
+### 8. ขอ OTP ใหม่ (ภายใน 60 วินาทีจะได้ 429)
+POST {{baseUrl}}/auth/otp/resend
+Content-Type: application/json
+
+{
+  "verificationId": {{loginBuyer.response.body.data.verificationId}}
+}
+
+########## Task08: รอบหิ้ว ##########
+
+### 9. A เปิดรอบ
+# @name createRound
+POST {{baseUrl}}/delivery-rounds
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "storeName": "Starbucks - Central Plaza",
+  "locationName": "SC1",
+  "scheduledAt": "2030-10-25T14:00:00",
+  "serviceFee": 20.00
+}
+
+### 10. Guest ดูรอบที่เปิดอยู่ (ไม่ต้องมี token)
+GET {{baseUrl}}/delivery-rounds
+
+### 11. รอบของฉัน (A)
+GET {{baseUrl}}/delivery-rounds/my
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+### 12. ไม่มี token (ควรได้ 401)
+POST {{baseUrl}}/delivery-rounds
+Content-Type: application/json
+
+{}
+
+########## Task12: โพสต์หาคนรับหิ้ว ##########
+
+### 13. B โพสต์
+# @name createPost
+POST {{baseUrl}}/posts
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "postTitle": "ฝากซื้อชานมไข่มุก",
+  "shopName": "ร้านชานมหน้ามอ",
+  "productDetail": "หวานน้อย",
+  "quantity": 2,
+  "carryFee": 20.00,
+  "desiredDate": "2030-10-25",
+  "location": "ตึกวิศวะ",
+  "budget": 120.00,
+  "additionalDetails": "รับช่วงเที่ยง"
+}
+
+### 14. Guest ดูโพสต์ที่เปิดอยู่
+GET {{baseUrl}}/posts
+
+### 15. B รับโพสต์ตัวเอง (ควรได้ 403)
+PATCH {{baseUrl}}/posts/{{createPost.response.body.data.postId}}/accept
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+### 16. A รับงานโพสต์ของ B (ได้ ACCEPTED กดซ้ำจะได้ 409)
+PATCH {{baseUrl}}/posts/{{createPost.response.body.data.postId}}/accept
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+########## Task16: สั่งของในรอบ ##########
+
+### 17. A สั่งของในรอบตัวเอง (ควรได้ 403)
+POST {{baseUrl}}/orders
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "roundId": {{createRound.response.body.data.roundId}},
+  "handoffMethod": "MEETUP",
+  "handoffLocation": "SC1",
+  "items": [{ "productName": "Latte", "quantity": 1 }]
+}
+
+### 18. B สั่งของในรอบของ A
+# @name createOrder
+POST {{baseUrl}}/orders
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "roundId": {{createRound.response.body.data.roundId}},
+  "handoffMethod": "MEETUP",
+  "handoffLocation": "หน้าตึก SC1",
+  "items": [
+    { "productName": "Iced Americano", "quantity": 2, "note": "หวานน้อย" },
+    { "productName": "Croissant", "quantity": 1 }
+  ]
+}
+
+### 19. A ดูออเดอร์ทั้งหมดในรอบตัวเอง
+GET {{baseUrl}}/orders?roundId={{createRound.response.body.data.roundId}}
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+### 20. B ดูออเดอร์ของฉัน
+GET {{baseUrl}}/orders/my
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+########## Task20: ชำระเงิน ##########
+
+### 21. A (เจ้าของรอบ) ระบุราคาสินค้า -> ได้ยอดรวมและ qrPayload
+PUT {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/price
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "productAmount": 80.00
+}
+
+### 22. B ดูยอดที่ต้องจ่าย
+GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/payment
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+### 23. B แนบสลิปยอดผิด (ควรได้ 400)
+POST {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/payment/slip
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: multipart/form-data; boundary=CarryHubBoundary
+
+--CarryHubBoundary
+Content-Disposition: form-data; name="paidAmount"
+
+90.00
+--CarryHubBoundary
+Content-Disposition: form-data; name="slipImage"; filename="slip.png"
+Content-Type: image/png
+
+< ./sample-image.png
+--CarryHubBoundary--
+
+### 24. B แนบสลิปยอดถูก (80 + ค่าหิ้ว 20 = 100) -> Payment HELD, Order PAID
+POST {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/payment/slip
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: multipart/form-data; boundary=CarryHubBoundary
+
+--CarryHubBoundary
+Content-Disposition: form-data; name="paidAmount"
+
+100.00
+--CarryHubBoundary
+Content-Disposition: form-data; name="slipImage"; filename="slip.png"
+Content-Type: image/png
+
+< ./sample-image.png
+--CarryHubBoundary--
+
+########## Task24: ยืนยันรับสินค้า ##########
+
+### 25. B ยืนยันรับของพร้อมรูป -> Payment RELEASED, Order COMPLETED
+POST {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/completion
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: multipart/form-data; boundary=CarryHubBoundary
+
+--CarryHubBoundary
+Content-Disposition: form-data; name="evidenceImage"; filename="evidence.png"
+Content-Type: image/png
+
+< ./sample-image.png
+--CarryHubBoundary--
+
+### 26. A ดูผลการยืนยันรับสินค้า
+GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/completion
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+########## ลืมรหัสผ่าน ##########
+
+### 27. ขอ OTP รีเซ็ตรหัสผ่าน (ดู OTP ใน log ใส่ที่ @otpReset)
+# @name forgot
+POST {{baseUrl}}/auth/password/forgot
+Content-Type: application/json
+
+{
+  "phoneNumber": "0822222222"
+}
+
+### 28. ตั้งรหัสผ่านใหม่
+POST {{baseUrl}}/auth/password/reset
+Content-Type: application/json
+
+{
+  "verificationId": {{forgot.response.body.data.verificationId}},
+  "otp": "{{otpReset}}",
+  "newPassword": "NewPassword123"
+}

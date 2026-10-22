@@ -23,23 +23,48 @@
             <h1>ยินดีต้อนรับกลับมา</h1>
             <p>เข้าสู่ระบบเพื่อใช้งาน CarryHub</p>
 
+<<<<<<< HEAD
             <form action="index.html">
                 <div class="form-group">
                     <label for="email">อีเมล</label>
                     <input type="email" id="email" placeholder="กรอกอีเมลของคุณ" required>
+=======
+            <form id="login-form" method="post" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="identifier">อีเมลหรือเบอร์โทรศัพท์</label>
+                    <input type="text" id="identifier" placeholder="กรอกอีเมลหรือเบอร์โทรศัพท์"
+                        autocomplete="username" required>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 </div>
 
                 <div class="form-group">
                     <label for="password">รหัสผ่าน</label>
+<<<<<<< HEAD
                     <input type="password" id="password" placeholder="กรอกรหัสผ่าน" minlength="8"
                         pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
                         title="รหัสผ่านต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข อย่างน้อย 8 ตัวอักษร"
                         autocomplete="new-password" required>
+=======
+                    <input type="password" id="password" placeholder="กรอกรหัสผ่าน"
+                        autocomplete="current-password" required>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                 </div>
 
                 <p><a href="forgot-password.html">ลืมรหัสผ่าน?</a></p>
 
+<<<<<<< HEAD
                 <button type="submit" class="btn btn-primary btn-full">
+=======
+                <p id="login-origin-message" class="form-message error-message" hidden>
+                    กรุณาเข้าสู่ระบบผ่าน
+                    <a href="http://localhost:8081/login.html">http://localhost:8081/login.html</a>
+                    เพื่อเชื่อมต่อ API และยืนยัน OTP
+                </p>
+
+                <p id="login-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <button id="login-button" type="submit" class="btn btn-primary btn-full">
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
                     เข้าสู่ระบบ
                 </button>
             </form>
@@ -54,6 +79,114 @@
     <footer class="footer">
         <p>© 2026 CarryHub</p>
     </footer>
+<<<<<<< HEAD
+=======
+
+    <script>
+        const loginForm = document.getElementById("login-form");
+        const loginButton = document.getElementById("login-button");
+        const loginMessage = document.getElementById("login-message");
+        const loginOriginMessage = document.getElementById("login-origin-message");
+
+        if (window.location.protocol === "file:") {
+            loginOriginMessage.hidden = false;
+            loginButton.disabled = true;
+        }
+
+        function showLoginMessage(message) {
+            loginMessage.textContent = message;
+            loginMessage.className = "form-message error-message";
+            loginMessage.hidden = false;
+        }
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            if (window.location.protocol === "file:") {
+                loginOriginMessage.hidden = false;
+                return;
+            }
+
+            loginButton.disabled = true;
+            loginButton.textContent = "กำลังตรวจสอบ...";
+            loginMessage.hidden = true;
+
+            let response;
+            try {
+                response = await fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: document.getElementById("identifier").value.trim(),
+                        password: document.getElementById("password").value
+                    })
+                });
+            } catch (error) {
+                showLoginMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง");
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                showLoginMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง");
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            const verificationId = result && result.data && result.data.verificationId;
+            if (!response.ok || !result || result.status !== "SUCCESS"
+                || !Number.isInteger(verificationId) || verificationId <= 0) {
+                showLoginMessage(
+                    result && typeof result.message === "string"
+                        ? result.message
+                        : "เข้าสู่ระบบไม่สำเร็จ (HTTP " + response.status + ")"
+                );
+                loginButton.disabled = false;
+                loginButton.textContent = "เข้าสู่ระบบ";
+                return;
+            }
+
+            try {
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    result.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not store OTP context in this tab; passing it to the OTP page directly.", error);
+            }
+
+            try {
+                localStorage.setItem("carryhub.verificationId", String(verificationId));
+                localStorage.setItem("carryhub.otpPurpose", "LOGIN");
+                localStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    result.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not persist OTP context across tabs; continuing with this tab's session.", error);
+            }
+
+            const otpContext = new URLSearchParams({
+                verificationId: String(verificationId),
+                purpose: "LOGIN"
+            });
+            const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+            if (returnTo && returnTo.charAt(0) === "/" && returnTo.indexOf("//") !== 0) {
+                otpContext.set("returnTo", returnTo);
+            }
+            window.location.assign("/verify-otp.html?" + otpContext.toString());
+        });
+    </script>
+    <script src="/js/guest-access.js"></script>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
 </body>
 
 </html>

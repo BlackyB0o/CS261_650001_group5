@@ -4,16 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>รายละเอียดรอบรับหิ้ว | CarryHub</title>
+=======
+    <title>จัดการรอบรับหิ้ว | CarryHub</title>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/round-detail.css">
 </head>
 
 <body>
+<<<<<<< HEAD
 
     <header class="navbar">
         <a href="index.html" class="logo">CarryHub</a>
 
+=======
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
         <nav>
             <a href="index.html">หน้าแรก</a>
             <a href="rounds.html">รอบรับหิ้ว</a>
@@ -24,6 +33,7 @@
     </header>
 
     <main class="container round-detail-container">
+<<<<<<< HEAD
         <section class="round-detail-card">
 
             <div class="round-detail-header">
@@ -100,6 +110,54 @@
                 </a>
             </div>
 
+=======
+        <a href="orders.html#rounds-panel" class="back-link">← กลับไปรอบรับหิ้วของฉัน</a>
+        <p id="my-round-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+        <section id="my-round-content" class="round-detail-card" hidden>
+            <div class="round-detail-header">
+                <span id="my-round-status" class="round-status"></span>
+                <span id="my-round-id" class="round-id"></span>
+            </div>
+            <h1 id="my-round-store"></h1>
+            <p class="round-description">รายละเอียดรอบรับหิ้วของคุณ</p>
+            <div class="round-divider"></div>
+            <h2>รายละเอียดรอบรับหิ้ว</h2>
+            <div class="round-info">
+                <div class="round-info-item">
+                    <span class="round-info-label">ผู้รับหิ้ว</span>
+                    <strong id="my-round-runner"></strong>
+                </div>
+                <div class="round-info-item">
+                    <span class="round-info-label">วันและเวลารับสินค้า</span>
+                    <strong id="my-round-scheduled"></strong>
+                </div>
+                <div class="round-info-item">
+                    <span class="round-info-label">ค่าบริการ</span>
+                    <strong id="my-round-fee"></strong>
+                </div>
+                <div class="round-info-item">
+                    <span class="round-info-label">สถานที่รับสินค้า</span>
+                    <strong id="my-round-location"></strong>
+                </div>
+            </div>
+
+            <form id="round-status-form" class="form-section" hidden>
+                <label for="round-status-select">อัปเดตสถานะรอบ</label>
+                <select id="round-status-select" required></select>
+                <button id="round-status-button" type="submit" class="btn btn-primary">บันทึกสถานะ</button>
+            </form>
+
+            <div class="post-actions">
+                <a href="orders.html#rounds-panel" class="btn btn-outline">กลับไปรอบรับหิ้วของฉัน</a>
+            </div>
+        </section>
+
+        <section id="round-orders-section" class="round-detail-card" hidden>
+            <h2>รายการฝากซื้อในรอบนี้</h2>
+            <p id="round-orders-message" class="form-message" role="status" aria-live="polite" hidden></p>
+            <div id="round-orders-list" class="orders-list" aria-live="polite"></div>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
         </section>
     </main>
 
@@ -107,6 +165,14 @@
         <p>© 2026 CarryHub</p>
     </footer>
 
+<<<<<<< HEAD
 </body>
 
 </html>
+=======
+    <script src="/js/my-round-detail.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>
+>>>>>>> 10b82eb6ded120badb3d7bdd0d4d523182b57962
