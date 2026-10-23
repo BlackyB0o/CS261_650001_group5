@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/orders.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="buyer-posts.html">à¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html" class="active">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+    <main class="orders-container">
+
+        <section class="orders-heading">
+            <div>
+                <p class="orders-eyebrow">MY ACTIVITIES</p>
+                <h1>à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</h1>
+                <p class="orders-subtitle">
+                    à¸•à¸´à¸”à¸•à¸²à¸¡à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸«à¸´à¹‰à¸§à¹à¸¥à¸°à¸ˆà¸±à¸”à¸à¸²à¸£à¸‡à¸²à¸™à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¹„à¸”à¹‰à¹ƒà¸™à¸—à¸µà¹ˆà¹€à¸”à¸µà¸¢à¸§
+                </p>
+            </div>
+
+            <div class="orders-total">
+                <span>à¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”</span>
+                <strong id="total-count">6</strong>
+                <span>à¸£à¸²à¸¢à¸à¸²à¸£</span>
+            </div>
+        </section>
+
+        <section class="orders-content">
+
+            <div class="orders-tabs">
+                <button class="orders-tab active" data-tab="buyer">
+                    <span class="tab-icon">ðŸ›ï¸</span>
+                    à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸«à¸´à¹‰à¸§
+                    <span class="tab-count" id="buyer-count">3</span>
+                </button>
+
+                <button class="orders-tab" data-tab="carrier">
+                    <span class="tab-icon">ðŸ›µ</span>
+                    à¸£à¸²à¸¢à¸à¸²à¸£à¸£à¸±à¸šà¸«à¸´à¹‰à¸§
+                    <span class="tab-count" id="carrier-count">3</span>
+                </button>
+
+                <button class="orders-tab" data-tab="posts">
+                    <span class="tab-icon">ðŸ“</span>
+                    à¹‚à¸žà¸ªà¸•à¹Œà¸‚à¸­à¸‡à¸‰à¸±à¸™
+                    <span class="tab-count" id="posts-count">0</span>
+                </button>
+
+                <button class="orders-tab" data-tab="round-orders">
+                    <span class="tab-icon">ðŸ›’</span>
+                    à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸«à¸´à¹‰à¸§à¸ˆà¸²à¸à¸£à¸­à¸š
+                    <span class="tab-count" id="round-orders-count">0</span>
+                </button>
+
+                <button class="orders-tab" data-tab="rounds">
+                    <span class="tab-icon">ðŸ“</span>
+                    à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™
+                    <span class="tab-count" id="rounds-count">2</span>
+                </button>
+            </div>
+
+            <div class="orders-panel active" id="buyer-panel">
+
+                <div class="orders-section-heading">
+                    <div>
+                        <h2>à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™</h2>
+                        <p>à¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸žà¸ªà¸•à¹Œà¹€à¸žà¸·à¹ˆà¸­à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¸ªà¸´à¸™à¸„à¹‰à¸²</p>
+                    </div>
+
+                    <a href="create-buyer-post.html" class="create-order-btn">
+                        + à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸žà¸ªà¸•à¹Œ
+                    </a>
+                </div>
+
+                <div class="orders-list">
+
+                    <article class="order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</span>
+                                <h3>CH001</h3>
+                            </div>
+
+                            <span class="order-status order-status-pending">
+                                à¸£à¸­à¸Šà¸³à¸£à¸°à¹€à¸‡à¸´à¸™
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>à¸£à¹‰à¸²à¸™à¸Šà¸²à¸™à¸¡à¸«à¸™à¹‰à¸²à¸¡à¸«à¸²à¸§à¸´à¸—à¸¢à¸²à¸¥à¸±à¸¢</h4>
+                                <p>à¸Šà¸²à¸™à¸¡ 2 à¹à¸à¹‰à¸§</p>
+                                <p class="order-carrier">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§: à¸ªà¸¡à¸Šà¸²à¸¢</p>
+                            </div>
+                        </div>
+
+                        <div class="order-card-footer">
+                            <div class="order-price">
+                                <span>à¸¢à¸­à¸”à¸£à¸§à¸¡</span>
+                                <strong>100 à¸šà¸²à¸—</strong>
+                            </div>
+
+                            <a href="order-detail.html" class="order-detail-btn">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</span>
+                                <h3>CH002</h3>
+                            </div>
+
+                            <span class="order-status order-status-processing">
+                                à¸à¸³à¸¥à¸±à¸‡à¸”à¸³à¹€à¸™à¸´à¸™à¸à¸²à¸£
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>à¸£à¹‰à¸²à¸™à¸­à¸²à¸«à¸²à¸£à¸•à¸²à¸¡à¸ªà¸±à¹ˆà¸‡</h4>
+                                <p>à¸‚à¹‰à¸²à¸§à¸œà¸±à¸” 1 à¸à¸¥à¹ˆà¸­à¸‡</p>
+                                <p class="order-carrier">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§: à¸¡à¸²à¸™à¸°</p>
+                            </div>
+                        </div>
+
+                        <div class="order-card-footer">
+                            <div class="order-price">
+                                <span>à¸¢à¸­à¸”à¸£à¸§à¸¡</span>
+                                <strong>75 à¸šà¸²à¸—</strong>
+                            </div>
+
+                            <a href="order-detail.html" class="order-detail-btn">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</span>
+                                <h3>CH003</h3>
+                            </div>
+
+                            <span class="order-status order-status-completed">
+                                à¸ªà¹ˆà¸‡à¸¡à¸­à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²à¹à¸¥à¹‰à¸§
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>à¸£à¹‰à¸²à¸™à¹€à¸šà¹€à¸à¸­à¸£à¸µ</h4>
+                                <p>à¸‚à¸™à¸¡à¸›à¸±à¸‡ 3 à¸Šà¸´à¹‰à¸™</p>
+                                <p class="order-carrier">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§: à¸ªà¸¸à¸”à¸²</p>
+                            </div>
+                        </div>
+
+                        <div class="order-card-footer">
+                            <div class="order-price">
+                                <span>à¸¢à¸­à¸”à¸£à¸§à¸¡</span>
+                                <strong>90 à¸šà¸²à¸—</strong>
+                            </div>
+
+                            <a href="order-detail.html" class="order-detail-btn">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                            </a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+            <div class="orders-panel" id="posts-panel">
+                <div class="orders-section-heading">
+                    <div>
+                        <h2>à¹‚à¸žà¸ªà¸•à¹Œà¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™</h2>
+                        <p>à¸”à¸¹à¹‚à¸žà¸ªà¸•à¹Œà¹à¸¥à¸°à¸ªà¸–à¸²à¸™à¸°à¸œà¸¹à¹‰à¸£à¸±à¸šà¸‡à¸²à¸™à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸ªà¸£à¹‰à¸²à¸‡à¹„à¸§à¹‰</p>
+                    </div>
+                    <a href="create-buyer-post.html" class="create-order-btn">+ à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸žà¸ªà¸•à¹Œ</a>
+                </div>
+                <p id="my-posts-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div id="my-posts-list" class="orders-list" aria-live="polite"></div>
+            </div>
+
+            <div class="orders-panel" id="carrier-panel">
+
+                <div class="orders-section-heading">
+                    <div>
+                        <h2>à¸£à¸²à¸¢à¸à¸²à¸£à¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™</h2>
+                        <p>à¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸à¸”à¸£à¸±à¸šà¸‡à¸²à¸™à¸ˆà¸²à¸à¹‚à¸žà¸ªà¸•à¹Œà¸‚à¸­à¸‡à¸œà¸¹à¹‰à¸à¸²à¸à¸«à¸´à¹‰à¸§</p>
+                    </div>
+
+                    <a href="buyer-posts.html" class="create-order-btn">
+                        + à¸„à¹‰à¸™à¸«à¸²à¸‡à¸²à¸™à¹€à¸žà¸´à¹ˆà¸¡
+                    </a>
+                </div>
+
+                <div class="orders-list">
+
+                    <article class="order-card carrier-order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸‡à¸²à¸™</span>
+                                <h3>BP001</h3>
+                            </div>
+
+                            <span class="order-status order-status-processing">
+                                à¸£à¸±à¸šà¸‡à¸²à¸™à¹à¸¥à¹‰à¸§
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸·à¹ˆà¸¡</h4>
+                                <p>à¸£à¹‰à¸²à¸™à¸Šà¸²à¸™à¸¡à¸«à¸™à¹‰à¸²à¸¡à¸«à¸²à¸§à¸´à¸—à¸¢à¸²à¸¥à¸±à¸¢</p>
+                                <p class="order-carrier">à¸œà¸¹à¹‰à¸à¸²à¸à¸«à¸´à¹‰à¸§: à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡</p>
+                            </div>
+                        </div>
+
+                        <div class="carrier-order-info">
+                            <div>
+                                <span>à¸ˆà¸³à¸™à¸§à¸™à¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                                <strong>2 à¹à¸à¹‰à¸§</strong>
+                            </div>
+
+                            <div>
+                                <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹„à¸”à¹‰à¸£à¸±à¸š</span>
+                                <strong class="carrier-fee">20 à¸šà¸²à¸—</strong>
+                            </div>
+                        </div>
+
+                        <div class="order-card-footer">
+                            <div class="order-price">
+                                <span>à¸ªà¸–à¸²à¸™à¸°à¸‡à¸²à¸™</span>
+                                <strong>à¸£à¸­à¸”à¸³à¹€à¸™à¸´à¸™à¸à¸²à¸£</strong>
+                            </div>
+
+                            <a href="order-detail.html" class="order-detail-btn">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="order-card carrier-order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸‡à¸²à¸™</span>
+                                <h3>BP002</h3>
+                            </div>
+
+                            <span class="order-status order-status-processing">
+                                à¸à¸³à¸¥à¸±à¸‡à¸”à¸³à¹€à¸™à¸´à¸™à¸à¸²à¸£
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¸‚à¹‰à¸²à¸§à¸à¸¥à¸²à¸‡à¸§à¸±à¸™</h4>
+                                <p>à¸£à¹‰à¸²à¸™à¸­à¸²à¸«à¸²à¸£à¸•à¸²à¸¡à¸ªà¸±à¹ˆà¸‡</p>
+                                <p class="order-carrier">à¸œà¸¹à¹‰à¸à¸²à¸à¸«à¸´à¹‰à¸§: à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡</p>
+                            </div>
+                        </div>
+
+                        <div class="carrier-order-info">
+                            <div>
+                                <span>à¸ˆà¸³à¸™à¸§à¸™à¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                                <strong>1 à¸à¸¥à¹ˆà¸­à¸‡</strong>
+                            </div>
+
+                            <div>
+                                <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹„à¸”à¹‰à¸£à¸±à¸š</span>
+                                <strong class="carrier-fee">15 à¸šà¸²à¸—</strong>
+                            </div>
+                        </div>
+
+                        <div class="order-card-footer">
+                            <div class="order-price">
+                                <span>à¸ªà¸–à¸²à¸™à¸°à¸‡à¸²à¸™</span>
+                                <strong>à¸à¸³à¸¥à¸±à¸‡à¸‹à¸·à¹‰à¸­à¸ªà¸´à¸™à¸„à¹‰à¸²</strong>
+                            </div>
+
+                            <a href="order-detail.html" class="order-detail-btn">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="order-card carrier-order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸‡à¸²à¸™</span>
+                                <h3>BP003</h3>
+                            </div>
+
+                            <span class="order-status order-status-completed">
+                                à¸ªà¹ˆà¸‡à¸¡à¸­à¸šà¸ªà¸³à¹€à¸£à¹‡à¸ˆ
+                            </span>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-shop-icon">CH</div>
+
+                            <div class="order-product-info">
+                                <h4>à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¸‚à¸™à¸¡à¸›à¸±à¸‡</h4>
+                                <p>à¸£à¹‰à¸²à¸™à¹€à¸šà¹€à¸à¸­à¸£à¸µ</p>
+                                <p class="order-carrier">à¸œà¸¹à¹‰à¸à¸²à¸à¸«à¸´à¹‰à¸§: à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡</p>
+                            </div>
+                        </div>
+
+                        <div class="carrier-order-info">
+                            <div>
+                                <span>à¸ˆà¸³à¸™à¸§à¸™à¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                                <strong>3 à¸Šà¸´à¹‰à¸™</strong>
+                            </div>
+
+                            <div>
+                                <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹„à¸”à¹‰à¸£à¸±à¸š</span>
+                                <strong class="carrier-fee">25 à¸šà¸²à¸—</strong>
+                            </div>
+                        </div>
+
+                        <div class="order-card-footer">
+                            <div class="order-price">
+                                <span>à¸ªà¸–à¸²à¸™à¸°à¸‡à¸²à¸™</span>
+                                <strong>à¹€à¸ªà¸£à¹‡à¸ˆà¸ªà¸´à¹‰à¸™</strong>
+                            </div>
+
+                            <a href="order-detail.html" class="order-detail-btn">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                            </a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+            <div class="orders-panel" id="round-orders-panel">
+
+                <div class="orders-section-heading">
+                    <div>
+                        <h2>à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸«à¸´à¹‰à¸§à¸ˆà¸²à¸à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</h2>
+                        <p>à¸£à¸²à¸¢à¸à¸²à¸£à¸ªà¸´à¸™à¸„à¹‰à¸²à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¸œà¹ˆà¸²à¸™à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¸œà¸¹à¹‰à¸­à¸·à¹ˆà¸™à¹€à¸›à¸´à¸”à¹„à¸§à¹‰</p>
+                    </div>
+
+                    <a href="rounds.html" class="create-order-btn">
+                        à¸”à¸¹à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§
+                    </a>
+                </div>
+
+                <p id="my-orders-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div id="my-orders-list" class="orders-list" aria-live="polite"></div>
+            </div>
+            <div class="orders-panel" id="rounds-panel">
+
+                <div class="my-rounds-header">
+                    <div>
+                        <h2>à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™</h2>
+                        <p>à¸ˆà¸±à¸”à¸à¸²à¸£à¸£à¸­à¸šà¸—à¸µà¹ˆà¸„à¸¸à¸“à¹€à¸›à¸´à¸” à¹à¸¥à¸°à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸µà¹ˆà¸¡à¸µà¸„à¸™à¸à¸²à¸à¸‹à¸·à¹‰à¸­</p>
+                    </div>
+
+                    <a href="create-round.html" class="create-order-btn">
+                        + à¸ªà¸£à¹‰à¸²à¸‡à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§
+                    </a>
+                </div>
+                <p id="my-rounds-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                <div class="orders-list" id="my-rounds-list" aria-live="polite"></div>
+
+            </div>
+        </section>
+
+        <section class="report-history" id="report-history">
+
+            <div class="report-history-header">
+                <div>
+                    <h2>à¸›à¸£à¸°à¸§à¸±à¸•à¸´à¸à¸²à¸£à¸£à¸²à¸¢à¸‡à¸²à¸™à¸›à¸±à¸à¸«à¸²</h2>
+                    <p>à¸•à¸´à¸”à¸•à¸²à¸¡à¸ªà¸–à¸²à¸™à¸°à¸›à¸±à¸à¸«à¸²à¸—à¸µà¹ˆà¸„à¸¸à¸“à¹€à¸„à¸¢à¹à¸ˆà¹‰à¸‡à¹„à¸§à¹‰</p>
+                </div>
+
+                <a href="report.html" class="report-button">
+                    + à¹à¸ˆà¹‰à¸‡à¸›à¸±à¸à¸«à¸²
+                </a>
+            </div>
+
+            <div class="report-search">
+                <input type="text" id="reportSearch" placeholder="à¸„à¹‰à¸™à¸«à¸²à¸£à¸«à¸±à¸ªà¸£à¸²à¸¢à¸‡à¸²à¸™à¸«à¸£à¸·à¸­à¸«à¸±à¸§à¸‚à¹‰à¸­à¸›à¸±à¸à¸«à¸²...">
+            </div>
+
+            <div class="report-table-wrapper">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>à¸£à¸«à¸±à¸ªà¸£à¸²à¸¢à¸‡à¸²à¸™</th>
+                            <th>à¸«à¸±à¸§à¸‚à¹‰à¸­à¸›à¸±à¸à¸«à¸²</th>
+                            <th>à¸§à¸±à¸™à¸—à¸µà¹ˆà¹à¸ˆà¹‰à¸‡</th>
+                            <th>à¸ªà¸–à¸²à¸™à¸°</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reportTableBody">
+                        <tr>
+                            <td>RP0001</td>
+                            <td>à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</td>
+                            <td>15/10/2026</td>
+                            <td>
+                                <span class="report-status pending">
+                                    à¸à¸³à¸¥à¸±à¸‡à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š
+                                </span>
+                            </td>
+                            <td>
+                                <a href="my-report-detail.html?id=RP0001" class="report-detail-link">
+                                    à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>RP0002</td>
+                            <td>à¸›à¸±à¸à¸«à¸²à¸à¸²à¸£à¸Šà¸³à¸£à¸°à¹€à¸‡à¸´à¸™</td>
+                            <td>12/10/2026</td>
+                            <td>
+                                <span class="report-status resolved">
+                                    à¹à¸à¹‰à¹„à¸‚à¹à¸¥à¹‰à¸§
+                                </span>
+                            </td>
+                            <td>
+                                <a href="my-report-detail.html?id=RP0002" class="report-detail-link">
+                                    à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr id="noReportFound" style="display: none;">
+                            <td colspan="5" class="no-report">
+                                à¹„à¸¡à¹ˆà¸žà¸šà¸£à¸²à¸¢à¸‡à¸²à¸™à¸—à¸µà¹ˆà¸„à¹‰à¸™à¸«à¸²
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub Â© 2026</p>
+    </footer>
+
+    <script>
+        const tabs = document.querySelectorAll(".orders-tab");
+        const panels = document.querySelectorAll(".orders-panel");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                const selectedTab = tab.dataset.tab;
+
+                tabs.forEach((item) => item.classList.remove("active"));
+                panels.forEach((panel) => panel.classList.remove("active"));
+
+                tab.classList.add("active");
+                document.getElementById(selectedTab + "-panel").classList.add("active");
+            });
+        });
+
+        const panel = window.location.hash.slice(1);
+        if (panel === "rounds-panel") {
+            document.querySelector('[data-tab="rounds"]').click();
+        } else if (panel === "posts-panel") {
+            document.querySelector('[data-tab="posts"]').click();
+        } else if (panel === "round-orders-panel") {
+            document.querySelector('[data-tab="round-orders"]').click();
+        }
+
+        function updateCounts() {
+            const buyerCards = document.querySelectorAll("#buyer-panel .order-card").length;
+            const carrierCards = document.querySelectorAll("#carrier-panel .order-card").length;
+
+            document.getElementById("buyer-count").textContent = buyerCards;
+            document.getElementById("carrier-count").textContent = carrierCards;
+            document.getElementById("total-count").textContent = buyerCards + carrierCards;
+        }
+
+        updateCounts();
+    </script>
+
+    <script src="/js/my-rounds.js"></script>
+    <script src="/js/my-orders.js"></script>
+    <script src="/js/my-posts.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

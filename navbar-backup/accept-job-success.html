@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รับงานสำเร็จ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/accept-job-success.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="container job-success-page">
+
+        <section class="success-card">
+
+            <div class="success-icon">✓</div>
+
+            <p class="success-label">JOB ACCEPTED</p>
+
+            <h1>รับงานสำเร็จแล้ว!</h1>
+
+            <p class="success-description">
+                คุณรับงานนี้เรียบร้อยแล้ว สามารถตรวจสอบรายละเอียด
+                และติดตามงานได้จากรายการของคุณ
+            </p>
+
+            <div class="job-status">
+                <span class="status-dot"></span>
+                รับงานแล้ว
+            </div>
+
+            <div class="job-detail-card">
+
+                <div class="job-detail-heading">
+                    <div>
+                        <p class="detail-label">หมายเลขงาน</p>
+                        <h2 id="job-id">BP001</h2>
+                    </div>
+
+                    <span class="job-badge">งานรับหิ้ว</span>
+                </div>
+
+                <div class="job-detail-row">
+                    <span>ชื่อโพสต์</span>
+                    <strong id="job-title">ฝากซื้อเครื่องดื่ม</strong>
+                </div>
+
+                <div class="job-detail-row">
+                    <span>ร้านค้า</span>
+                    <strong id="job-shop">ร้านตัวอย่าง</strong>
+                </div>
+
+                <div class="job-detail-row">
+                    <span>รายการสินค้า</span>
+                    <strong id="job-product">เครื่องดื่ม 1 รายการ</strong>
+                </div>
+
+                <div class="job-detail-row">
+                    <span>จำนวนสินค้า</span>
+                    <strong id="job-quantity">1 ชิ้น</strong>
+                </div>
+
+                <div class="job-detail-row">
+                    <span>วันที่ต้องการรับสินค้า</span>
+                    <strong id="job-date">-</strong>
+                </div>
+
+                <div class="job-detail-row">
+                    <span>สถานที่รับสินค้า</span>
+                    <strong id="job-location">-</strong>
+                </div>
+
+                <div class="job-fee-row">
+                    <span>ค่าหิ้วที่เสนอให้</span>
+                    <strong id="job-fee">20 บาท</strong>
+                </div>
+
+            </div>
+
+            <div class="success-note">
+                <strong>ขั้นตอนต่อไป</strong>
+                <p>
+                    ตรวจสอบรายละเอียดสินค้าและวันเวลารับสินค้าให้เรียบร้อย
+                    คุณสามารถกลับไปดูรายการงานที่รับไว้ได้จากหน้ารายการสั่งซื้อ
+                </p>
+            </div>
+
+            <div class="success-actions">
+                <a href="orders.html" class="btn btn-primary">
+                    ดูรายการของฉัน
+                </a>
+
+                <a href="buyer-posts.html" class="btn btn-outline">
+                    ดูโพสต์อื่น
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const fields = {
+            "job-id": "id",
+            "job-title": "title",
+            "job-shop": "shop",
+            "job-product": "product",
+            "job-quantity": "quantity",
+            "job-date": "date",
+            "job-location": "location"
+        };
+
+        Object.entries(fields).forEach(function ([elementId, paramName]) {
+            const value = params.get(paramName);
+
+            if (value) {
+                document.getElementById(elementId).textContent = value;
+            }
+        });
+
+        const fee = params.get("carry-fee");
+
+        if (fee !== null && fee !== "") {
+            document.getElementById("job-fee").textContent =
+                Number(fee).toLocaleString("th-TH") + " บาท";
+        }
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸à¸²à¸£à¸ªà¹ˆà¸‡à¸¡à¸­à¸š | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/delivery-proof.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="orders.html" class="active">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+    <main class="proof-container">
+
+        <p id="completion-message" class="form-message" role="status" aria-live="polite" hidden></p>
+        <div class="proof-breadcrumb">
+            <a href="orders.html">à¸£à¸²à¸¢à¸à¸²à¸£à¸ªà¸±à¹ˆà¸‡à¸‹à¸·à¹‰à¸­</a>
+            <span>/</span>
+            <a id="completion-order-link" href="orders.html#round-orders-panel">à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</a>
+            <span>/</span>
+            <span>à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸à¸²à¸£à¸ªà¹ˆà¸‡à¸¡à¸­à¸š</span>
+        </div>
+
+        <section class="proof-heading">
+            <div class="proof-heading-icon">CH</div>
+
+            <div>
+                <p id="completion-order-label" class="proof-eyebrow">ORDER</p>
+                <h1>à¸¢à¸·à¸™à¸¢à¸±à¸™à¸§à¹ˆà¸²à¹„à¸”à¹‰à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²à¹à¸¥à¹‰à¸§</h1>
+                <p class="proof-subtitle">
+                        à¹à¸™à¸šà¸£à¸¹à¸›à¸«à¸¥à¸±à¸à¸à¸²à¸™à¹€à¸žà¸·à¹ˆà¸­à¸¢à¸·à¸™à¸¢à¸±à¸™à¸à¸²à¸£à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²à¹à¸¥à¸°à¸›à¸´à¸”à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ
+                </p>
+            </div>
+
+            <span id="completion-order-status" class="proof-status">à¸à¸³à¸¥à¸±à¸‡à¹‚à¸«à¸¥à¸”...</span>
+        </section>
+
+        <div class="proof-layout">
+
+            <div class="proof-main">
+
+                <section class="proof-card">
+                    <div class="proof-card-heading">
+                        <div>
+                            <h2>à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</h2>
+                            <p>à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸à¹ˆà¸­à¸™à¸¢à¸·à¸™à¸¢à¸±à¸™à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</p>
+                        </div>
+                    </div>
+
+                    <div class="proof-info-list">
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸ªà¹ˆà¸‡à¸¡à¸­à¸š</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="proof-card">
+                    <div class="proof-card-heading">
+                        <div>
+                            <h2>à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸à¸²à¸£à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</h2>
+                            <p>à¹à¸™à¸šà¸£à¸¹à¸›à¸ à¸²à¸žà¹€à¸žà¸·à¹ˆà¸­à¹ƒà¸Šà¹‰à¹€à¸›à¹‡à¸™à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸¢à¸·à¸™à¸¢à¸±à¸™à¸§à¹ˆà¸²à¸„à¸¸à¸“à¹„à¸”à¹‰à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²à¹à¸¥à¹‰à¸§</p>
+                        </div>
+                    </div>
+
+                    <form id="completion-form">
+                        <label class="proof-upload-area" for="evidence-image">
+                            <div class="proof-upload-icon">+</div>
+                            <h3>à¹à¸™à¸šà¸£à¸¹à¸›à¸ à¸²à¸žà¸«à¸¥à¸±à¸à¸à¸²à¸™</h3>
+                            <p>à¸„à¸¥à¸´à¸à¹€à¸žà¸·à¹ˆà¸­à¹€à¸¥à¸·à¸­à¸à¸ à¸²à¸žà¸ˆà¸²à¸à¸­à¸¸à¸›à¸à¸£à¸“à¹Œà¸‚à¸­à¸‡à¸„à¸¸à¸“</p>
+                            <span>JPEG à¸«à¸£à¸·à¸­ PNG, à¸‚à¸™à¸²à¸”à¹„à¸¡à¹ˆà¹€à¸à¸´à¸™ 5 MB</span>
+                            <input type="file" id="evidence-image" name="evidenceImage" accept="image/jpeg,image/png" required>
+                        </label>
+
+                        <p id="completion-form-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                        <div class="proof-notice">
+                            <span class="proof-notice-mark">!</span>
+                            <p>
+                                à¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸§à¹ˆà¸²à¸£à¸¹à¸›à¸ à¸²à¸žà¹€à¸›à¹‡à¸™à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸‚à¸­à¸‡à¸­à¸­à¹€à¸”à¸­à¸£à¹Œà¸™à¸µà¹‰
+                                à¸à¹ˆà¸­à¸™à¸à¸”à¸¢à¸·à¸™à¸¢à¸±à¸™à¸à¸²à¸£à¸ªà¹ˆà¸‡à¸¡à¸­à¸š
+                            </p>
+                        </div>
+
+                        <div class="proof-actions">
+                            <a id="completion-back-link" href="orders.html#round-orders-panel" class="proof-btn proof-btn-secondary">
+                                à¸à¸¥à¸±à¸š
+                            </a>
+
+                            <button id="completion-submit" type="submit" class="proof-btn proof-btn-primary">
+                                à¸¢à¸·à¸™à¸¢à¸±à¸™à¸§à¹ˆà¸²à¹„à¸”à¹‰à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+            </div>
+
+            <aside class="proof-sidebar">
+
+                <section class="proof-card proof-summary">
+                    <h2>à¸ªà¸£à¸¸à¸›à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</h2>
+
+                    <div class="proof-summary-id">
+                        <span>à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</span>
+                        <strong id="completion-summary-id">-</strong>
+                    </div>
+
+                    <div class="proof-summary-status">
+                        <span class="proof-status-dot"></span>
+                        <span id="completion-summary-status">à¸à¸³à¸¥à¸±à¸‡à¹‚à¸«à¸¥à¸”...</span>
+                    </div>
+
+                    <div class="proof-summary-divider"></div>
+
+                    <div class="proof-summary-row">
+                        <span>à¸ªà¸–à¸²à¸™à¸°à¸«à¸¥à¸±à¸à¸à¸²à¸™</span>
+                        <span id="completion-evidence-status">à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹à¸™à¸šà¸£à¸¹à¸›à¸ à¸²à¸ž</span>
+                    </div>
+
+                    <div class="proof-summary-row">
+                        <span>à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                        <span id="completion-location">-</span>
+                    </div>
+                </section>
+
+                <section class="proof-help-card">
+                    <h3>à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸„à¸§à¸²à¸¡à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­?</h3>
+                    <p>
+                        à¸«à¸²à¸à¸žà¸šà¸›à¸±à¸à¸«à¸²à¹€à¸à¸µà¹ˆà¸¢à¸§à¸à¸±à¸šà¸à¸²à¸£à¸ªà¹ˆà¸‡à¸¡à¸­à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²
+                        à¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸ˆà¹‰à¸‡à¸›à¸±à¸à¸«à¸²à¹ƒà¸«à¹‰à¸—à¸µà¸¡à¸‡à¸²à¸™à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¹„à¸”à¹‰
+                    </p>
+                    <a href="report.html">à¹à¸ˆà¹‰à¸‡à¸›à¸±à¸à¸«à¸²à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</a>
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub Â© 2026</p>
+    </footer>
+
+    <script src="/js/delivery-proof.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

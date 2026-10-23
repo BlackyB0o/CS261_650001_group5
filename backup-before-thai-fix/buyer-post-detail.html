@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹‚à¸žà¸ªà¸•à¹Œ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/buyer-post-detail.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="buyer-posts.html">à¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+    <main class="container post-detail-container">
+        <a href="buyer-posts.html" class="back-link">â† à¸à¸¥à¸±à¸šà¹„à¸›à¸«à¸™à¹‰à¸²à¹‚à¸žà¸ªà¸•à¹Œà¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+        <p id="post-detail-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+        <section id="post-detail-content" class="post-detail-card" hidden>
+            <div class="post-detail-header">
+                <span id="post-detail-status" class="post-status"></span>
+                <span id="post-detail-id" class="post-id"></span>
+            </div>
+            <h1 id="post-detail-title"></h1>
+            <p id="post-detail-description" class="post-description"></p>
+            <div class="post-divider"></div>
+            <h2>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸ªà¸´à¸™à¸„à¹‰à¸²</h2>
+
+            <div class="post-info">
+                <div class="info-item">
+                    <span class="info-label">à¸£à¹‰à¸²à¸™à¸„à¹‰à¸²</span>
+                    <strong id="post-detail-shop"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸ªà¸´à¸™à¸„à¹‰à¸²à¹à¸¥à¸°à¸ˆà¸³à¸™à¸§à¸™</span>
+                    <strong id="post-detail-product"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                    <strong id="post-detail-buyer"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸§à¸±à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£</span>
+                    <strong id="post-detail-date"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                    <strong id="post-detail-location"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹€à¸ªà¸™à¸­</span>
+                    <strong id="post-detail-fee"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸‡à¸šà¸›à¸£à¸°à¸¡à¸²à¸“</span>
+                    <strong id="post-detail-budget"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸‡à¸²à¸™</span>
+                    <strong id="post-detail-accepted-by"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">à¸§à¸±à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸‡à¸²à¸™</span>
+                    <strong id="post-detail-accepted-at"></strong>
+                </div>
+            </div>
+
+            <div class="post-note">
+                <h3>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡</h3>
+                <p id="post-detail-additional"></p>
+            </div>
+
+            <div id="post-detail-actions" class="post-actions" hidden>
+                <button id="accept-post-button" type="button" class="btn btn-primary">à¸£à¸±à¸šà¸‡à¸²à¸™à¸™à¸µà¹‰</button>
+                <a href="buyer-posts.html" class="btn btn-outline">à¸à¸¥à¸±à¸šà¹„à¸›à¸«à¸™à¹‰à¸²à¸£à¸²à¸¢à¸à¸²à¸£à¹‚à¸žà¸ªà¸•à¹Œ</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">Â© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/buyer-post-detail.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

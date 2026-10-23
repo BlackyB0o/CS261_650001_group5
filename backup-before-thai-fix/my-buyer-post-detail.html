@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¹‚à¸žà¸ªà¸•à¹Œà¸‚à¸­à¸‡à¸‰à¸±à¸™ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/buyer-post-detail.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="buyer-posts.html">à¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html#posts-panel">à¹‚à¸žà¸ªà¸•à¹Œà¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+    <main class="container post-detail-container">
+        <a href="orders.html#posts-panel" class="back-link">â† à¸à¸¥à¸±à¸šà¹„à¸›à¹‚à¸žà¸ªà¸•à¹Œà¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+        <p id="my-post-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+        <section id="my-post-content" class="post-detail-card" hidden>
+            <div class="post-detail-header">
+                <span id="my-post-status" class="post-status"></span>
+                <span id="my-post-id" class="post-id"></span>
+            </div>
+            <h1 id="my-post-title"></h1>
+            <p id="my-post-product" class="post-description"></p>
+            <div class="post-divider"></div>
+            <h2>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹‚à¸žà¸ªà¸•à¹Œ</h2>
+            <div class="post-info">
+                <div class="info-item"><span class="info-label">à¸£à¹‰à¸²à¸™à¸„à¹‰à¸²</span><strong id="my-post-shop"></strong></div>
+                <div class="info-item"><span class="info-label">à¸ˆà¸³à¸™à¸§à¸™</span><strong id="my-post-quantity"></strong></div>
+                <div class="info-item"><span class="info-label">à¸§à¸±à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£</span><strong id="my-post-date"></strong></div>
+                <div class="info-item"><span class="info-label">à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</span><strong id="my-post-location"></strong></div>
+                <div class="info-item"><span class="info-label">à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§</span><strong id="my-post-fee"></strong></div>
+                <div class="info-item"><span class="info-label">à¸‡à¸šà¸›à¸£à¸°à¸¡à¸²à¸“</span><strong id="my-post-budget"></strong></div>
+                <div class="info-item"><span class="info-label">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸‡à¸²à¸™</span><strong id="my-post-accepted-by"></strong></div>
+                <div class="info-item"><span class="info-label">à¸§à¸±à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸‡à¸²à¸™</span><strong id="my-post-accepted-at"></strong></div>
+            </div>
+            <div class="post-note">
+                <h3>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡</h3>
+                <p id="my-post-additional"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">Â© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/my-post-detail.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

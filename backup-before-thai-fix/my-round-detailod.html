@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¸ˆà¸±à¸”à¸à¸²à¸£à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/round-detail.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="buyer-posts.html">à¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+    <main class="container round-detail-container">
+        <a href="orders.html#rounds-panel" class="back-link">â† à¸à¸¥à¸±à¸šà¹„à¸›à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+        <p id="my-round-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+        <section id="my-round-content" class="round-detail-card" hidden>
+            <div class="round-detail-header">
+                <span id="my-round-status" class="round-status"></span>
+                <span id="my-round-id" class="round-id"></span>
+            </div>
+            <h1 id="my-round-store"></h1>
+            <p class="round-description">à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸„à¸¸à¸“</p>
+            <div class="round-divider"></div>
+            <h2>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</h2>
+            <div class="round-info">
+                <div class="round-info-item">
+                    <span class="round-info-label">à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</span>
+                    <strong id="my-round-runner"></strong>
+                </div>
+                <div class="round-info-item">
+                    <span class="round-info-label">à¸§à¸±à¸™à¹à¸¥à¸°à¹€à¸§à¸¥à¸²à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                    <strong id="my-round-scheduled"></strong>
+                </div>
+                <div class="round-info-item">
+                    <span class="round-info-label">à¸„à¹ˆà¸²à¸šà¸£à¸´à¸à¸²à¸£</span>
+                    <strong id="my-round-fee"></strong>
+                </div>
+                <div class="round-info-item">
+                    <span class="round-info-label">à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</span>
+                    <strong id="my-round-location"></strong>
+                </div>
+            </div>
+
+            <form id="round-status-form" class="form-section" hidden>
+                <label for="round-status-select">à¸­à¸±à¸›à¹€à¸”à¸•à¸ªà¸–à¸²à¸™à¸°à¸£à¸­à¸š</label>
+                <select id="round-status-select" required></select>
+                <button id="round-status-button" type="submit" class="btn btn-primary">à¸šà¸±à¸™à¸—à¸¶à¸à¸ªà¸–à¸²à¸™à¸°</button>
+            </form>
+
+            <div class="post-actions">
+                <a href="orders.html#rounds-panel" class="btn btn-outline">à¸à¸¥à¸±à¸šà¹„à¸›à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            </div>
+        </section>
+
+        <section id="round-orders-section" class="round-detail-card" hidden>
+            <h2>à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¹ƒà¸™à¸£à¸­à¸šà¸™à¸µà¹‰</h2>
+            <p id="round-orders-message" class="form-message" role="status" aria-live="polite" hidden></p>
+            <div id="round-orders-list" class="orders-list" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Â© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/my-round-detail.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

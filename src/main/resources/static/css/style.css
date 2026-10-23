@@ -9658,7 +9658,6 @@ body {
     width: 100%;
 }
 
-/* Hero Section */
 .home-hero-section {
     width: 100%;
     box-sizing: border-box;
@@ -10127,4 +10126,450 @@ body {
     margin: 0;
     padding: 18px 0;
     max-width: none;
+}
+
+.profile-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 20px;
+    background-color: #dc2626;
+    color: #ffffff;
+    border: 1px solid #b91c1c;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-logout:hover {
+    background-color: #b91c1c;
+    box-shadow: 0 4px 10px rgba(185, 28, 28, 0.25);
+    transform: translateY(-1px);
+}
+
+.profile-logout:active {
+    background-color: #991b1b;
+    transform: translateY(0);
+}
+
+.profile-logout:focus-visible {
+    outline: 3px solid #fca5a5;
+    outline-offset: 3px;
+}
+
+.logout-icon {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.navbar {
+    width: 100%;
+    min-height: 76px;
+    padding: 14px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f0e5dc;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .logo {
+    flex-shrink: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f58220;
+    text-decoration: none;
+}
+
+.navbar nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.navbar nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    color: #333333;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.navbar nav a:hover {
+    color: #f58220;
+    background-color: #fff3e8;
+}
+
+.navbar nav a.nav-active {
+    color: #f58220;
+    font-weight: 600;
+}
+
+.navbar nav a.btn-primary {
+    color: #ffffff;
+    background-color: #f58220;
+}
+
+.navbar nav a.btn-primary:hover {
+    color: #ffffff;
+    background-color: #df6c0c;
+}
+
+.navbar nav a.btn-outline {
+    background-color: #ffffff;
+    border: 1px solid #f58220;
+    color: #f58220;
+}
+
+.navbar nav a.btn-outline:hover {
+    background-color: #fff3e8;
+    color: #d9680b;
+}
+
+.menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: 1px solid #f0e5dc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    margin: 4px auto;
+    background-color: #f58220;
+    border-radius: 2px;
+}
+
+@media (max-width: 1050px) {
+    .navbar {
+        padding: 14px 24px;
+    }
+
+    .navbar nav {
+        gap: 2px;
+    }
+
+    .navbar nav a {
+        padding: 9px 8px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 850px) {
+    .navbar {
+        min-height: 68px;
+        padding: 12px 20px;
+        flex-wrap: wrap;
+    }
+
+    .menu-toggle {
+        display: block;
+        flex-shrink: 0;
+    }
+
+    .navbar nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 12px 0 4px;
+    }
+
+    .navbar nav.open {
+        display: flex;
+    }
+
+    .navbar nav a {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 14px;
+        white-space: normal;
+        font-size: 15px;
+    }
+
+    .navbar nav a.btn-primary,
+    .navbar nav a.btn-outline {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar {
+        padding: 12px 14px;
+    }
+
+    .navbar .logo {
+        font-size: 23px;
+    }
+}
+
+header.navbar {
+    width: 100%;
+    min-height: 72px;
+    padding: 12px 4%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #f0e5dc;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+header.navbar .logo {
+    flex-shrink: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f58220;
+    text-decoration: none;
+}
+
+header.navbar nav {
+    max-width: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+header.navbar nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #333333;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+header.navbar nav a[hidden] {
+    display: none !important;
+}
+
+header.navbar nav a:hover {
+    color: #d9680b;
+    background-color: #fff3e8;
+}
+
+header.navbar nav a.nav-active {
+    color: #f58220;
+    font-weight: 600;
+}
+
+header.navbar nav a.btn-outline {
+    color: #f58220;
+    background-color: #ffffff;
+    border: 1px solid #f58220;
+}
+
+header.navbar nav a.btn-outline:hover {
+    color: #d9680b;
+    background-color: #fff3e8;
+}
+
+header.navbar nav a.btn-primary {
+    color: #ffffff;
+    background-color: #f58220;
+    border: 1px solid #f58220;
+}
+
+header.navbar nav a.btn-primary:hover {
+    color: #ffffff;
+    background-color: #df6c0c;
+}
+
+.menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    flex-shrink: 0;
+    border: 1px solid #f0e5dc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 5px auto;
+    border-radius: 2px;
+    background-color: #f58220;
+}
+
+@media (max-width: 1050px) {
+    header.navbar {
+        padding: 12px 20px;
+        gap: 12px;
+    }
+
+    header.navbar nav {
+        gap: 2px;
+    }
+
+    header.navbar nav a {
+        padding: 9px 8px;
+        font-size: 13px;
+    }
+
+    header.navbar .logo {
+        font-size: 23px;
+    }
+}
+
+@media (max-width: 850px) {
+    header.navbar {
+        min-height: 68px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 12px 18px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    header.navbar nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+        padding: 10px 0 4px;
+    }
+
+    header.navbar nav.open {
+        display: flex;
+    }
+
+    header.navbar nav a {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 14px;
+        white-space: normal;
+        font-size: 15px;
+    }
+
+    header.navbar nav a.btn-outline,
+    header.navbar nav a.btn-primary {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 400px) {
+    header.navbar {
+        padding: 10px 14px;
+    }
+
+    header.navbar .logo {
+        font-size: 22px;
+    }
+}
+
+header.navbar {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    flex-shrink: 0;
+    border: 1px solid #f0e5dc;
+    border-radius: 8px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 5px auto;
+    border-radius: 2px;
+    background-color: #f58220;
+}
+
+@media (max-width: 850px) {
+    header.navbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    header.navbar nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+    }
+
+    header.navbar nav.open {
+        display: flex;
+    }
+
+    header.navbar nav a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+header.navbar nav a[data-logout="true"] {
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    background-color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+header.navbar nav a[data-logout="true"]:hover {
+    color: #fff;
+    background-color: #dc2626;
 }

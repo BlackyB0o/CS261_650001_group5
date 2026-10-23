@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸žà¸ªà¸•à¹Œà¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-buyer-post.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="buyer-posts.html">à¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                <a href="buyer-posts.html" class="back-link">â† à¸à¸¥à¸±à¸šà¹„à¸›à¸«à¸™à¹‰à¸²à¹‚à¸žà¸ªà¸•à¹Œà¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+
+                <h1>à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸žà¸ªà¸•à¹Œà¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</h1>
+                <p>à¸à¸£à¸­à¸à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸ªà¸´à¸™à¸„à¹‰à¸²à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£ à¹€à¸žà¸·à¹ˆà¸­à¹ƒà¸«à¹‰à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸ªà¸²à¸¡à¸²à¸£à¸–à¸•à¸´à¸”à¸•à¹ˆà¸­à¸«à¸£à¸·à¸­à¸£à¸±à¸šà¸‡à¸²à¸™à¹„à¸”à¹‰</p>
+                <p>à¸‚à¸“à¸°à¸™à¸µà¹‰à¸£à¸°à¸šà¸šà¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸£à¸­à¸‡à¸£à¸±à¸šà¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸£à¸¹à¸›à¸ªà¸´à¸™à¸„à¹‰à¸²à¹ƒà¸™à¹‚à¸žà¸ªà¸•à¹Œ</p>
+            </div>
+
+            <form id="create-post-form">
+                <p id="create-post-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <div class="form-section">
+                    <h2>à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ªà¸´à¸™à¸„à¹‰à¸²</h2>
+                    <p class="section-description">
+                        à¸£à¸°à¸šà¸¸à¸Šà¸·à¹ˆà¸­à¹‚à¸žà¸ªà¸•à¹Œ à¸£à¹‰à¸²à¸™à¸„à¹‰à¸² à¹à¸¥à¸°à¸£à¸²à¸¢à¸à¸²à¸£à¸ªà¸´à¸™à¸„à¹‰à¸²à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸à¸²à¸à¸‹à¸·à¹‰à¸­
+                    </p>
+
+                    <div class="form-group">
+                        <label for="post-title">
+                            à¸Šà¸·à¹ˆà¸­à¹‚à¸žà¸ªà¸•à¹Œ <span class="required">*</span>
+                        </label>
+                        <input type="text" id="post-title" name="postTitle" maxlength="255"
+                            placeholder="à¹€à¸Šà¹ˆà¸™ à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸”à¸·à¹ˆà¸¡" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shop-name">
+                            à¸Šà¸·à¹ˆà¸­à¸£à¹‰à¸²à¸™à¸„à¹‰à¸² <span class="required">*</span>
+                        </label>
+                        <input type="text" id="shop-name" name="shopName" maxlength="255"
+                            placeholder="à¸à¸£à¸­à¸à¸Šà¸·à¹ˆà¸­à¸£à¹‰à¸²à¸™à¸„à¹‰à¸²" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product">
+                            à¸£à¸²à¸¢à¸à¸²à¸£à¸ªà¸´à¸™à¸„à¹‰à¸² <span class="required">*</span>
+                        </label>
+                        <textarea id="product" name="productDetail" rows="4"
+                            placeholder="à¸£à¸°à¸šà¸¸à¸Šà¸·à¹ˆà¸­à¸ªà¸´à¸™à¸„à¹‰à¸² à¸£à¸¸à¹ˆà¸™ à¸£à¸ªà¸Šà¸²à¸•à¸´ à¸«à¸£à¸·à¸­à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">
+                            à¸ˆà¸³à¸™à¸§à¸™à¸ªà¸´à¸™à¸„à¹‰à¸² <span class="required">*</span>
+                        </label>
+                        <input type="number" id="quantity" name="quantity" min="1" step="1" placeholder="à¸£à¸°à¸šà¸¸à¸ˆà¸³à¸™à¸§à¸™à¸ªà¸´à¸™à¸„à¹‰à¸²"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="carry-fee">
+                            à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹€à¸ªà¸™à¸­à¹ƒà¸«à¹‰ (à¸šà¸²à¸—) <span class="required">*</span>
+                        </label>
+                        <input type="number" id="carry-fee" name="carry-fee" min="0" step="0.01" placeholder="à¹€à¸Šà¹ˆà¸™ 20"
+                            required>
+                    </div>
+
+                </div>
+
+                <div class="form-section">
+                    <h2>à¸§à¸±à¸™à¹€à¸§à¸¥à¸²à¹à¸¥à¸°à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²</h2>
+                    <p class="section-description">
+                        à¸£à¸°à¸šà¸¸à¸§à¸±à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸²à¹à¸¥à¸°à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸—à¸µà¹ˆà¸ªà¸°à¸”à¸§à¸
+                    </p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">
+                                à¸§à¸±à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸² <span class="required">*</span>
+                            </label>
+                            <input type="date" id="date" name="desiredDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">
+                                à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸² <span class="required">*</span>
+                            </label>
+                            <input type="text" id="location" name="location" maxlength="255"
+                                placeholder="à¹€à¸Šà¹ˆà¸™ à¸«à¸™à¹‰à¸²à¸„à¸“à¸°" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>à¸‡à¸šà¸›à¸£à¸°à¸¡à¸²à¸“à¹à¸¥à¸°à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡</h2>
+                    <p class="section-description">
+                        à¸à¸³à¸«à¸™à¸”à¸‡à¸šà¸›à¸£à¸°à¸¡à¸²à¸“à¹à¸¥à¸°à¹à¸ˆà¹‰à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸„à¸§à¸£à¸—à¸£à¸²à¸š
+                    </p>
+
+                    <div class="form-group">
+                        <label for="budget">à¸‡à¸šà¸›à¸£à¸°à¸¡à¸²à¸“à¸„à¹ˆà¸²à¸ªà¸´à¸™à¸„à¹‰à¸² (à¸šà¸²à¸—)</label>
+                        <input type="number" id="budget" name="budget" min="0" step="0.01" placeholder="à¸£à¸°à¸šà¸¸à¸‡à¸šà¸›à¸£à¸°à¸¡à¸²à¸“">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="details">à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡</label>
+                        <textarea id="details" name="additionalDetails" rows="4"
+                            placeholder="à¹€à¸Šà¹ˆà¸™ à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸ªà¸´à¸™à¸„à¹‰à¸² à¸ˆà¸¸à¸”à¸™à¸±à¸”à¸£à¸±à¸š à¸«à¸£à¸·à¸­à¹€à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="create-post-button" type="submit" class="btn btn-primary">
+                        à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸žà¸ªà¸•à¹Œ
+                    </button>
+
+                    <a href="buyer-posts.html" class="btn btn-outline">
+                        à¸¢à¸à¹€à¸¥à¸´à¸
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub Â© 2026</p>
+    </footer>
+
+
+    <script src="/js/create-post.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

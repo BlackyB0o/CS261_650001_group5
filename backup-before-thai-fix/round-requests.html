@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>à¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¹ƒà¸™à¸£à¸­à¸š | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/round-requests.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="buyer-posts.html">à¸«à¸²à¸„à¸™à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html" class="active">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+
+    <main class="round-requests-container">
+
+        <a href="orders.html" class="back-link">
+            â† à¸à¸¥à¸±à¸šà¹„à¸›à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™
+        </a>
+
+        <section class="round-summary-card">
+
+            <div class="round-summary-top">
+
+                <div class="round-shop-icon">ðŸ§‹</div>
+
+                <div class="round-summary-title">
+                    <span class="round-id">à¸£à¸«à¸±à¸ªà¸£à¸­à¸š RD001</span>
+                    <h1>à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸Šà¸²à¸™à¸¡</h1>
+                    <p>à¸£à¹‰à¸²à¸™à¸Šà¸²à¸™à¸¡à¸«à¸™à¹‰à¸²à¸¡à¸«à¸²à¸§à¸´à¸—à¸¢à¸²à¸¥à¸±à¸¢</p>
+                </div>
+
+                <span class="round-status">à¹€à¸›à¸´à¸”à¸£à¸±à¸šà¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+
+            </div>
+
+            <div class="round-summary-info">
+
+                <div class="summary-item">
+                    <span>ðŸ“… à¸§à¸±à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</span>
+                    <strong>20 à¸•.à¸„. 2569</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>â° à¸›à¸´à¸”à¸£à¸±à¸šà¸à¸²à¸</span>
+                    <strong>12:00 à¸™.</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>ðŸ“ à¸ˆà¸¸à¸”à¸£à¸±à¸šà¸‚à¸­à¸‡</span>
+                    <strong>à¸«à¸™à¹‰à¸²à¸¡à¸«à¸²à¸§à¸´à¸—à¸¢à¸²à¸¥à¸±à¸¢</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="requests-section">
+
+            <div class="requests-heading">
+
+                <div>
+                    <h2>à¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸µà¹ˆà¸¡à¸µà¸„à¸™à¸à¸²à¸à¸‹à¸·à¹‰à¸­</h2>
+                    <p>à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸à¹ˆà¸­à¸™à¸•à¸±à¸”à¸ªà¸´à¸™à¹ƒà¸ˆà¸£à¸±à¸šà¸‡à¸²à¸™</p>
+                </div>
+
+                <div class="requests-total">
+                    <strong id="request-count">4</strong>
+                    <span>à¸£à¸²à¸¢à¸à¸²à¸£</span>
+                </div>
+
+            </div>
+
+            <div class="request-filters">
+
+                <button class="filter-btn active" data-filter="all">
+                    à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+                </button>
+
+                <button class="filter-btn" data-filter="waiting">
+                    à¸£à¸­à¸£à¸±à¸šà¸‡à¸²à¸™
+                </button>
+
+                <button class="filter-btn" data-filter="accepted">
+                    à¸£à¸±à¸šà¸‡à¸²à¸™à¹à¸¥à¹‰à¸§
+                </button>
+
+            </div>
+
+
+            <div class="request-list">
+
+
+                <!-- Request 1 -->
+                <article class="request-card" data-status="waiting">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">à¸£à¸²à¸¢à¸à¸²à¸£ PB001</span>
+                            <h3>à¸Šà¸²à¸™à¸¡à¹„à¸‚à¹ˆà¸¡à¸¸à¸</h3>
+                        </div>
+
+                        <span class="request-status status-waiting">
+                            à¸£à¸­à¸£à¸±à¸šà¸‡à¸²à¸™
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">ðŸ§‹</div>
+
+                        <div class="product-info">
+                            <strong>à¸Šà¸²à¸™à¸¡à¹„à¸‚à¹ˆà¸¡à¸¸à¸à¸«à¸§à¸²à¸™ 50%</strong>
+                            <p>à¸‚à¸™à¸²à¸”à¸à¸¥à¸²à¸‡ Â· à¸«à¸§à¸²à¸™ 50% Â· à¹„à¸‚à¹ˆà¸¡à¸¸à¸à¸›à¸à¸•à¸´</p>
+                            <p>à¸ˆà¸³à¸™à¸§à¸™ <strong>2 à¹à¸à¹‰à¸§</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">à¸™</div>
+
+                        <div>
+                            <span>à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                            <strong>à¸™à¸±à¸—</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹€à¸ªà¸™à¸­</span>
+                            <strong>20 à¸šà¸²à¸—</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="order-detail.html" class="btn btn-outline">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”
+                            </a>
+
+                            <button class="btn btn-primary accept-btn" data-id="PB001">
+                                à¸£à¸±à¸šà¸‡à¸²à¸™
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="request-card" data-status="waiting">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">à¸£à¸²à¸¢à¸à¸²à¸£ PB002</span>
+                            <h3>à¸Šà¸²à¹„à¸—à¸¢</h3>
+                        </div>
+
+                        <span class="request-status status-waiting">
+                            à¸£à¸­à¸£à¸±à¸šà¸‡à¸²à¸™
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">ðŸ¥¤</div>
+
+                        <div class="product-info">
+                            <strong>à¸Šà¸²à¹„à¸—à¸¢à¸«à¸§à¸²à¸™à¸™à¹‰à¸­à¸¢</strong>
+                            <p>à¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ Â· à¸«à¸§à¸²à¸™ 25%</p>
+                            <p>à¸ˆà¸³à¸™à¸§à¸™ <strong>1 à¹à¸à¹‰à¸§</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">à¸ž</div>
+
+                        <div>
+                            <span>à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                            <strong>à¸žà¸´à¸¡</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹€à¸ªà¸™à¸­</span>
+                            <strong>15 à¸šà¸²à¸—</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="order-detail.html" class="btn btn-outline">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”
+                            </a>
+
+                            <button class="btn btn-primary accept-btn" data-id="PB002">
+                                à¸£à¸±à¸šà¸‡à¸²à¸™
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="request-card" data-status="accepted">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">à¸£à¸²à¸¢à¸à¸²à¸£ PB003</span>
+                            <h3>à¹‚à¸à¹‚à¸à¹‰à¹€à¸¢à¹‡à¸™</h3>
+                        </div>
+
+                        <span class="request-status status-accepted">
+                            à¸£à¸±à¸šà¸‡à¸²à¸™à¹à¸¥à¹‰à¸§
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">ðŸ¥¤</div>
+
+                        <div class="product-info">
+                            <strong>à¹‚à¸à¹‚à¸à¹‰à¹€à¸¢à¹‡à¸™</strong>
+                            <p>à¸‚à¸™à¸²à¸”à¸à¸¥à¸²à¸‡ Â· à¸«à¸§à¸²à¸™à¸›à¸à¸•à¸´</p>
+                            <p>à¸ˆà¸³à¸™à¸§à¸™ <strong>1 à¹à¸à¹‰à¸§</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">à¸¡</div>
+
+                        <div>
+                            <span>à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                            <strong>à¸¡à¸²à¸¢à¸”à¹Œ</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹€à¸ªà¸™à¸­</span>
+                            <strong>10 à¸šà¸²à¸—</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="order-detail.html" class="btn btn-outline">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”
+                            </a>
+
+                            <button class="btn btn-accepted" disabled>
+                                âœ“ à¸£à¸±à¸šà¸‡à¸²à¸™à¹à¸¥à¹‰à¸§
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="request-card" data-status="waiting">
+
+                    <div class="request-card-header">
+
+                        <div>
+                            <span class="request-id">à¸£à¸²à¸¢à¸à¸²à¸£ PB004</span>
+                            <h3>à¸Šà¸²à¹€à¸‚à¸µà¸¢à¸§à¸¡à¸±à¸—à¸‰à¸°</h3>
+                        </div>
+
+                        <span class="request-status status-waiting">
+                            à¸£à¸­à¸£à¸±à¸šà¸‡à¸²à¸™
+                        </span>
+
+                    </div>
+
+                    <div class="request-product">
+
+                        <div class="product-icon">ðŸµ</div>
+
+                        <div class="product-info">
+                            <strong>à¸Šà¸²à¹€à¸‚à¸µà¸¢à¸§à¸¡à¸±à¸—à¸‰à¸°à¸«à¸§à¸²à¸™à¸™à¹‰à¸­à¸¢</strong>
+                            <p>à¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ Â· à¹€à¸žà¸´à¹ˆà¸¡à¹„à¸‚à¹ˆà¸¡à¸¸à¸</p>
+                            <p>à¸ˆà¸³à¸™à¸§à¸™ <strong>1 à¹à¸à¹‰à¸§</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="requester-info">
+                        <div class="requester-avatar">à¸•</div>
+
+                        <div>
+                            <span>à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                            <strong>à¸•à¹‰à¸™</strong>
+                        </div>
+                    </div>
+
+                    <div class="request-card-footer">
+
+                        <div class="carry-fee">
+                            <span>à¸„à¹ˆà¸²à¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¹€à¸ªà¸™à¸­</span>
+                            <strong>20 à¸šà¸²à¸—</strong>
+                        </div>
+
+                        <div class="request-actions">
+
+                            <a href="order-detail.html" class="btn btn-outline">
+                                à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”
+                            </a>
+
+                            <button class="btn btn-primary accept-btn" data-id="PB004">
+                                à¸£à¸±à¸šà¸‡à¸²à¸™
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">ðŸ“‹</div>
+                <h3>à¹„à¸¡à¹ˆà¸žà¸šà¸£à¸²à¸¢à¸à¸²à¸£à¸à¸²à¸à¸‹à¸·à¹‰à¸­</h3>
+                <p>à¹„à¸¡à¹ˆà¸¡à¸µà¸£à¸²à¸¢à¸à¸²à¸£à¹ƒà¸™à¸ªà¸–à¸²à¸™à¸°à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub Â© 2026</p>
+    </footer>
+
+
+    <script>
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const requestCards = document.querySelectorAll(".request-card");
+        const emptyState = document.getElementById("empty-state");
+
+        function filterRequests(status) {
+            let visibleCount = 0;
+
+            requestCards.forEach(card => {
+                const cardStatus = card.dataset.status;
+
+                const shouldShow =
+                    status === "all" || cardStatus === status;
+
+                card.hidden = !shouldShow;
+
+                if (shouldShow) {
+                    visibleCount++;
+                }
+            });
+
+            document.getElementById("request-count").textContent =
+                visibleCount;
+
+            emptyState.hidden = visibleCount !== 0;
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                filterButtons.forEach(item =>
+                    item.classList.remove("active")
+                );
+
+                button.classList.add("active");
+
+                filterRequests(button.dataset.filter);
+            });
+        });
+
+        document.querySelectorAll(".accept-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                const card = button.closest(".request-card");
+                const requestId = button.dataset.id;
+
+                const confirmed = confirm(
+                    `à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸£à¸±à¸šà¸‡à¸²à¸™à¸£à¸²à¸¢à¸à¸²à¸£ ${requestId} à¹ƒà¸Šà¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?`
+                );
+
+                if (!confirmed) return;
+
+                card.dataset.status = "accepted";
+
+                const statusLabel =
+                    card.querySelector(".request-status");
+
+                statusLabel.textContent = "à¸£à¸±à¸šà¸‡à¸²à¸™à¹à¸¥à¹‰à¸§";
+                statusLabel.className =
+                    "request-status status-accepted";
+
+                button.textContent = "âœ“ à¸£à¸±à¸šà¸‡à¸²à¸™à¹à¸¥à¹‰à¸§";
+                button.classList.remove("btn-primary", "accept-btn");
+                button.classList.add("btn-accepted");
+                button.disabled = true;
+
+                const activeFilter =
+                    document.querySelector(".filter-btn.active");
+
+                filterRequests(activeFilter.dataset.filter);
+            });
+        });
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

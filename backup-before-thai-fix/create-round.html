@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>à¸ªà¸£à¹‰à¸²à¸‡à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-round.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="rounds.html">à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+            <a href="orders.html">à¸£à¸²à¸¢à¸à¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                <a href="rounds.html" class="back-link">â† à¸à¸¥à¸±à¸šà¹„à¸›à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</a>
+                <h1>à¸ªà¸£à¹‰à¸²à¸‡à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</h1>
+                <p>à¸à¸£à¸­à¸à¸Šà¸·à¹ˆà¸­à¸£à¹‰à¸²à¸™ à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆ à¸§à¸±à¸™à¹€à¸§à¸¥à¸²à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸² à¹à¸¥à¸°à¸„à¹ˆà¸²à¸šà¸£à¸´à¸à¸²à¸£à¹€à¸žà¸·à¹ˆà¸­à¹€à¸›à¸´à¸”à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</p>
+            </div>
+
+            <form id="create-round-form">
+                <p id="create-round-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <div class="form-section">
+                    <h2>à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§</h2>
+                    <p class="section-description">à¸£à¸°à¸šà¸¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸žà¸·à¹‰à¸™à¸à¸²à¸™à¸‚à¸­à¸‡à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸›à¸´à¸”</p>
+
+                    <div class="form-group">
+                        <label for="shop">à¸Šà¸·à¹ˆà¸­à¸£à¹‰à¸²à¸™à¸„à¹‰à¸² <span class="required">*</span></label>
+                        <input type="text" id="shop" name="storeName" placeholder="à¸à¸£à¸­à¸à¸Šà¸·à¹ˆà¸­à¸£à¹‰à¸²à¸™à¸„à¹‰à¸²" maxlength="255" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">à¸ªà¸–à¸²à¸™à¸—à¸µà¹ˆà¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸² <span class="required">*</span></label>
+                        <input type="text" id="location" name="location" placeholder="à¹€à¸Šà¹ˆà¸™ à¸«à¸™à¹‰à¸²à¸£à¹‰à¸²à¸™ à¸«à¸£à¸·à¸­à¸­à¸²à¸„à¸²à¸£à¸—à¸µà¹ˆà¸™à¸±à¸”à¸£à¸±à¸š"
+                            maxlength="255" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>à¸§à¸±à¸™à¹€à¸§à¸¥à¸²à¹à¸¥à¸°à¸„à¹ˆà¸²à¸šà¸£à¸´à¸à¸²à¸£</h2>
+                    <p class="section-description">à¸à¸³à¸«à¸™à¸”à¸§à¸±à¸™à¹à¸¥à¸°à¹€à¸§à¸¥à¸²à¸—à¸µà¹ˆà¸ˆà¸°à¹„à¸›à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸² à¸žà¸£à¹‰à¸­à¸¡à¸„à¹ˆà¸²à¸šà¸£à¸´à¸à¸²à¸£à¸•à¹ˆà¸­à¸£à¸²à¸¢à¸à¸²à¸£</p>
+
+                    <div class="form-group">
+                        <label for="scheduled-at">à¸§à¸±à¸™à¹à¸¥à¸°à¹€à¸§à¸¥à¸²à¸£à¸±à¸šà¸ªà¸´à¸™à¸„à¹‰à¸² <span class="required">*</span></label>
+                        <input type="datetime-local" id="scheduled-at" name="scheduledAt" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fee">à¸„à¹ˆà¸²à¸šà¸£à¸´à¸à¸²à¸£à¸•à¹ˆà¸­à¸£à¸²à¸¢à¸à¸²à¸£ (à¸šà¸²à¸—) <span class="required">*</span></label>
+                        <input type="number" id="fee" name="serviceFee" min="0" step="0.01" placeholder="à¹€à¸Šà¹ˆà¸™ 10" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="create-round-button" type="submit" class="btn btn-primary">
+                        à¹€à¸›à¸´à¸”à¸£à¸­à¸šà¸£à¸±à¸šà¸«à¸´à¹‰à¸§
+                    </button>
+
+                    <a href="rounds.html" class="btn btn-outline">
+                        à¸¢à¸à¹€à¸¥à¸´à¸
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>Â© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/create-round.js"></script>
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>à¸ˆà¸±à¸”à¸à¸²à¸£à¸£à¸²à¸¢à¸‡à¸²à¸™à¸›à¸±à¸à¸«à¸² | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin-reports.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">à¸«à¸™à¹‰à¸²à¹à¸£à¸</a>
+            <a href="profile.html">à¹‚à¸›à¸£à¹„à¸Ÿà¸¥à¹Œ</a>
+        </nav>
+    </header>
+
+
+    <main class="admin-reports-container">
+
+        <!-- Page heading -->
+        <section class="page-heading">
+            <div>
+                <span class="page-label">ADMIN DASHBOARD</span>
+                <h1>à¸ˆà¸±à¸”à¸à¸²à¸£à¸£à¸²à¸¢à¸‡à¸²à¸™à¸›à¸±à¸à¸«à¸²</h1>
+                <p>à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸£à¸²à¸¢à¸‡à¸²à¸™à¸›à¸±à¸à¸«à¸²à¸—à¸µà¹ˆà¸ªà¹ˆà¸‡à¸¡à¸²à¸ˆà¸²à¸à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­à¹à¸¥à¸°à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</p>
+            </div>
+        </section>
+
+
+        <!-- Overview -->
+        <section class="report-overview">
+
+            <div class="overview-card">
+                <div class="overview-icon icon-orange">ðŸ“‹</div>
+
+                <div class="overview-info">
+                    <p>à¸£à¸²à¸¢à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”</p>
+                    <h2 id="total-reports">3</h2>
+                    <span>à¸£à¸²à¸¢à¸à¸²à¸£</span>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-icon icon-yellow">â³</div>
+
+                <div class="overview-info">
+                    <p>à¸£à¸­à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š</p>
+                    <h2 id="pending-reports">2</h2>
+                    <span>à¸£à¸²à¸¢à¸à¸²à¸£</span>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-icon icon-green">âœ“</div>
+
+                <div class="overview-info">
+                    <p>à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¹à¸¥à¹‰à¸§</p>
+                    <h2 id="resolved-reports">1</h2>
+                    <span>à¸£à¸²à¸¢à¸à¸²à¸£</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Report list -->
+        <section class="reports-section">
+
+            <div class="reports-heading">
+                <div>
+                    <h2>à¸£à¸²à¸¢à¸à¸²à¸£à¸£à¸²à¸¢à¸‡à¸²à¸™</h2>
+                    <p>à¸£à¸²à¸¢à¸à¸²à¸£à¸›à¸±à¸à¸«à¸²à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹à¸ˆà¹‰à¸‡à¹€à¸‚à¹‰à¸²à¸¡à¸²</p>
+                </div>
+
+                <div class="report-count">
+                    <span id="visible-count">3</span> à¸£à¸²à¸¢à¸à¸²à¸£
+                </div>
+            </div>
+
+
+            <!-- Filters -->
+            <div class="report-toolbar">
+
+                <div class="report-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+                    </button>
+
+                    <button class="filter-btn" data-filter="pending">
+                        à¸£à¸­à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š
+                    </button>
+
+                    <button class="filter-btn" data-filter="resolved">
+                        à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¹à¸¥à¹‰à¸§
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- Table -->
+            <div class="table-wrapper">
+
+                <table class="reports-table">
+
+                    <thead>
+                        <tr>
+                            <th>à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸£à¸²à¸¢à¸‡à¸²à¸™</th>
+                            <th>à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¸­à¸­à¹€à¸”à¸­à¸£à¹Œ</th>
+                            <th>à¸œà¸¹à¹‰à¸£à¸²à¸¢à¸‡à¸²à¸™</th>
+                            <th>à¸›à¸£à¸°à¹€à¸ à¸—à¸›à¸±à¸à¸«à¸²</th>
+                            <th>à¸ªà¸–à¸²à¸™à¸°</th>
+                            <th>à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reports-table-body">
+
+                        <!-- Report 1 -->
+                        <tr data-status="pending">
+
+                            <td>
+                                <span class="report-id">RP001</span>
+                            </td>
+
+                            <td>
+                                <span class="order-id">CH001</span>
+                            </td>
+
+                            <td>
+                                <div class="reporter-cell">
+                                    <div class="reporter-avatar">à¸œ</div>
+                                    <span>à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="issue-text">
+                                    à¸ªà¸´à¸™à¸„à¹‰à¸²à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸•à¸²à¸¡à¸—à¸µà¹ˆà¸ªà¸±à¹ˆà¸‡
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-pending">
+                                    <span class="status-dot"></span>
+                                    à¸£à¸­à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="report-detail.html?id=RP001" class="detail-btn">
+                                    à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+
+                        <!-- Report 2 -->
+                        <tr data-status="pending">
+
+                            <td>
+                                <span class="report-id">RP002</span>
+                            </td>
+
+                            <td>
+                                <span class="order-id">CH002</span>
+                            </td>
+
+                            <td>
+                                <div class="reporter-cell">
+                                    <div class="reporter-avatar carrier-avatar">à¸£</div>
+                                    <span>à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸´à¹‰à¸§</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="issue-text">
+                                    à¸›à¸±à¸à¸«à¸²à¸à¸²à¸£à¸ªà¹ˆà¸‡à¸¡à¸­à¸š
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-pending">
+                                    <span class="status-dot"></span>
+                                    à¸£à¸­à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="report-detail.html?id=RP002" class="detail-btn">
+                                    à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+
+                        <!-- Report 3 -->
+                        <tr data-status="resolved">
+
+                            <td>
+                                <span class="report-id">RP003</span>
+                            </td>
+
+                            <td>
+                                <span class="order-id">CH003</span>
+                            </td>
+
+                            <td>
+                                <div class="reporter-cell">
+                                    <div class="reporter-avatar">à¸œ</div>
+                                    <span>à¸œà¸¹à¹‰à¸à¸²à¸à¸‹à¸·à¹‰à¸­</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="issue-text">
+                                    à¸›à¸±à¸à¸«à¸²à¸à¸²à¸£à¸Šà¸³à¸£à¸°à¹€à¸‡à¸´à¸™
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-resolved">
+                                    <span class="status-dot"></span>
+                                    à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¹à¸¥à¹‰à¸§
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="report-detail.html?id=RP003" class="detail-btn">
+                                    à¸”à¸¹à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” <span>â†’</span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Empty state -->
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">ðŸ“‹</div>
+                <h3>à¹„à¸¡à¹ˆà¸žà¸šà¸£à¸²à¸¢à¸‡à¸²à¸™</h3>
+                <p>à¹„à¸¡à¹ˆà¸¡à¸µà¸£à¸²à¸¢à¸‡à¸²à¸™à¹ƒà¸™à¸ªà¸–à¸²à¸™à¸°à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>CarryHub Â© 2026</p>
+    </footer>
+
+
+    <script>
+        // à¹€à¸¥à¸·à¸­à¸à¸à¸£à¸­à¸‡à¸£à¸²à¸¢à¸‡à¸²à¸™à¸•à¸²à¸¡à¸ªà¸–à¸²à¸™à¸°
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const reportRows = document.querySelectorAll(
+            "#reports-table-body tr"
+        );
+
+        const emptyState = document.getElementById("empty-state");
+        const visibleCount = document.getElementById("visible-count");
+
+        function filterReports(status) {
+            let count = 0;
+
+            reportRows.forEach(row => {
+                const rowStatus = row.dataset.status;
+
+                const showRow =
+                    status === "all" || rowStatus === status;
+
+                row.hidden = !showRow;
+
+                if (showRow) {
+                    count++;
+                }
+            });
+
+            visibleCount.textContent = count;
+            emptyState.hidden = count !== 0;
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+
+                filterButtons.forEach(item => {
+                    item.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                filterReports(button.dataset.filter);
+            });
+        });
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+    <script src="/js/navbar.js"></script>
+</body>
+
+</html>

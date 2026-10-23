@@ -11,13 +11,32 @@
 
 <body>
 
-    <header class="navbar">
-        <a href="index.html" class="logo">CarryHub</a>
-        <nav>
-            <a href="rounds.html">รอบรับหิ้ว</a>
-            <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
-        </nav>
-    </header>
+  <header class="navbar">
+    <a href="index.html" class="logo">CarryHub</a>
+
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="เปิดเมนู"
+        aria-expanded="false"
+        aria-controls="navMenu"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="navMenu">
+        <a href="index.html">หน้าแรก</a>
+        <a href="rounds.html">รอบรับหิ้ว</a>
+        <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+        <a href="orders.html" class="nav-active">รายการของฉัน</a>
+        <a href="profile.html">โปรไฟล์</a>
+        <a href="login.html" class="btn btn-outline">เข้าสู่ระบบ</a>
+        <a href="register.html" class="btn btn-primary">ลงทะเบียน</a>
+    </nav>
+</header>
 
     <main class="container">
         <section class="success-card">
@@ -40,6 +59,36 @@
     </footer>
 
     <script src="/js/guest-access.js"></script>
+    <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    menuToggle.addEventListener("click", function () {
+        const isOpen = navMenu.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", isOpen);
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "ปิดเมนู" : "เปิดเมนู"
+        );
+    });
+
+    navMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        });
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 850) {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        }
+    });
+</script>
 </body>
 
 </html>

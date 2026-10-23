@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฝากซื้อสำเร็จ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/round-order-success.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html" class="active">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="container round-success-page">
+
+        <section class="success-card">
+
+            <div class="success-icon">✓</div>
+
+            <p class="success-label">ORDER PLACED</p>
+
+            <h1>ฝากซื้อสำเร็จแล้ว!</h1>
+
+            <p class="success-description">
+                คุณส่งรายการฝากซื้อเรียบร้อยแล้ว
+                สามารถตรวจสอบรายละเอียดและติดตามสถานะได้ที่รายการของฉัน
+            </p>
+
+            <div class="order-status">
+                <span class="status-dot"></span>
+                ส่งรายการฝากซื้อแล้ว
+            </div>
+
+            <div class="order-detail-card">
+
+                <div class="order-detail-heading">
+                    <div>
+                        <p class="detail-label">หมายเลขออเดอร์</p>
+                        <h2 id="order-id">RO001</h2>
+                    </div>
+
+                    <span class="order-badge">ฝากซื้อผ่านรอบ</span>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>ชื่อรอบรับหิ้ว</span>
+                    <strong id="round-name">รอบรับหิ้วชานม</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>หมายเลขรอบ</span>
+                    <strong id="round-id">RD001</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>ร้านค้า</span>
+                    <strong id="order-shop">ร้านชานมหน้ามหาวิทยาลัย</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>รายการสินค้า</span>
+                    <strong id="order-product">ชานม</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>จำนวน</span>
+                    <strong id="order-quantity">2 แก้ว</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>รายละเอียดเพิ่มเติม</span>
+                    <strong id="order-note">ไม่ระบุ</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>ผู้รับหิ้ว</span>
+                    <strong id="order-carrier">รอยืนยันข้อมูล</strong>
+                </div>
+
+                <div class="order-detail-row">
+                    <span>สถานะออเดอร์</span>
+                    <strong class="status-text">รอดำเนินการ</strong>
+                </div>
+
+            </div>
+
+            <div class="success-note">
+                <strong>ขั้นตอนต่อไป</strong>
+                <p>
+                    ผู้รับหิ้วจะดำเนินการตามรายการที่คุณส่งมา
+                    คุณสามารถเข้าไปดูความคืบหน้าของออเดอร์ได้จากหน้ารายการของฉัน
+                </p>
+            </div>
+
+            <div class="success-actions">
+                <a href="orders.html" class="btn btn-primary">
+                    ดูรายการของฉัน
+                </a>
+
+                <a href="rounds.html" class="btn btn-outline">
+                    กลับไปดูรอบรับหิ้ว
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const fields = {
+            "order-id": "orderId",
+            "round-name": "roundName",
+            "round-id": "roundId",
+            "order-shop": "shop",
+            "order-product": "product",
+            "order-quantity": "quantity",
+            "order-note": "note",
+            "order-carrier": "carrier"
+        };
+
+        Object.entries(fields).forEach(([elementId, paramName]) => {
+            const value = params.get(paramName);
+
+            if (value !== null && value.trim() !== "") {
+                document.getElementById(elementId).textContent = value;
+            }
+        });
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>
