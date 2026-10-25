@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กรอกรหัส OTP | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าหลัก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+        </nav>
+    </header>
+
+    <main class="verify-container">
+        <div class="verify-card">
+
+            <div class="verify-step">ขั้นตอนที่ 2 จาก 2</div>
+
+            <h1>กรอกรหัส OTP</h1>
+            <p id="otp-description">กรอกรหัสยืนยัน 6 หลักที่ได้รับทาง SMS</p>
+            <p id="otp-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+            <form id="otp-form" hidden>
+                <label for="otp">รหัส OTP</label>
+                <input type="text" id="otp" name="otp" placeholder="กรอกรหัส OTP 6 หลัก" maxlength="6"
+                    pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required>
+
+                <button id="verify-button" type="submit" class="btn-full">
+                    ยืนยันรหัส OTP
+                </button>
+            </form>
+
+            <div class="otp-actions">
+                <a id="back-link" href="login.html">ย้อนกลับไปเข้าสู่ระบบ</a>
+                <button id="resend-button" type="button" disabled>ขอรหัสใหม่</button>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const otpForm = document.getElementById("otp-form");
+        const otpInput = document.getElementById("otp");
+        const otpMessage = document.getElementById("otp-message");
+        const otpDescription = document.getElementById("otp-description");
+        const verifyButton = document.getElementById("verify-button");
+        const resendButton = document.getElementById("resend-button");
+        let verificationId;
+        let otpPurpose = "LOGIN";
+        let returnTo = "";
+
+        function showOtpMessage(message, success) {
+            otpMessage.textContent = message;
+            otpMessage.className = "form-message " + (success ? "success-message" : "error-message");
+            otpMessage.hidden = false;
+        }
+
+        function setButtonState(button, disabled, text) {
+            button.disabled = disabled;
+            button.textContent = text;
+        }
+
+        if (window.location.protocol === "file:") {
+            showOtpMessage(
+                "กรุณาเปิดหน้านี้ผ่าน http://localhost:8081/verify-otp.html หลังเข้าสู่ระบบหรือขอรีเซ็ตรหัสผ่าน ไม่สามารถใช้ OTP จากการเปิดไฟล์โดยตรงได้",
+                false
+            );
+            document.getElementById("back-link").href = "http://localhost:8081/login.html";
+            document.getElementById("back-link").textContent = "เปิดหน้าเข้าสู่ระบบ";
+        } else {
+            const queryContext = new URLSearchParams(window.location.search);
+            const fragmentContext = new URLSearchParams(window.location.hash.slice(1));
+            const contextVerificationId = queryContext.get("verificationId")
+                || fragmentContext.get("verificationId");
+            const contextPurpose = queryContext.get("purpose")
+                || fragmentContext.get("purpose");
+            returnTo = queryContext.get("returnTo") || "";
+            if (returnTo.charAt(0) !== "/" || returnTo.indexOf("//") === 0) {
+                returnTo = "";
+            }
+
+            try {
+                const savedVerificationId = contextVerificationId
+                    || sessionStorage.getItem("carryhub.verificationId")
+                    || localStorage.getItem("carryhub.verificationId");
+                otpPurpose = contextPurpose
+                    || sessionStorage.getItem("carryhub.otpPurpose")
+                    || localStorage.getItem("carryhub.otpPurpose")
+                    || "LOGIN";
+                const parsedVerificationId = Number(savedVerificationId);
+                if (savedVerificationId && Number.isInteger(parsedVerificationId) && parsedVerificationId > 0) {
+                    verificationId = parsedVerificationId;
+                    otpForm.hidden = false;
+                    resendButton.disabled = false;
+
+                    if (otpPurpose === "RESET_PASSWORD") {
+                        document.querySelector(".verify-step").textContent = "รีเซ็ตรหัสผ่าน";
+                        document.querySelector("h1").textContent = "ยืนยัน OTP";
+                        document.getElementById("back-link").href = "forgot-password.html";
+                        document.getElementById("back-link").textContent = "กลับไปขอรหัสใหม่";
+                        verifyButton.textContent = "ยืนยันรหัส OTP";
+                    }
+
+                    const maskedPhoneNumber = sessionStorage.getItem("carryhub.maskedPhoneNumber")
+                        || localStorage.getItem("carryhub.maskedPhoneNumber");
+                    if (maskedPhoneNumber) {
+                        otpDescription.textContent =
+                            "กรอกรหัสยืนยัน 6 หลักที่ส่งไปยังเบอร์ " + maskedPhoneNumber;
+                    }
+                }
+            } catch (error) {
+                if (!verificationId) {
+                    showOtpMessage("ไม่สามารถเรียกข้อมูลการยืนยันได้ กรุณาเข้าสู่ระบบเพื่อขอ OTP ใหม่", false);
+                } else {
+                    console.warn("Could not read optional OTP details from browser storage.", error);
+                }
+            }
+
+            if (!verificationId && otpMessage.hidden) {
+                showOtpMessage("ไม่พบข้อมูลการยืนยัน กรุณาเข้าสู่ระบบเพื่อขอ OTP ใหม่", false);
+            }
+        }
+
+        otpForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            if (!verificationId) {
+                showOtpMessage("ไม่พบข้อมูลการยืนยัน กรุณาเข้าสู่ระบบเพื่อขอ OTP ใหม่", false);
+                return;
+            }
+
+            setButtonState(verifyButton, true, "กำลังตรวจสอบ...");
+            resendButton.disabled = true;
+            otpMessage.hidden = true;
+
+            if (otpPurpose === "RESET_PASSWORD") {
+                try {
+                    sessionStorage.setItem("carryhub.resetOtp", otpInput.value.trim());
+                } catch (error) {
+                    showOtpMessage(
+                        "ไม่สามารถเก็บข้อมูลการยืนยันได้ กรุณาเปิดพื้นที่จัดเก็บข้อมูลแล้วลองใหม่",
+                        false
+                    );
+                    setButtonState(verifyButton, false, "ยืนยันรหัส OTP");
+                    resendButton.disabled = false;
+                    return;
+                }
+                window.location.href = "reset-password.html";
+                return;
+            }
+
+            let response;
+            try {
+                response = await fetch("/api/v1/auth/otp/verify", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        verificationId: verificationId,
+                        otp: otpInput.value.trim()
+                    })
+                });
+            } catch (error) {
+                showOtpMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", false);
+                setButtonState(verifyButton, false, "ยืนยันรหัส OTP");
+                resendButton.disabled = false;
+                return;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                showOtpMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง", false);
+                setButtonState(verifyButton, false, "ยืนยันรหัส OTP");
+                resendButton.disabled = false;
+                return;
+            }
+
+            if (!response.ok || !result || result.status !== "SUCCESS"
+                || !result.data || typeof result.data.token !== "string" || !result.data.token) {
+                const message = result && typeof result.message === "string"
+                    ? result.message
+                    : "ยืนยัน OTP ไม่สำเร็จ (HTTP " + response.status + ")";
+                showOtpMessage(message, false);
+                setButtonState(verifyButton, false, "ยืนยันรหัส OTP");
+                resendButton.disabled = false;
+                return;
+            }
+
+            try {
+                localStorage.setItem("tokenType", result.data.tokenType || "Bearer");
+                localStorage.setItem("token", result.data.token);
+            } catch (error) {
+                showOtpMessage(
+                    "ยืนยัน OTP แล้ว แต่ไม่สามารถบันทึกสถานะเข้าสู่ระบบได้ กรุณาเปิดพื้นที่จัดเก็บข้อมูลและลองเข้าสู่ระบบอีกครั้ง",
+                    false
+                );
+                setButtonState(verifyButton, false, "ยืนยันรหัส OTP");
+                resendButton.disabled = false;
+                return;
+            }
+
+            try {
+                sessionStorage.removeItem("carryhub.verificationId");
+                sessionStorage.removeItem("carryhub.otpPurpose");
+                sessionStorage.removeItem("carryhub.maskedPhoneNumber");
+                localStorage.removeItem("carryhub.verificationId");
+                localStorage.removeItem("carryhub.otpPurpose");
+                localStorage.removeItem("carryhub.maskedPhoneNumber");
+                sessionStorage.removeItem("carryhub.resetOtp");
+            } catch (error) {
+                console.warn("Could not clear the completed OTP verification state.", error);
+            }
+
+            const destination = returnTo ? new URL(returnTo, window.location.origin) : null;
+            window.location.href = destination && destination.origin === window.location.origin
+                ? destination.href
+                : "index.html";
+        });
+
+        resendButton.addEventListener("click", async function () {
+            if (!verificationId) {
+                showOtpMessage("ไม่พบข้อมูลการยืนยัน กรุณาเข้าสู่ระบบเพื่อขอ OTP ใหม่", false);
+                return;
+            }
+
+            setButtonState(resendButton, true, "กำลังส่ง...");
+            verifyButton.disabled = true;
+            otpMessage.hidden = true;
+
+            let response;
+            try {
+                response = await fetch("/api/v1/auth/otp/resend", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        verificationId: verificationId
+                    })
+                });
+            } catch (error) {
+                showOtpMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", false);
+                setButtonState(resendButton, false, "ขอรหัสใหม่");
+                verifyButton.disabled = false;
+                return;
+            }
+
+            let result;
+            try {
+                result = await response.json();
+            } catch (error) {
+                showOtpMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง", false);
+                setButtonState(resendButton, false, "ขอรหัสใหม่");
+                verifyButton.disabled = false;
+                return;
+            }
+
+            const newVerificationId = result && result.data && result.data.verificationId;
+            if (!response.ok || !result || result.status !== "SUCCESS"
+                || !Number.isInteger(newVerificationId) || newVerificationId <= 0) {
+                const message = result && typeof result.message === "string"
+                    ? result.message
+                    : "ไม่สามารถส่ง OTP ใหม่ได้ (HTTP " + response.status + ")";
+                showOtpMessage(message, false);
+                setButtonState(resendButton, false, "ขอรหัสใหม่");
+                verifyButton.disabled = false;
+                return;
+            }
+
+            try {
+                verificationId = newVerificationId;
+                sessionStorage.setItem("carryhub.verificationId", String(verificationId));
+                sessionStorage.setItem("carryhub.otpPurpose", otpPurpose);
+                sessionStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    result.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                showOtpMessage(
+                    "ส่ง OTP ใหม่แล้ว แต่เบราว์เซอร์ไม่สามารถเก็บข้อมูลยืนยันชั่วคราวได้ กรุณาเปิดใช้พื้นที่จัดเก็บข้อมูลแล้วลองอีกครั้ง",
+                    false
+                );
+                setButtonState(resendButton, false, "ขอรหัสใหม่");
+                verifyButton.disabled = false;
+                return;
+            }
+
+            try {
+                localStorage.setItem("carryhub.verificationId", String(verificationId));
+                localStorage.setItem("carryhub.otpPurpose", otpPurpose);
+                localStorage.setItem(
+                    "carryhub.maskedPhoneNumber",
+                    result.data.maskedPhoneNumber || ""
+                );
+            } catch (error) {
+                console.warn("Could not persist resent OTP context across tabs; continuing with this tab's session.", error);
+            }
+
+            const resentOtpContext = new URLSearchParams({
+                verificationId: String(verificationId),
+                purpose: otpPurpose
+            });
+            if (returnTo) {
+                resentOtpContext.set("returnTo", returnTo);
+            }
+            window.history.replaceState(
+                null,
+                "",
+                window.location.pathname + "?" + resentOtpContext.toString()
+            );
+
+            if (result.data.maskedPhoneNumber) {
+                otpDescription.textContent =
+                    "กรอกรหัสยืนยัน 6 หลักที่ส่งไปยังเบอร์ " + result.data.maskedPhoneNumber;
+            }
+            otpInput.value = "";
+            showOtpMessage("ส่งรหัส OTP ใหม่แล้ว", true);
+            setButtonState(resendButton, false, "ขอรหัสใหม่");
+            verifyButton.disabled = false;
+        });
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

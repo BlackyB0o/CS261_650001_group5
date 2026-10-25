@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฝากซื้อจากรอบ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="form-card">
+            <a id="order-round-back" href="rounds.html" class="back-link">← กลับไปหน้ารอบรับหิ้ว</a>
+            <h1>ฝากซื้อสินค้า/อาหาร</h1>
+            <p>กรอกรายการสินค้าที่ต้องการและจุดนัดรับ</p>
+            <p id="create-order-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+            <form id="create-order-form">
+                <div class="form-group">
+                    <label for="handoff-method">วิธีรับสินค้า</label>
+                    <select id="handoff-method" required>
+                        <option value="MEETUP">นัดรับ</option>
+                        <option value="DELIVERY">ส่งถึงที่</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="handoff-location">จุดนัดรับ/สถานที่จัดส่ง</label>
+                    <input id="handoff-location" type="text" maxlength="255" required>
+                </div>
+
+                <fieldset id="order-items">
+                    <legend>รายการสินค้า</legend>
+                    <div class="order-item-fields">
+                        <div class="form-group">
+                            <label>ชื่อสินค้า</label>
+                            <input name="productName" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>จำนวน</label>
+                            <input name="quantity" type="number" min="1" step="1" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>หมายเหตุ (ไม่บังคับ)</label>
+                            <input name="note" type="text">
+                        </div>
+                        <button class="remove-order-item" type="button" hidden>ลบรายการ</button>
+                    </div>
+                </fieldset>
+                <button id="add-order-item" type="button" class="btn btn-outline">+ เพิ่มสินค้า</button>
+
+                <div class="form-actions">
+                    <button id="create-order-button" type="submit" class="btn btn-primary">ยืนยันฝากซื้อ</button>
+                    <a href="rounds.html" class="btn btn-outline">ยกเลิก</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/create-order.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

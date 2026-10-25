@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>รายละเอียดรายงาน | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/report-detail.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+
+    <main class="report-detail-container">
+
+        <a href="admin-reports.html" class="back-link">
+            ← กลับไปรายการรายงาน
+        </a>
+
+        <section class="detail-heading">
+
+            <div>
+                <span class="page-label">ADMIN DASHBOARD</span>
+                <h1>รายละเอียดรายงาน</h1>
+                <p>ตรวจสอบข้อมูลปัญหาและบันทึกผลการดำเนินการ</p>
+            </div>
+
+            <span class="status-badge status-pending" id="current-status">
+                <span class="status-dot"></span>
+                รอตรวจสอบ
+            </span>
+
+        </section>
+
+        <section class="detail-card">
+
+            <div class="card-heading">
+                <div class="heading-icon">📋</div>
+
+                <div>
+                    <h2>ข้อมูลรายงาน</h2>
+                    <p>ข้อมูลเบื้องต้นของปัญหาที่ได้รับแจ้ง</p>
+                </div>
+            </div>
+
+            <div class="report-number-box">
+
+                <div>
+                    <span>หมายเลขรายงาน</span>
+                    <h3 id="report-id">RP001</h3>
+                </div>
+
+                <div class="report-date">
+                    <span>วันที่รายงาน</span>
+                    <strong>15 ตุลาคม 2026</strong>
+                </div>
+
+            </div>
+
+            <div class="report-info-grid">
+
+                <div class="info-item">
+                    <span class="info-label">หมายเลขออเดอร์</span>
+                    <strong class="info-value">CH001</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">ผู้รายงาน</span>
+
+                    <div class="reporter-info">
+                        <div class="reporter-avatar">ผ</div>
+                        <strong class="info-value">ผู้ฝากซื้อ</strong>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">ประเภทปัญหา</span>
+                    <strong class="info-value">สินค้าไม่ตรงตามที่สั่ง</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">สถานะปัจจุบัน</span>
+                    <strong class="info-value" id="status-text">
+                        รอตรวจสอบ
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="problem-description">
+
+                <h3>
+                    <span>⚠️</span>
+                    รายละเอียดปัญหา
+                </h3>
+
+                <p>
+                    ผู้ฝากซื้อแจ้งว่าได้รับสินค้าไม่ตรงตามรายการที่สั่งซื้อ
+                    จึงส่งรายงานเข้ามาเพื่อให้แอดมินตรวจสอบและดำเนินการแก้ไข
+                </p>
+
+            </div>
+
+        </section>
+
+        <section class="detail-card review-card">
+
+            <div class="card-heading">
+                <div class="heading-icon review-icon">📝</div>
+
+                <div>
+                    <h2>ผลการตรวจสอบ</h2>
+                    <p>เลือกสถานะและบันทึกผลการดำเนินการของแอดมิน</p>
+                </div>
+            </div>
+
+
+            <form id="review-form">
+
+                <div class="form-group">
+
+                    <label for="status">
+                        สถานะรายงาน <span class="required">*</span>
+                    </label>
+
+                    <select id="status" name="status" required>
+                        <option value="pending">รอตรวจสอบ</option>
+                        <option value="investigating">กำลังตรวจสอบ</option>
+                        <option value="resolved">แก้ไขแล้ว</option>
+                        <option value="rejected">ไม่รับเรื่อง</option>
+                    </select>
+
+                    <small>เลือกสถานะให้ตรงกับผลการตรวจสอบล่าสุด</small>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="admin-note">บันทึกจากแอดมิน</label>
+
+                    <textarea id="admin-note" name="admin-note" rows="5"
+                        placeholder="ระบุผลการตรวจสอบ แนวทางแก้ไข หรือเหตุผลในการไม่รับเรื่อง"></textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a href="admin-reports.html" class="btn btn-back">
+                        ยกเลิก
+                    </a>
+
+                    <button type="submit" class="btn btn-save">
+                        <span>✓</span>
+                        บันทึกผลการตรวจสอบ
+                    </button>
+
+                </div>
+
+                <p class="form-message" id="form-message" hidden></p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+
+    <script>
+        const statusSelect = document.getElementById("status");
+        const currentStatus = document.getElementById("current-status");
+        const statusText = document.getElementById("status-text");
+        const reviewForm = document.getElementById("review-form");
+        const formMessage = document.getElementById("form-message");
+
+        const statusLabels = {
+            pending: "รอตรวจสอบ",
+            investigating: "กำลังตรวจสอบ",
+            resolved: "แก้ไขแล้ว",
+            rejected: "ไม่รับเรื่อง"
+        };
+
+        const statusClasses = {
+            pending: "status-pending",
+            investigating: "status-investigating",
+            resolved: "status-resolved",
+            rejected: "status-rejected"
+        };
+
+        function updateStatusDisplay(status) {
+            currentStatus.className =
+                "status-badge " + statusClasses[status];
+
+            currentStatus.innerHTML =
+                '<span class="status-dot"></span>' +
+                statusLabels[status];
+
+            statusText.textContent = statusLabels[status];
+        }
+
+        statusSelect.addEventListener("change", () => {
+            updateStatusDisplay(statusSelect.value);
+        });
+
+        reviewForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const selectedStatus = statusSelect.value;
+            const note = document.getElementById("admin-note").value.trim();
+
+            updateStatusDisplay(selectedStatus);
+
+            formMessage.hidden = false;
+            formMessage.className = "form-message success-message";
+            formMessage.textContent =
+                "เปลี่ยนสถานะเป็น \"" +
+                statusLabels[selectedStatus] +
+                "\" แล้ว" +
+                (note ? " และรับบันทึกข้อความบนหน้าจอแล้ว" : "");
+
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+        });
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

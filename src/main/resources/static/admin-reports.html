@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>จัดการรายงานปัญหา | CarryHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin-reports.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+
+    <main class="admin-reports-container">
+
+        <!-- Page heading -->
+        <section class="page-heading">
+            <div>
+                <span class="page-label">ADMIN DASHBOARD</span>
+                <h1>จัดการรายงานปัญหา</h1>
+                <p>ตรวจสอบรายงานปัญหาที่ส่งมาจากผู้ฝากซื้อและผู้รับหิ้ว</p>
+            </div>
+        </section>
+
+
+        <!-- Overview -->
+        <section class="report-overview">
+
+            <div class="overview-card">
+                <div class="overview-icon icon-orange">📋</div>
+
+                <div class="overview-info">
+                    <p>รายงานทั้งหมด</p>
+                    <h2 id="total-reports">3</h2>
+                    <span>รายการ</span>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-icon icon-yellow">⏳</div>
+
+                <div class="overview-info">
+                    <p>รอตรวจสอบ</p>
+                    <h2 id="pending-reports">2</h2>
+                    <span>รายการ</span>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-icon icon-green">✓</div>
+
+                <div class="overview-info">
+                    <p>ตรวจสอบแล้ว</p>
+                    <h2 id="resolved-reports">1</h2>
+                    <span>รายการ</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Report list -->
+        <section class="reports-section">
+
+            <div class="reports-heading">
+                <div>
+                    <h2>รายการรายงาน</h2>
+                    <p>รายการปัญหาทั้งหมดที่ผู้ใช้แจ้งเข้ามา</p>
+                </div>
+
+                <div class="report-count">
+                    <span id="visible-count">3</span> รายการ
+                </div>
+            </div>
+
+
+            <!-- Filters -->
+            <div class="report-toolbar">
+
+                <div class="report-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        ทั้งหมด
+                    </button>
+
+                    <button class="filter-btn" data-filter="pending">
+                        รอตรวจสอบ
+                    </button>
+
+                    <button class="filter-btn" data-filter="resolved">
+                        ตรวจสอบแล้ว
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- Table -->
+            <div class="table-wrapper">
+
+                <table class="reports-table">
+
+                    <thead>
+                        <tr>
+                            <th>หมายเลขรายงาน</th>
+                            <th>หมายเลขออเดอร์</th>
+                            <th>ผู้รายงาน</th>
+                            <th>ประเภทปัญหา</th>
+                            <th>สถานะ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reports-table-body">
+
+                        <!-- Report 1 -->
+                        <tr data-status="pending">
+
+                            <td>
+                                <span class="report-id">RP001</span>
+                            </td>
+
+                            <td>
+                                <span class="order-id">CH001</span>
+                            </td>
+
+                            <td>
+                                <div class="reporter-cell">
+                                    <div class="reporter-avatar">ผ</div>
+                                    <span>ผู้ฝากซื้อ</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="issue-text">
+                                    สินค้าไม่ตรงตามที่สั่ง
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-pending">
+                                    <span class="status-dot"></span>
+                                    รอตรวจสอบ
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="report-detail.html?id=RP001" class="detail-btn">
+                                    ดูรายละเอียด <span>→</span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+
+                        <!-- Report 2 -->
+                        <tr data-status="pending">
+
+                            <td>
+                                <span class="report-id">RP002</span>
+                            </td>
+
+                            <td>
+                                <span class="order-id">CH002</span>
+                            </td>
+
+                            <td>
+                                <div class="reporter-cell">
+                                    <div class="reporter-avatar carrier-avatar">ร</div>
+                                    <span>ผู้รับหิ้ว</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="issue-text">
+                                    ปัญหาการส่งมอบ
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-pending">
+                                    <span class="status-dot"></span>
+                                    รอตรวจสอบ
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="report-detail.html?id=RP002" class="detail-btn">
+                                    ดูรายละเอียด <span>→</span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+
+                        <!-- Report 3 -->
+                        <tr data-status="resolved">
+
+                            <td>
+                                <span class="report-id">RP003</span>
+                            </td>
+
+                            <td>
+                                <span class="order-id">CH003</span>
+                            </td>
+
+                            <td>
+                                <div class="reporter-cell">
+                                    <div class="reporter-avatar">ผ</div>
+                                    <span>ผู้ฝากซื้อ</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="issue-text">
+                                    ปัญหาการชำระเงิน
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-resolved">
+                                    <span class="status-dot"></span>
+                                    ตรวจสอบแล้ว
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="report-detail.html?id=RP003" class="detail-btn">
+                                    ดูรายละเอียด <span>→</span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Empty state -->
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">📋</div>
+                <h3>ไม่พบรายงาน</h3>
+                <p>ไม่มีรายงานในสถานะที่เลือก</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+
+    <script>
+        // เลือกกรองรายงานตามสถานะ
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const reportRows = document.querySelectorAll(
+            "#reports-table-body tr"
+        );
+
+        const emptyState = document.getElementById("empty-state");
+        const visibleCount = document.getElementById("visible-count");
+
+        function filterReports(status) {
+            let count = 0;
+
+            reportRows.forEach(row => {
+                const rowStatus = row.dataset.status;
+
+                const showRow =
+                    status === "all" || rowStatus === status;
+
+                row.hidden = !showRow;
+
+                if (showRow) {
+                    count++;
+                }
+            });
+
+            visibleCount.textContent = count;
+            emptyState.hidden = count !== 0;
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+
+                filterButtons.forEach(item => {
+                    item.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                filterReports(button.dataset.filter);
+            });
+        });
+    </script>
+
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>
