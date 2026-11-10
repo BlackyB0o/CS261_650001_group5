@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.CreateDeliveryRoundRequestDTO;
 import com.example.demo.dto.DeliveryRoundResponseDTO;
+import com.example.demo.dto.RoundSearchRequestDTO;
 import com.example.demo.dto.RoundStatusResponseDTO;
 import com.example.demo.dto.UpdateRoundStatusRequestDTO;
 import com.example.demo.entity.DeliveryRound;
@@ -10,9 +11,15 @@ import com.example.demo.exception.ApiException;
 import com.example.demo.repository.DeliveryRoundRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.DeliveryRoundService;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +35,9 @@ public class DeliveryRoundServiceImpl implements DeliveryRoundService {
             "CLOSED", Set.of("COMPLETED", "CANCELLED"),
             "COMPLETED", Set.of(),
             "CANCELLED", Set.of());
+
+    /** จำนวนรอบต่อหน้าเมื่อไม่ส่ง size (Task31) */
+    static final int DEFAULT_PAGE_SIZE = 20;
 
     private final DeliveryRoundRepository deliveryRoundRepository;
     private final UserRepository userRepository;
@@ -49,11 +59,40 @@ public class DeliveryRoundServiceImpl implements DeliveryRoundService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DeliveryRoundResponseDTO> getRounds(String status) {
-        String filter = status == null ? "OPEN" : status;
-        return deliveryRoundRepository.findByStatusOrderByScheduledAtAsc(filter).stream()
-                .map(DeliveryRoundServiceImpl::toDto)
-                .toList();
+    public Page<DeliveryRoundResponseDTO> getRounds(RoundSearchRequestDTO criteria) {
+        String status = criteria.getStatus() == null ? "OPEN" : criteria.getStatus();
+        String keyword = toLikePattern(criteria.getKeyword());
+        int page = criteria.getPage() == null ? 1 : criteria.getPage();
+        int size = criteria.getSize() == null ? DEFAULT_PAGE_SIZE : criteria.getSize();
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<DeliveryRound> rounds;
+        if (criteria.getDate() == null || criteria.getDate().isBlank()) {
+            rounds = deliveryRoundRepository.search(status, keyword, pageable);
+        } else {
+            LocalDate day = parseDate(criteria.getDate());
+            rounds = deliveryRoundRepository.searchByDate(status, keyword,
+                    day.atStartOfDay(), day.plusDays(1).atStartOfDay(), pageable);
+        }
+        return rounds.map(DeliveryRoundServiceImpl::toDto);
+    }
+
+    /** คำค้นว่างหรือไม่ส่ง = ทุกรอบ ("%") ส่วน % _ ! ที่ผู้ใช้พิมพ์มาให้ถือเป็นตัวอักษรธรรมดา */
+    static String toLikePattern(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return "%";
+        }
+        String escaped = keyword.trim().toLowerCase(Locale.ROOT)
+                .replace("!", "!!").replace("%", "!%").replace("_", "!_");
+        return "%" + escaped + "%";
+    }
+
+    /** DTO ตรวจรูปแบบ yyyy-MM-dd แล้ว ที่นี่กันวันที่ไม่มีจริง เช่น 2026-02-30 */
+    private static LocalDate parseDate(String date) {
+        try {
+            return LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            throw ApiException.validation("date", "must be a valid date in yyyy-MM-dd format");
+        }
     }
 
     @Override
