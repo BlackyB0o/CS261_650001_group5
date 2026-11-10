@@ -108,6 +108,18 @@ Content-Type: application/json
 ### 10. Guest ดูรอบที่เปิดอยู่ (ไม่ต้องมี token)
 GET {{baseUrl}}/delivery-rounds
 
+### 10.1 Task31 (US02) ค้นหาด้วยคำค้น (ชื่อร้าน สถานที่ หรือชื่อผู้รับหิ้ว ไม่สนตัวพิมพ์เล็กใหญ่)
+GET {{baseUrl}}/delivery-rounds?keyword=starbucks
+
+### 10.2 Task31 (US02) ค้นหาด้วยคำค้นและวันที่
+GET {{baseUrl}}/delivery-rounds?keyword=sc1&date=2030-10-25
+
+### 10.3 Task31 (US02) วันที่ผิดรูปแบบ (ควรได้ 400)
+GET {{baseUrl}}/delivery-rounds?date=25-10-2030
+
+### 10.4 Task31 (US02) แบ่งหน้า หน้า 1 หน้าละ 5 รอบ (ดูจำนวนทั้งหมดที่ pagination)
+GET {{baseUrl}}/delivery-rounds?page=1&size=5
+
 ### 11. รอบของฉัน (A)
 GET {{baseUrl}}/delivery-rounds/my
 Authorization: Bearer {{verifyRunner.response.body.data.token}}

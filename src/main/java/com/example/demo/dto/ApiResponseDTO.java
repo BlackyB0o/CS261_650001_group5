@@ -15,6 +15,8 @@ public class ApiResponseDTO<T> {
     private String message;
     private T data;
     private List<FieldErrorDTO> errors;
+    /** มีเฉพาะ endpoint ที่แบ่งหน้า (Task31 GET /delivery-rounds) */
+    private PageMetaDTO pagination;
 
     public ApiResponseDTO(String status, String message, T data, List<FieldErrorDTO> errors) {
         this.status = status;
@@ -31,6 +33,13 @@ public class ApiResponseDTO<T> {
     /** สำเร็จแบบไม่มี message (GET) */
     public static <T> ApiResponseDTO<T> success(T data) {
         return new ApiResponseDTO<>("SUCCESS", null, data, null);
+    }
+
+    /** สำเร็จแบบแบ่งหน้า data เป็นรายการของหน้านั้น และมี pagination บอกจำนวนทั้งหมด */
+    public static <T> ApiResponseDTO<T> success(T data, PageMetaDTO pagination) {
+        ApiResponseDTO<T> response = new ApiResponseDTO<>("SUCCESS", null, data, null);
+        response.pagination = pagination;
+        return response;
     }
 
     /** สำเร็จแบบไม่มี data */
