@@ -44,6 +44,18 @@
 - `message` ใส่เมื่อมีการสร้างหรือเปลี่ยนข้อมูล (POST/PATCH) ส่วน GET ไม่ต้องมี
 - `errors` ไม่ส่งเมื่อสำเร็จ
 
+### สำเร็จแบบแบ่งหน้า (เพิ่มใน Sprint 2 Task29/31)
+endpoint ที่แบ่งหน้าได้ (ตอนนี้มี `GET /api/v1/delivery-rounds`) รับ query `page` (เริ่มที่ 1) และ `size` (1 ถึง 100) `data` ยังเป็น array ของหน้านั้นเหมือนเดิม และมี `pagination` เพิ่ม
+```json
+{
+  "status": "SUCCESS",
+  "data": [ ],
+  "pagination": { "page": 1, "size": 20, "totalItems": 45, "totalPages": 3 }
+}
+```
+- endpoint ที่ไม่แบ่งหน้าจะไม่มี `pagination`
+- ขอหน้าที่เกินจำนวนหน้าที่มี ได้ `200` และ `data` เป็น `[]`
+
 ### ผิดพลาด
 ```json
 {
@@ -64,10 +76,18 @@ classDiagram
         -String message
         -T data
         -List~FieldErrorDTO~ errors
+        -PageMetaDTO pagination
         +getStatus() String
         +getMessage() String
         +getData() T
         +getErrors() List~FieldErrorDTO~
+        +getPagination() PageMetaDTO
+    }
+    class PageMetaDTO {
+        -int page
+        -int size
+        -long totalItems
+        -int totalPages
     }
     class FieldErrorDTO {
         -String field
@@ -76,6 +96,7 @@ classDiagram
         +getMessage() String
     }
     ApiResponseDTO ..> FieldErrorDTO : errors
+    ApiResponseDTO ..> PageMetaDTO : pagination
 ```
 
 ### HTTP Status ที่ใช้
