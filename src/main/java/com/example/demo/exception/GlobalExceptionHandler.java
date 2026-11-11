@@ -128,7 +128,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private List<FieldErrorDTO> toFieldErrors(BindException ex) {
         Map<String, String> byField = new LinkedHashMap<>();
         for (FieldError fe : ex.getBindingResult().getFieldErrors()) {
-            String msg = fe.getDefaultMessage() == null ? "invalid value" : fe.getDefaultMessage();
+            // แปลงชนิดข้อมูลไม่ได้ เช่น page=abc ให้ข้อความสั้นแทน message ยาวของ Spring
+            String msg = fe.isBindingFailure() ? "has an invalid format"
+                    : fe.getDefaultMessage() == null ? "invalid value" : fe.getDefaultMessage();
             String old = byField.get(fe.getField());
             if (old == null || (msg.startsWith("must not be") && !old.startsWith("must not be"))) {
                 byField.put(fe.getField(), msg);

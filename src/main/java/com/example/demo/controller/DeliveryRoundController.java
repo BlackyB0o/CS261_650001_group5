@@ -4,37 +4,35 @@ import com.example.demo.common.RequestAttributes;
 import com.example.demo.dto.ApiResponseDTO;
 import com.example.demo.dto.CreateDeliveryRoundRequestDTO;
 import com.example.demo.dto.DeliveryRoundResponseDTO;
-import com.example.demo.dto.FieldErrorDTO;
+import com.example.demo.dto.PageMetaDTO;
+import com.example.demo.dto.RoundSearchRequestDTO;
 import com.example.demo.dto.RoundStatusResponseDTO;
 import com.example.demo.dto.UpdateRoundStatusRequestDTO;
-import com.example.demo.exception.ApiException;
 import com.example.demo.service.DeliveryRoundService;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Task08 รอบหิ้ว
+ * Task08 รอบหิ้ว + Task31 (US02) ค้นหารอบ
  * GET list/detail เปิดให้ Guest ดูได้ ส่วนที่เหลือต้องมี token (userId จาก JWT)
  */
 @RestController
 @RequestMapping("/api/v1/delivery-rounds")
 @RequiredArgsConstructor
 public class DeliveryRoundController {
-
-    private static final Set<String> STATUSES = Set.of("OPEN", "CLOSED", "COMPLETED", "CANCELLED");
 
     private final DeliveryRoundService deliveryRoundService;
 
@@ -47,15 +45,16 @@ public class DeliveryRoundController {
                 .body(ApiResponseDTO.success("Delivery round created successfully", data));
     }
 
-    /** Guest ดูได้ ไม่ส่ง status = เฉพาะรอบ OPEN */
+    /**
+     * Guest ดูได้ ไม่ส่ง status = เฉพาะรอบ OPEN
+     * Task31 (US02) ค้นหาเพิ่มด้วย keyword (ร้าน/สถานที่/ผู้รับหิ้ว) และ date (yyyy-MM-dd)
+     * แบ่งหน้าด้วย page (เริ่มที่ 1) และ size (ไม่ส่ง = 20) data ยังเป็น array เหมือนเดิม
+     */
     @GetMapping
     public ResponseEntity<ApiResponseDTO<List<DeliveryRoundResponseDTO>>> getRounds(
-            @RequestParam(required = false) String status) {
-        if (status != null && !STATUSES.contains(status)) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed", List.of(
-                    new FieldErrorDTO("status", "must be one of OPEN, CLOSED, COMPLETED, CANCELLED")));
-        }
-        return ResponseEntity.ok(ApiResponseDTO.success(deliveryRoundService.getRounds(status)));
+            @Valid @ModelAttribute RoundSearchRequestDTO criteria) {
+        Page<DeliveryRoundResponseDTO> page = deliveryRoundService.getRounds(criteria);
+        return ResponseEntity.ok(ApiResponseDTO.success(page.getContent(), PageMetaDTO.from(page)));
     }
 
     @GetMapping("/my")
