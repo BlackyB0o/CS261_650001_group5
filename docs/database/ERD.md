@@ -19,7 +19,6 @@ erDiagram
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
         varchar phone_number UK "NOT NULL"
-        varchar role "NOT NULL"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
@@ -27,8 +26,8 @@ erDiagram
     DELIVERY_ROUNDS {
         bigint id PK
         bigint runner_id FK "NOT NULL"
-        varchar store_name
-        varchar location_name
+        varchar store_name "NOT NULL"
+        varchar location_name "NOT NULL"
         timestamp scheduled_at "NOT NULL"
         decimal service_fee "NOT NULL, >=0"
         varchar status "NOT NULL"
@@ -76,3 +75,4 @@ erDiagram
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         varchar completion_status "NOT NULL"
     }
+```
