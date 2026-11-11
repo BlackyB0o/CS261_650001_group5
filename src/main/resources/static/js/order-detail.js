@@ -1,488 +1,409 @@
 (function () {
-    const main = document.querySelector(".order-detail-page");
+    "use strict";
+
     const orderId = new URLSearchParams(window.location.search).get("orderId");
-    let order;
-    let payment;
+    const $ = (id) => document.getElementById(id);
+    let order = null;
+    let payment = null;
+    let isCarrier = false;
 
-    function element(tag, className, text) {
-        const node = document.createElement(tag);
-        if (className) {
-            node.className = className;
-        }
-        if (text != null) {
-            node.textContent = text;
-        }
-        return node;
-    }
+    const orderStatusText = {
+        PENDING: "รอชำระเงิน",
+        PAID: "ชำระเงินแล้ว",
+        ACCEPTED: "ผู้รับหิ้วรับงานแล้ว",
+        IN_PROGRESS: "กำลังดำเนินการ",
+        PURCHASING: "กำลังซื้อสินค้า",
+        READY_FOR_DELIVERY: "รอส่งมอบสินค้า",
+        DELIVERING: "กำลังส่งมอบสินค้า",
+        COMPLETED: "สำเร็จ",
+        CANCELLED: "ยกเลิกแล้ว"
+    };
 
-    function showMessage(text, isError) {
-        main.replaceChildren();
-        const message = element("p", "form-message " + (isError ? "error-message" : ""), text);
-        message.setAttribute("role", "status");
-        main.appendChild(message);
-        main.appendChild(element("a", "", "กลับไปรายการของฉัน")).href = "/orders.html#round-orders-panel";
-    }
-
-    function formatDate(value) {
-        const date = new Date(value);
-        return Number.isNaN(date.getTime())
-            ? value || "-"
-            : new Intl.DateTimeFormat("th-TH", { dateStyle: "full", timeStyle: "short" }).format(date);
-    }
+    const paymentStatusText = {
+        PENDING: "รอชำระเงิน",
+        HELD: "ชำระแล้ว (เงินพักในระบบ)",
+        PAID: "ชำระแล้ว",
+        FAILED: "ชำระเงินไม่สำเร็จ",
+        REFUNDED: "คืนเงินแล้ว"
+    };
 
     function money(value) {
-        const amount = Number(value);
-        return Number.isFinite(amount) ? amount.toLocaleString("th-TH", { minimumFractionDigits: 2 }) + " บาท" : "-";
+        const n = Number(value);
+        return Number.isFinite(n)
+            ? n.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " บาท"
+            : "-";
     }
 
-    function addMeta(grid, label, value) {
-        const item = element("div");
-        item.append(element("span", "", label), element("strong", "", value == null || value === "" ? "-" : value));
-        grid.appendChild(item);
-    }
-
-    function currentUserId() {
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                return null;
-            }
-            const encoded = token.split(".")[1];
-            const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
-            const claims = JSON.parse(atob(base64 + "=".repeat((4 - base64.length % 4) % 4)));
-            const userId = Number(claims.sub);
-            return Number.isSafeInteger(userId) && userId > 0 ? userId : null;
-        } catch (error) {
-            return null;
-        }
+    function dateText(value) {
+        if (!value) return "-";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime())
+            ? String(value)
+            : new Intl.DateTimeFormat("th-TH", { dateStyle: "medium", timeStyle: "short" }).format(date);
     }
 
     function authHeaders(json) {
         const token = localStorage.getItem("token");
-        if (!token) {
-            return null;
-        }
+        if (!token) return null;
         const headers = {
             "Authorization": (localStorage.getItem("tokenType") || "Bearer") + " " + token
         };
-        if (json) {
-            headers["Content-Type"] = "application/json";
-        }
+        if (json) headers["Content-Type"] = "application/json";
         return headers;
     }
 
-    function sendToLogin() {
-        window.location.replace("/login.html?returnTo="
-            + encodeURIComponent(window.location.pathname + window.location.search));
+    function redirectLogin() {
+        window.location.replace("/login.html?returnTo=" +
+            encodeURIComponent(window.location.pathname + window.location.search));
     }
 
-    async function readResponse(response) {
+    async function parseResponse(response) {
+        let data;
         try {
-            return await response.json();
-        } catch (error) {
-            throw new Error("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง");
+            data = await response.json();
+        } catch (_) {
+            throw new Error("เซิร์ฟเวอร์ตอบกลับข้อมูลไม่ถูกต้อง");
         }
+        return data;
     }
 
-    function displayPaymentSection(isRunner) {
-        const section = element("section", "order-section-card");
-        section.id = "payment-section";
-        section.appendChild(element("h2", "", isRunner ? "กำหนดราคาสินค้า" : "ชำระเงินผ่านระบบตัวกลาง"));
-        const message = element("p", "form-message");
-        message.id = "payment-message";
-        message.hidden = true;
-        section.appendChild(message);
+    function showPageMessage(message, isError) {
+        const box = $("page-message");
+        box.hidden = false;
+        box.textContent = message;
+        box.className = "page-message" + (isError ? " error-message" : "");
+    }
 
-        if (isRunner) {
-            const form = element("form");
-            form.id = "set-price-form";
-            const label = element("label", "", "ราคารวมสินค้า (บาท)");
-            label.htmlFor = "product-amount";
-            const amount = element("input");
-            amount.id = "product-amount";
-            amount.type = "number";
-            amount.min = "0.01";
-            amount.step = "0.01";
-            amount.required = true;
-            if (payment && payment.productAmount != null) {
-                amount.value = payment.productAmount;
-            }
-            const submit = element("button", "btn btn-primary", "บันทึกราคาสินค้า");
-            submit.type = "submit";
-            form.append(label, amount, submit);
-            section.appendChild(form);
-            form.addEventListener("submit", setPrice);
+    function showPaymentMessage(message, isError) {
+        const box = $("payment-message");
+        box.hidden = false;
+        box.textContent = message;
+        box.className = "form-message " + (isError ? "error-message" : "success-message");
+    }
+
+    function make(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined && text !== null) node.textContent = text;
+        return node;
+    }
+
+    function statusLabel(status) {
+        return orderStatusText[status] || status || "ไม่ระบุสถานะ";
+    }
+
+    function renderOrder(data) {
+        order = data;
+        $("order-number").textContent = data.orderId ?? orderId;
+        $("order-date").textContent = dateText(data.createdAt);
+        $("order-round").textContent = data.roundId ? "รอบ #" + data.roundId : "-";
+        $("order-location").textContent = data.handoffLocation || "-";
+
+        const status = $("order-status");
+        status.textContent = statusLabel(data.status);
+        status.className = "order-status status-" + String(data.status || "pending").toLowerCase();
+
+        $("buyer-name").textContent = data.buyerName || "-";
+        $("buyer-avatar").textContent = (data.buyerName || "B").trim().charAt(0).toUpperCase();
+        $("carrier-name").textContent = data.carrierName || data.runnerName || "ยังไม่มีผู้รับหิ้ว";
+        $("carrier-avatar").textContent = (data.carrierName || data.runnerName || "C").trim().charAt(0).toUpperCase();
+
+        const itemsBox = $("order-items");
+        itemsBox.replaceChildren();
+        const items = Array.isArray(data.items) ? data.items : [];
+        $("item-count").textContent = items.length + " รายการ";
+
+        if (items.length === 0) {
+            itemsBox.appendChild(make("p", "muted", "ไม่พบรายการสินค้า"));
+        } else {
+            items.forEach(function (item) {
+                const row = make("article", "order-product");
+                const icon = make("div", "product-placeholder", "CH");
+                const info = make("div", "order-product-info");
+                info.append(
+                    make("h3", "", item.productName || "สินค้า"),
+                    make("p", "", "จำนวน " + (item.quantity ?? "-") + (item.unit || " ชิ้น"))
+                );
+                if (item.note) info.appendChild(make("small", "item-note", "หมายเหตุ: " + item.note));
+                row.append(icon, info);
+                itemsBox.appendChild(row);
+            });
         }
 
-        const summary = element("div");
-        summary.id = "payment-summary";
-        section.appendChild(summary);
+        const summary = $("order-price-summary");
+        summary.replaceChildren();
+        const productTotal = items.reduce((sum, item) => {
+            const price = Number(item.subtotal ?? item.totalPrice ?? 0);
+            return sum + (Number.isFinite(price) ? price : 0);
+        }, 0);
+        summary.append(
+            priceRow("วิธีรับสินค้า", data.handoffMethod === "MEETUP" ? "นัดรับ" :
+                data.handoffMethod === "DELIVERY" ? "จัดส่ง" : (data.handoffMethod || "-")),
+            priceRow("สถานที่รับสินค้า", data.handoffLocation || "-")
+        );
 
-        if (!isRunner) {
-            const form = element("form");
-            form.id = "payment-slip-form";
-            const amountLabel = element("label", "", "ยอดที่ชำระ (บาท)");
-            amountLabel.htmlFor = "paid-amount";
-            const amount = element("input");
-            amount.id = "paid-amount";
-            amount.name = "paidAmount";
-            amount.type = "number";
-            amount.min = "0.01";
-            amount.step = "0.01";
-            amount.required = true;
-            const fileLabel = element("label", "", "แนบสลิป (JPEG หรือ PNG, ไม่เกิน 5 MB)");
-            fileLabel.htmlFor = "slip-image";
-            const file = element("input");
-            file.id = "slip-image";
-            file.name = "slipImage";
-            file.type = "file";
-            file.accept = "image/jpeg,image/png";
-            file.required = true;
-            const submit = element("button", "btn btn-primary", "ยืนยันชำระเงิน");
-            submit.type = "submit";
-            form.append(amountLabel, amount, fileLabel, file, submit);
-            section.appendChild(form);
-            form.addEventListener("submit", submitSlip);
+        $("round-link").href = "/round-detail.html?roundId=" + encodeURIComponent(data.roundId || "");
+        $("report-button").href = "/report.html?orderId=" + encodeURIComponent(data.orderId || orderId);
+        renderTimeline(data.status);
+    }
+
+    function priceRow(label, value) {
+        const row = make("div", "price-row");
+        row.append(make("span", "", label), make("strong", "", value));
+        return row;
+    }
+
+    function renderTimeline(status) {
+        const steps = [
+            { title: "สร้างรายการสั่งซื้อ", detail: "ระบบได้รับรายการสั่งซื้อแล้ว", states: ["PENDING", "PAID", "ACCEPTED", "IN_PROGRESS", "PURCHASING", "READY_FOR_DELIVERY", "DELIVERING", "COMPLETED"] },
+            { title: "ชำระเงิน", detail: "ตรวจสอบการชำระเงินผ่านระบบตัวกลาง", states: ["PAID", "ACCEPTED", "IN_PROGRESS", "PURCHASING", "READY_FOR_DELIVERY", "DELIVERING", "COMPLETED"] },
+            { title: "ผู้รับหิ้วดำเนินการ", detail: "ผู้รับหิ้วกำลังซื้อสินค้าตามรายการ", states: ["ACCEPTED", "IN_PROGRESS", "PURCHASING", "READY_FOR_DELIVERY", "DELIVERING", "COMPLETED"] },
+            { title: "ส่งมอบสินค้า", detail: "นัดรับหรือจัดส่งสินค้าตามที่ตกลง", states: ["READY_FOR_DELIVERY", "DELIVERING", "COMPLETED"] },
+            { title: "เสร็จสิ้น", detail: "ผู้ฝากซื้อได้รับสินค้าเรียบร้อยแล้ว", states: ["COMPLETED"] }
+        ];
+        const box = $("order-timeline");
+        box.replaceChildren();
+        if (status === "CANCELLED") {
+            box.appendChild(make("p", "timeline-cancelled", "ออเดอร์นี้ถูกยกเลิกแล้ว หากมีข้อสงสัยสามารถรายงานปัญหาให้ทีมงานตรวจสอบได้"));
+            return;
         }
+        const currentIndex = Math.max(0, steps.findIndex(step => !step.states.includes(status)));
+        steps.forEach(function (step, index) {
+            const state = step.states.includes(status) ? "completed" : (index === currentIndex ? "current" : "");
+            const row = make("div", "timeline-item " + state);
+            row.append(
+                make("div", "timeline-marker", String(index + 1)),
+                make("div", "timeline-content")
+            );
+            row.querySelector(".timeline-content").append(
+                make("h3", "", step.title),
+                make("p", "", step.detail)
+            );
+            if (state === "completed") row.appendChild(make("span", "timeline-tag", "เสร็จแล้ว"));
+            if (state === "current") row.appendChild(make("span", "timeline-tag current-tag", "ขั้นตอนปัจจุบัน"));
+            box.appendChild(row);
+        });
+    }
 
-        main.insertBefore(section, main.querySelector(".order-bottom-actions"));
+    async function loadPayment() {
+        const response = await fetch("/api/v1/orders/" + encodeURIComponent(orderId) + "/payment", {
+            headers: authHeaders(false)
+        });
+        const result = await parseResponse(response);
+
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("tokenType");
+            redirectLogin();
+            return;
+        }
+        if (response.status === 404 && result && result.message === "Payment not found") {
+            payment = null;
+            renderPayment();
+            return;
+        }
+        if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
+            throw new Error((result && result.message) || "โหลดข้อมูลการชำระเงินไม่สำเร็จ (HTTP " + response.status + ")");
+        }
+        payment = result.data;
         renderPayment();
     }
 
-    function setPaymentMessage(text, isError) {
-        const message = document.getElementById("payment-message");
-        message.textContent = text;
-        message.className = "form-message " + (isError ? "error-message" : "success-message");
-        message.hidden = false;
-    }
-
     function renderPayment() {
-        const summary = document.getElementById("payment-summary");
-        if (!summary) {
-            return;
-        }
-        summary.replaceChildren();
-        const priceForm = document.getElementById("set-price-form");
-        const slipForm = document.getElementById("payment-slip-form");
+        const content = $("payment-content");
+        content.replaceChildren();
+
+        const pStatus = payment ? payment.paymentStatus : "PENDING";
+        $("payment-status-badge").textContent = paymentStatusText[pStatus] || pStatus || "รอกำหนดราคา";
+        $("total-payment-status").textContent = paymentStatusText[pStatus] || "รอผู้รับหิ้วกำหนดราคา";
+        $("total-product").textContent = payment ? money(payment.productAmount) : "-";
+        $("total-service").textContent = payment ? money(payment.serviceFee) : "-";
+        $("total-amount").innerHTML = payment
+            ? Number(payment.totalAmount || 0).toLocaleString("th-TH", { minimumFractionDigits: 2 }) + ' <span>บาท</span>'
+            : 'รอกำหนดราคา <span></span>';
+
         if (!payment) {
-            if (priceForm) {
-                priceForm.hidden = order.status !== "PENDING";
-            }
-            if (slipForm) {
-                slipForm.hidden = true;
-                summary.appendChild(element("p", "", "รอผู้รับหิ้วกำหนดราคาสินค้า"));
+            if (isCarrier && order.status === "PENDING") {
+                content.appendChild(make("p", "payment-instruction", "กรุณากำหนดราคาสินค้ารวม เพื่อให้ผู้ฝากซื้อดำเนินการชำระเงิน"));
+                content.appendChild(priceForm());
+            } else {
+                content.appendChild(make("p", "muted", "ยังไม่มีข้อมูลราคา รอผู้รับหิ้วกำหนดราคาสินค้า"));
             }
             return;
         }
 
-        const table = element("div", "order-price-summary");
-        [
-            ["ราคาสินค้า", money(payment.productAmount)],
-            ["ค่าบริการรับหิ้ว", money(payment.serviceFee)],
-            ["ยอดรวมที่ต้องชำระ", money(payment.totalAmount)],
-            ["สถานะการชำระเงิน", payment.paymentStatus || "-"]
-        ].forEach(function (row) {
-            const line = element("div", "price-row");
-            line.append(element("span", "", row[0]), element("strong", "", row[1]));
-            table.appendChild(line);
-        });
-        summary.appendChild(table);
+        const summary = make("div", "payment-summary-list");
+        summary.append(
+            priceRow("ราคาสินค้า", money(payment.productAmount)),
+            priceRow("ค่าบริการรับหิ้ว", money(payment.serviceFee)),
+            priceRow("ยอดรวมที่ต้องชำระ", money(payment.totalAmount)),
+            priceRow("สถานะการชำระเงิน", paymentStatusText[pStatus] || pStatus || "-")
+        );
+        content.appendChild(summary);
+
         if (payment.qrPayload) {
-            summary.appendChild(element("h3", "", "ข้อมูล QR สำหรับชำระเงิน"));
-            const payload = element("code", "payment-qr-payload", payment.qrPayload);
-            payload.id = "payment-qr-payload";
-            summary.appendChild(payload);
-            summary.appendChild(element("p", "", "ชำระเข้าระบบตัวกลางตามยอดรวมข้างต้น ไม่โอนให้ผู้รับหิ้วโดยตรง"));
+            const qrBox = make("div", "qr-payload-box");
+            qrBox.append(make("h3", "", "ข้อมูลสำหรับชำระเงิน"), make("code", "", payment.qrPayload));
+            qrBox.appendChild(make("p", "muted", "ชำระเข้าระบบตัวกลางตามยอดรวม ไม่โอนให้ผู้รับหิ้วโดยตรง"));
+            content.appendChild(qrBox);
         }
+
+        if (payment.slipImageUrl) {
+            const slipLink = make("a", "slip-link", "เปิดดูสลิปที่แนบ");
+            slipLink.href = payment.slipImageUrl;
+            slipLink.target = "_blank";
+            slipLink.rel = "noopener noreferrer";
+            content.appendChild(slipLink);
+        }
+
         if (payment.paymentStatus === "HELD") {
-            summary.appendChild(element("p", "payment-status", "ยืนยันการชำระแล้ว เงินพักไว้ในระบบตัวกลาง"));
-            if (payment.transactionReference) {
-                summary.appendChild(element("p", "", "เลขอ้างอิง: " + payment.transactionReference));
-            }
-            if (payment.paidAt) {
-                summary.appendChild(element("p", "", "ชำระเมื่อ: " + formatDate(payment.paidAt)));
-            }
-            if (payment.slipImageUrl) {
-                const slip = element("a", "", "ดูสลิปที่แนบ");
-                slip.href = payment.slipImageUrl;
-                slip.target = "_blank";
-                slip.rel = "noopener noreferrer";
-                summary.appendChild(slip);
-            }
+            content.appendChild(make("p", "payment-success", "ยืนยันการชำระเงินแล้ว เงินอยู่ระหว่างพักไว้ในระบบตัวกลาง"));
+            if (payment.transactionReference) content.appendChild(make("p", "muted", "เลขอ้างอิง: " + payment.transactionReference));
+            if (payment.paidAt) content.appendChild(make("p", "muted", "ชำระเมื่อ: " + dateText(payment.paidAt)));
         }
-        if (priceForm) {
-            const input = document.getElementById("product-amount");
-            input.value = payment.productAmount == null ? "" : payment.productAmount;
-            priceForm.hidden = order.status !== "PENDING" || payment.paymentStatus !== "PENDING";
-        }
-        if (slipForm) {
-            const paidAmount = document.getElementById("paid-amount");
-            paidAmount.value = payment.totalAmount == null ? "" : payment.totalAmount;
-            slipForm.hidden = order.status !== "PENDING" || payment.paymentStatus !== "PENDING";
+
+        if (isCarrier && order.status === "PENDING" && payment.paymentStatus === "PENDING") {
+            content.appendChild(priceForm(payment.productAmount));
+        } else if (!isCarrier && order.status === "PENDING" && payment.paymentStatus === "PENDING") {
+            content.appendChild(slipForm());
         }
     }
 
-    async function loadPayment(isRunner) {
-        try {
-            const headers = authHeaders(false);
-            if (!headers) {
-                sendToLogin();
-                return;
-            }
-            const response = await fetch("/api/v1/orders/" + encodeURIComponent(orderId) + "/payment", {
-                headers: headers
-            });
-            const result = await readResponse(response);
-            if (response.status === 401) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("tokenType");
-                sendToLogin();
-                return;
-            }
-            if (response.status === 404 && result && result.message === "Payment not found") {
-                displayPaymentSection(isRunner);
-                return;
-            }
-            if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
-                displayPaymentSection(isRunner);
-                setPaymentMessage(result && typeof result.message === "string"
-                    ? result.message
-                    : "โหลดข้อมูลการชำระเงินไม่สำเร็จ (HTTP " + response.status + ")", true);
-                return;
-            }
-            payment = result.data;
-            displayPaymentSection(isRunner);
-        } catch (error) {
-            displayPaymentSection(isRunner);
-            setPaymentMessage(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", true);
-        }
+    function priceForm(existingAmount) {
+        const form = make("form", "payment-form");
+        form.innerHTML = '<label for="product-amount">ราคารวมสินค้า (บาท)</label>' +
+            '<input id="product-amount" name="productAmount" type="number" min="0.01" step="0.01" required>' +
+            '<button class="btn btn-primary" type="submit">บันทึกราคาและแจ้งยอดชำระ</button>';
+        if (existingAmount != null) form.querySelector("input").value = existingAmount;
+        form.addEventListener("submit", submitPrice);
+        return form;
     }
 
-    async function setPrice(event) {
+    function slipForm() {
+        const form = make("form", "payment-form");
+        form.innerHTML = '<label for="paid-amount">ยอดที่ชำระ (บาท)</label>' +
+            '<input id="paid-amount" name="paidAmount" type="number" min="0.01" step="0.01" required>' +
+            '<label for="slip-image">แนบสลิป (JPEG หรือ PNG ไม่เกิน 5 MB)</label>' +
+            '<input id="slip-image" name="slipImage" type="file" accept="image/jpeg,image/png" required>' +
+            '<button class="btn btn-primary" type="submit">ยืนยันชำระเงินและแนบสลิป</button>';
+        form.querySelector("#paid-amount").value = payment.totalAmount ?? "";
+        form.addEventListener("submit", submitSlip);
+        return form;
+    }
+
+    async function submitPrice(event) {
         event.preventDefault();
         const form = event.currentTarget;
-        const amount = document.getElementById("product-amount");
-        const submit = form.querySelector("button[type='submit']");
-        let headers;
-        try {
-            headers = authHeaders(true);
-        } catch (error) {
-            setPaymentMessage("ไม่สามารถอ่านสถานะเข้าสู่ระบบได้ กรุณาเข้าสู่ระบบใหม่", true);
+        const button = form.querySelector("button");
+        const amount = Number(form.querySelector("input").value);
+        if (!Number.isFinite(amount) || amount <= 0) {
+            showPaymentMessage("กรุณากรอกราคามากกว่า 0 บาท", true);
             return;
         }
-        if (!headers) {
-            sendToLogin();
-            return;
-        }
-        submit.disabled = true;
+        button.disabled = true;
         try {
             const response = await fetch("/api/v1/orders/" + encodeURIComponent(orderId) + "/price", {
                 method: "PUT",
-                headers: headers,
-                body: JSON.stringify({ productAmount: Number(amount.value) })
+                headers: authHeaders(true),
+                body: JSON.stringify({ productAmount: amount })
             });
-            const result = await readResponse(response);
+            const result = await parseResponse(response);
             if (response.status === 401) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("tokenType");
-                sendToLogin();
+                redirectLogin();
                 return;
             }
             if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
-                const fieldErrors = Array.isArray(result && result.errors)
-                    ? result.errors.map(function (item) {
-                        return item && item.field && item.message ? item.field + ": " + item.message : "";
-                    }).filter(Boolean)
-                    : [];
-                setPaymentMessage([result && result.message || "บันทึกราคาไม่สำเร็จ (HTTP " + response.status + ")"]
-                    .concat(fieldErrors).join("\n"), true);
-                return;
+                throw new Error((result && result.message) || "บันทึกราคาไม่สำเร็จ");
             }
             payment = result.data;
             renderPayment();
-            setPaymentMessage("บันทึกราคาสินค้าและสร้างข้อมูลชำระเงินแล้ว", false);
+            showPaymentMessage("บันทึกราคาสินค้าแล้ว ผู้ฝากซื้อสามารถชำระเงินได้", false);
         } catch (error) {
-            setPaymentMessage(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", true);
+            showPaymentMessage(error.message || "เกิดข้อผิดพลาดในการบันทึกราคา", true);
         } finally {
-            submit.disabled = false;
+            button.disabled = false;
         }
     }
 
     async function submitSlip(event) {
         event.preventDefault();
         const form = event.currentTarget;
-        const fileInput = document.getElementById("slip-image");
-        const paidAmount = document.getElementById("paid-amount");
-        const submit = form.querySelector("button[type='submit']");
-        const file = fileInput.files[0];
-        if (!file) {
-            setPaymentMessage("กรุณาแนบสลิปการชำระเงิน", true);
-            return;
-        }
-        if (!["image/jpeg", "image/png"].includes(file.type)) {
-            setPaymentMessage("แนบได้เฉพาะไฟล์ JPEG หรือ PNG", true);
-            return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            setPaymentMessage("ขนาดไฟล์ต้องไม่เกิน 5 MB", true);
-            return;
-        }
-        let headers;
-        try {
-            headers = authHeaders(false);
-        } catch (error) {
-            setPaymentMessage("ไม่สามารถอ่านสถานะเข้าสู่ระบบได้ กรุณาเข้าสู่ระบบใหม่", true);
-            return;
-        }
-        if (!headers) {
-            sendToLogin();
-            return;
-        }
+        const file = form.querySelector("#slip-image").files[0];
+        const amount = form.querySelector("#paid-amount").value;
+        if (!file) return showPaymentMessage("กรุณาเลือกไฟล์สลิป", true);
+        if (!["image/jpeg", "image/png"].includes(file.type)) return showPaymentMessage("รองรับเฉพาะไฟล์ JPEG และ PNG", true);
+        if (file.size > 5 * 1024 * 1024) return showPaymentMessage("ไฟล์ต้องมีขนาดไม่เกิน 5 MB", true);
+
         const body = new FormData();
         body.append("slipImage", file);
-        body.append("paidAmount", paidAmount.value);
-        submit.disabled = true;
+        body.append("paidAmount", amount);
+        const button = form.querySelector("button");
+        button.disabled = true;
         try {
             const response = await fetch("/api/v1/orders/" + encodeURIComponent(orderId) + "/payment/slip", {
                 method: "POST",
-                headers: headers,
-                body: body
+                headers: authHeaders(false),
+                body
             });
-            const result = await readResponse(response);
+            const result = await parseResponse(response);
             if (response.status === 401) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("tokenType");
-                sendToLogin();
+                redirectLogin();
                 return;
             }
             if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
-                const fieldErrors = Array.isArray(result && result.errors)
-                    ? result.errors.map(function (item) {
-                        return item && item.field && item.message ? item.field + ": " + item.message : "";
-                    }).filter(Boolean)
-                    : [];
-                setPaymentMessage([result && result.message || "ยืนยันการชำระเงินไม่สำเร็จ (HTTP " + response.status + ")"]
-                    .concat(fieldErrors).join("\n"), true);
-                return;
+                throw new Error((result && result.message) || "ส่งหลักฐานการชำระเงินไม่สำเร็จ");
             }
             payment = result.data;
-            order.status = payment.orderStatus || "PAID";
-            const status = main.querySelector(".order-header-main .order-status");
-            if (status) {
-                status.textContent = order.status;
-            }
             renderPayment();
-            setPaymentMessage("ยืนยันการชำระเงินแล้ว เงินถูกพักไว้ในระบบตัวกลาง", false);
+            showPaymentMessage("ส่งหลักฐานการชำระเงินเรียบร้อยแล้ว", false);
         } catch (error) {
-            setPaymentMessage(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", true);
+            showPaymentMessage(error.message || "เกิดข้อผิดพลาดในการส่งสลิป", true);
         } finally {
-            submit.disabled = false;
+            button.disabled = false;
         }
-    }
-
-    function displayOrder(data) {
-        order = data;
-        document.title = "ออเดอร์ #" + order.orderId + " | CarryHub";
-        main.replaceChildren();
-        const breadcrumb = element("div", "order-breadcrumb");
-        const back = element("a", "", "รายการของฉัน");
-        back.href = "/orders.html#round-orders-panel";
-        breadcrumb.append(back, element("span", "", "/"), element("span", "", "รายละเอียดออเดอร์"));
-
-        const header = element("section", "order-header-card");
-        const headerMain = element("div", "order-header-main");
-        const titleBox = element("div");
-        titleBox.append(element("p", "order-eyebrow", "ORDER DETAILS"));
-        titleBox.append(element("h1", "", "รายละเอียดออเดอร์"));
-        titleBox.append(element("p", "order-id", "หมายเลขออเดอร์ " + order.orderId));
-        headerMain.append(titleBox, element("span", "order-status", order.status || "-"));
-        header.append(headerMain, element("div", "order-header-divider"));
-        const meta = element("div", "order-meta-grid");
-        addMeta(meta, "วันที่สั่งซื้อ", formatDate(order.createdAt));
-        addMeta(meta, "รอบรับหิ้ว", "#" + order.roundId);
-        addMeta(meta, "ผู้ฝากซื้อ", order.buyerName);
-        header.appendChild(meta);
-
-        const section = element("section", "order-section-card");
-        const heading = element("div", "order-section-heading");
-        heading.append(element("h2", "", "รายการสินค้า"));
-        heading.append(element("span", "order-item-count", (order.items || []).length + " รายการ"));
-        section.appendChild(heading);
-        (Array.isArray(order.items) ? order.items : []).forEach(function (item) {
-            const row = element("article", "order-product");
-            const info = element("div", "order-product-info");
-            info.append(element("h3", "", item.productName || "สินค้า"));
-            info.append(element("p", "", "จำนวน " + item.quantity));
-            if (item.note) {
-                info.append(element("p", "", "หมายเหตุ: " + item.note));
-            }
-            row.append(element("div", "product-placeholder", "CH"), info);
-            section.appendChild(row);
-        });
-
-        const handoff = element("section", "order-section-card");
-        handoff.append(element("h2", "", "การรับสินค้า"));
-        handoff.append(element("p", "", "วิธีรับสินค้า: "
-            + (order.handoffMethod === "MEETUP" ? "นัดรับ" : order.handoffMethod === "DELIVERY" ? "ส่งถึงที่" : "-")));
-        handoff.append(element("p", "", "สถานที่: " + (order.handoffLocation || "-")));
-
-        const actions = element("section", "order-bottom-actions");
-        const ordersLink = element("a", "order-back-btn", "กลับไปรายการของฉัน");
-        ordersLink.href = "/orders.html#round-orders-panel";
-        const roundsLink = element("a", "order-proof-btn", "ดูรอบรับหิ้ว");
-        roundsLink.href = "/round-detail.html?roundId=" + encodeURIComponent(order.roundId);
-        actions.append(ordersLink, roundsLink);
-        if (order.status === "PAID" || order.status === "COMPLETED") {
-            const completionLink = element("a", "order-proof-btn",
-                order.status === "COMPLETED" ? "ดูหลักฐานการรับสินค้า" : "ยืนยันรับสินค้า");
-            completionLink.href = "/delivery-proof.html?orderId=" + encodeURIComponent(order.orderId);
-            actions.appendChild(completionLink);
-        }
-        main.append(breadcrumb, header, section, handoff, actions);
-
-        const userId = currentUserId();
-        loadPayment(userId !== null && userId !== Number(order.buyerId));
     }
 
     async function loadOrder() {
         if (!orderId || !/^[1-9]\d*$/.test(orderId)) {
-            showMessage("ไม่พบรหัสออเดอร์ กรุณาเลือกรายการจากหน้ารายการของฉัน", true);
+            showPageMessage("ไม่พบรหัสออเดอร์ กรุณาเปิดจากหน้ารายการของฉัน", true);
             return;
         }
-        let headers;
-        try {
-            headers = authHeaders(false);
-        } catch (error) {
-            showMessage("ไม่สามารถอ่านสถานะเข้าสู่ระบบได้ กรุณาเข้าสู่ระบบใหม่", true);
-            return;
-        }
+        const headers = authHeaders(false);
         if (!headers) {
-            sendToLogin();
+            redirectLogin();
             return;
         }
+
         try {
-            const response = await fetch("/api/v1/orders/" + encodeURIComponent(orderId), {
-                headers: headers
-            });
-            const result = await readResponse(response);
+            const response = await fetch("/api/v1/orders/" + encodeURIComponent(orderId), { headers });
+            const result = await parseResponse(response);
             if (response.status === 401) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("tokenType");
-                sendToLogin();
+                redirectLogin();
                 return;
             }
             if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
-                showMessage(result && typeof result.message === "string"
-                    ? result.message
-                    : "โหลดรายละเอียดออเดอร์ไม่สำเร็จ (HTTP " + response.status + ")", true);
-                return;
+                throw new Error((result && result.message) || "โหลดรายละเอียดออเดอร์ไม่สำเร็จ (HTTP " + response.status + ")");
             }
-            displayOrder(result.data);
+            renderOrder(result.data);
+            const token = localStorage.getItem("token");
+            try {
+                const payload = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+                const claims = JSON.parse(atob(payload + "=".repeat((4 - payload.length % 4) % 4)));
+                isCarrier = Number(claims.sub) !== Number(order.buyerId);
+            } catch (_) {
+                isCarrier = false;
+            }
+            await loadPayment();
         } catch (error) {
-            showMessage(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", true);
+            showPageMessage(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้", true);
         }
     }
 
-    showMessage("กำลังโหลดรายละเอียดออเดอร์...", false);
     loadOrder();
 })();
