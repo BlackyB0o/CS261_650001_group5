@@ -13,10 +13,6 @@
 | So that 2: ทราบวัน เวลา และค่าหิ้วก่อนเข้าร่วมรอบ | ผลลัพธ์มี `scheduledAt` และ `serviceFee` ทุกรายการ | Endpoint 1 และ 2 |
 | การ์ด Task30 [Frontend]: หน้าจอค้นหารอบมี Pagination | แบ่งผลค้นหาเป็นหน้าด้วย `page` และ `size` และบอกจำนวนทั้งหมด | Endpoint 1 |
 
-### ทำไมใช้ `/api/v1/delivery-rounds` ไม่ใช่ `/api/v1/rounds` ตามการ์ด
-
-ระบบมี endpoint รายการรอบอยู่แล้วตั้งแต่ Task08 คือ `GET /api/v1/delivery-rounds` (ได้เฉพาะรอบ `OPEN` อยู่แล้ว) และหน้าเว็บ `rounds.html` เรียก endpoint นี้อยู่ US02 จึง**เพิ่ม query parameter ให้ endpoint เดิม** แทนการสร้าง `/rounds` ใหม่ เพื่อไม่ให้มี API ซ้ำกัน 2 ตัว `data` ยังเป็น array ของรอบเหมือนเดิม หน้าเว็บเดิมจึงอ่านได้ทันที ส่วนข้อมูลการแบ่งหน้าแยกไว้ใน field ใหม่ `pagination`
-
 ### ขอบเขต
 - ค้นหาได้ทั้ง Guest และผู้ที่ login แล้ว (ไม่ต้องใช้ token) ตามกติกา Guest ใน API Conventions
 - ผลค้นหาแบ่งเป็นหน้า หน้าละ 20 รอบถ้าไม่ระบุ `size`
