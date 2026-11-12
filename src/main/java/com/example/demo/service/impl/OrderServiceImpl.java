@@ -70,7 +70,8 @@ public class OrderServiceImpl implements OrderService {
         if (!round.getRunner().getId().equals(runnerId)) {
             throw ApiException.forbidden("You are not the owner of this delivery round");
         }
-        return orderRepository.findByRoundIdOrderByCreatedAtAsc(roundId).stream()
+        // Task36 (US04) ดึงผู้ฝากหิ้วและรายการสินค้ามาพร้อมกันใน query เดียว
+        return orderRepository.findByRoundIdWithBuyerAndItems(roundId).stream()
                 .map(OrderServiceImpl::toDto)
                 .toList();
     }
