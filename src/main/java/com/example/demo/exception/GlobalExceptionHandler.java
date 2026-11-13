@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -83,6 +85,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             return body(HttpStatus.UNAUTHORIZED, ApiResponseDTO.error("Invalid or missing token"));
         }
         return body(HttpStatus.BAD_REQUEST, ApiResponseDTO.error(VALIDATION_FAILED));
+    }
+
+    /**
+     * Task41 (US05) path หรือ query parameter แปลงชนิดไม่ได้ เช่น /orders/abc -> 400 พร้อมบอก field
+     * { field: "orderId", message: "must be a number" }
+     */
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+        String field = ex instanceof MethodArgumentTypeMismatchException m ? m.getName() : ex.getPropertyName();
+        Class<?> type = ex.getRequiredType();
+        String msg = type != null && (Number.class.isAssignableFrom(type) || (type.isPrimitive() && type != boolean.class))
+                ? "must be a number" : "has an invalid format";
+        return body(HttpStatus.BAD_REQUEST, ApiResponseDTO.error(VALIDATION_FAILED,
+                List.of(new FieldErrorDTO(field == null ? "parameter" : field, msg))));
     }
 
     @Override

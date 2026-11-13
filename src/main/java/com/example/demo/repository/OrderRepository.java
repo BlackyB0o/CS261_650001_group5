@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Order;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +27,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             ORDER BY o.createdAt ASC, o.id ASC
             """)
     List<Order> findByRoundIdWithBuyerAndItems(@Param("roundId") Long roundId);
+
+    /** Task41 (US05) ออเดอร์หนึ่งรายการ พร้อมผู้ฝากหิ้ว รอบ ผู้รับหิ้ว และรายการสินค้า ใน query เดียว */
+    @Query("""
+            SELECT o FROM Order o
+            JOIN FETCH o.buyer
+            JOIN FETCH o.round r
+            JOIN FETCH r.runner
+            LEFT JOIN FETCH o.items
+            WHERE o.id = :orderId
+            """)
+    Optional<Order> findByIdWithDetails(@Param("orderId") Long orderId);
 }

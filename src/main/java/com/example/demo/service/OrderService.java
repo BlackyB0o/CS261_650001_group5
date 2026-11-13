@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CreateOrderRequestDTO;
+import com.example.demo.dto.OrderDetailResponseDTO;
 import com.example.demo.dto.OrderResponseDTO;
 import com.example.demo.dto.OrderStatusResponseDTO;
 import com.example.demo.dto.UpdateOrderStatusRequestDTO;
@@ -20,8 +21,11 @@ public interface OrderService {
      */
     List<OrderResponseDTO> getOrdersByRound(Long runnerId, Long roundId);
 
-    /** เจ้าของออเดอร์ หรือเจ้าของรอบที่ออเดอร์อยู่ */
-    OrderResponseDTO getOrder(Long userId, Long orderId);
+    /**
+     * Task41 (US05) รายละเอียดออเดอร์ พร้อมผู้รับหิ้วและประวัติสถานะ
+     * ดูได้เฉพาะผู้ฝากหิ้วของออเดอร์ หรือผู้รับหิ้วของรอบ (403), ไม่พบ (404)
+     */
+    OrderDetailResponseDTO getOrderDetail(Long userId, Long orderId);
 
     /**
      * Task46 (US06) ผู้รับหิ้วเจ้าของรอบเปลี่ยนสถานะออเดอร์ทีละขั้นตาม OrderStatusRules
