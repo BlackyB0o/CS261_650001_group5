@@ -257,6 +257,57 @@ Content-Type: image/png
 < ./sample-image.png
 --CarryHubBoundary--
 
+########## Task46 (US06): ผู้รับหิ้วอัปเดตสถานะออเดอร์ ##########
+
+### 24.1 A ข้ามขั้น PAID -> DELIVERING (ควรได้ 409)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "DELIVERING" }
+
+### 24.2 B ไม่ใช่เจ้าของรอบ เปลี่ยนสถานะไม่ได้ (ควรได้ 403)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "ACCEPTED" }
+
+### 24.3 A รับออเดอร์ PAID -> ACCEPTED
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "ACCEPTED" }
+
+### 24.4 A กำลังซื้อสินค้า ACCEPTED -> PURCHASING
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "PURCHASING" }
+
+### 24.5 A ซื้อเสร็จ รอส่งมอบ PURCHASING -> READY_FOR_DELIVERY
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "READY_FOR_DELIVERY" }
+
+### 24.6 A กำลังส่งมอบ READY_FOR_DELIVERY -> DELIVERING (จากนั้น B ยืนยันรับของในข้อ 25 ได้)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "DELIVERING" }
+
+### 24.7 ส่งสถานะที่ไม่มีในระบบ (ควรได้ 400)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "IN_PROGRESS" }
+
 ########## Task24: ยืนยันรับสินค้า ##########
 
 ### 25. B ยืนยันรับของพร้อมรูป -> Payment RELEASED, Order COMPLETED
