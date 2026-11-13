@@ -308,6 +308,20 @@ Content-Type: application/json
 
 { "status": "IN_PROGRESS" }
 
+########## Task41 (US05): ดูรายละเอียดและสถานะออเดอร์ ##########
+
+### 24.8 B (ผู้ฝากหิ้ว) ดูรายละเอียดออเดอร์ พร้อมผู้รับหิ้วและประวัติสถานะ
+GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+### 24.9 A (ผู้รับหิ้วของรอบ) ดูรายละเอียดออเดอร์เดียวกันได้
+GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+### 24.10 orderId ไม่ใช่ตัวเลข (ควรได้ 400 พร้อม field orderId)
+GET {{baseUrl}}/orders/abc
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
 ########## Task24: ยืนยันรับสินค้า ##########
 
 ### 25. B ยืนยันรับของพร้อมรูป -> Payment RELEASED, Order COMPLETED

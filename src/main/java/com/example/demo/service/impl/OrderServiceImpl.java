@@ -2,9 +2,11 @@ package com.example.demo.service.impl;
 
 import com.example.demo.common.OrderStatusRules;
 import com.example.demo.dto.CreateOrderRequestDTO;
+import com.example.demo.dto.OrderDetailResponseDTO;
 import com.example.demo.dto.OrderItemRequestDTO;
 import com.example.demo.dto.OrderItemResponseDTO;
 import com.example.demo.dto.OrderResponseDTO;
+import com.example.demo.dto.OrderStatusHistoryResponseDTO;
 import com.example.demo.dto.OrderStatusResponseDTO;
 import com.example.demo.dto.UpdateOrderStatusRequestDTO;
 import com.example.demo.entity.DeliveryRound;
@@ -90,15 +92,40 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderResponseDTO getOrder(Long userId, Long orderId) {
-        Order order = orderRepository.findById(orderId)
+    public OrderDetailResponseDTO getOrderDetail(Long userId, Long orderId) {
+        Order order = orderRepository.findByIdWithDetails(orderId)
                 .orElseThrow(() -> ApiException.notFound("Order not found"));
+        User runner = order.getRound().getRunner();
         boolean isBuyer = order.getBuyer().getId().equals(userId);
-        boolean isRunner = order.getRound().getRunner().getId().equals(userId);
+        boolean isRunner = runner.getId().equals(userId);
         if (!isBuyer && !isRunner) {
             throw ApiException.forbidden("You are not allowed to view this order");
         }
-        return toDto(order);
+        List<OrderStatusHistoryResponseDTO> history = orderStatusHistoryRepository
+                .findByOrderIdOrderByChangedAtAscIdAsc(orderId).stream()
+                .map(h -> OrderStatusHistoryResponseDTO.builder()
+                        .fromStatus(h.getFromStatus())
+                        .toStatus(h.getToStatus())
+                        .changedById(h.getChangedBy().getId())
+                        .changedByName(h.getChangedBy().getFullName())
+                        .changedAt(h.getChangedAt())
+                        .build())
+                .toList();
+        OrderResponseDTO base = toDto(order);
+        return OrderDetailResponseDTO.builder()
+                .orderId(base.getOrderId())
+                .roundId(base.getRoundId())
+                .buyerId(base.getBuyerId())
+                .buyerName(base.getBuyerName())
+                .runnerId(runner.getId())
+                .runnerName(runner.getFullName())
+                .handoffMethod(base.getHandoffMethod())
+                .handoffLocation(base.getHandoffLocation())
+                .status(base.getStatus())
+                .createdAt(base.getCreatedAt())
+                .items(base.getItems())
+                .statusHistory(history)
+                .build();
     }
 
     @Override
