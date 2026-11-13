@@ -5,6 +5,7 @@
     const formMessage = document.getElementById("completion-form-message");
     const submitButton = document.getElementById("completion-submit");
     let order;
+    const CAN_CONFIRM = ["PAID", "ACCEPTED", "PURCHASING", "READY_FOR_DELIVERY", "DELIVERING"];
 
     function showMessage(target, text, isError) {
         target.textContent = text;
@@ -66,8 +67,8 @@
         rows[2].textContent = "-";
         rows[3].textContent = order.buyerName || "-";
         rows[4].textContent = order.handoffLocation || "-";
-        form.hidden = !(currentUserId() === Number(order.buyerId) && order.status === "PAID");
-        if (order.status !== "PAID" && order.status !== "COMPLETED") {
+        form.hidden = !(currentUserId() === Number(order.buyerId) && CAN_CONFIRM.includes(order.status));
+        if (!CAN_CONFIRM.includes(order.status) && order.status !== "COMPLETED") {
             showMessage(message, "ยืนยันรับสินค้าได้หลังยืนยันการชำระเงินแล้วเท่านั้น", false);
         }
     }
@@ -129,9 +130,9 @@
                 document.getElementById("completion-evidence-status").textContent = "ยังไม่แนบรูปภาพ";
                 if (order.status === "COMPLETED") {
                     showMessage(message, "ไม่พบข้อมูลการยืนยันรับสินค้าของออเดอร์นี้", true);
-                } else if (order.status === "PAID" && currentUserId() === Number(order.buyerId)) {
+                } else if (CAN_CONFIRM.includes(order.status) && currentUserId() === Number(order.buyerId)) {
                     showMessage(message, "อัปโหลดรูปหลักฐานเพื่อยืนยันรับสินค้าและปิดออเดอร์", false);
-                } else if (order.status === "PAID") {
+                } else if (CAN_CONFIRM.includes(order.status)) {
                     showMessage(message, "รอผู้ฝากซื้อยืนยันการรับสินค้า", false);
                 }
                 return;
