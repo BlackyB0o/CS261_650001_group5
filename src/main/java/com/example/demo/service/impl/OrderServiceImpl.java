@@ -1,16 +1,21 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.OrderStatusRules;
 import com.example.demo.dto.CreateOrderRequestDTO;
 import com.example.demo.dto.OrderItemRequestDTO;
 import com.example.demo.dto.OrderItemResponseDTO;
 import com.example.demo.dto.OrderResponseDTO;
+import com.example.demo.dto.OrderStatusResponseDTO;
+import com.example.demo.dto.UpdateOrderStatusRequestDTO;
 import com.example.demo.entity.DeliveryRound;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderItem;
+import com.example.demo.entity.OrderStatusHistory;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ApiException;
 import com.example.demo.repository.DeliveryRoundRepository;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.repository.OrderStatusHistoryRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.OrderService;
 import java.util.List;
@@ -18,7 +23,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Task16 ออเดอร์ เจ้าของออเดอร์ = ผู้ฝากหิ้ว, เจ้าของรอบของออเดอร์ = ผู้รับหิ้ว */
+/**
+ * Task16 ออเดอร์ เจ้าของออเดอร์ = ผู้ฝากหิ้ว, เจ้าของรอบของออเดอร์ = ผู้รับหิ้ว
+ * Task46 (US06) ผู้รับหิ้วเปลี่ยนสถานะออเดอร์ และบันทึกประวัติทุกครั้งที่สถานะเปลี่ยน
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -26,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final DeliveryRoundRepository deliveryRoundRepository;
     private final UserRepository userRepository;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
 
     @Override
     @Transactional
@@ -52,7 +61,10 @@ public class OrderServiceImpl implements OrderService {
             item.setNote(itemRequest.getNote());
             order.addItem(item);
         }
-        return toDto(orderRepository.save(order));
+        Order saved = orderRepository.save(order);
+        // Task46 (US06) ประวัติสถานะเริ่มตั้งแต่สร้างออเดอร์
+        orderStatusHistoryRepository.save(OrderStatusHistory.of(saved, null, "PENDING", buyer));
+        return toDto(saved);
     }
 
     @Override
@@ -87,6 +99,26 @@ public class OrderServiceImpl implements OrderService {
             throw ApiException.forbidden("You are not allowed to view this order");
         }
         return toDto(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderStatusResponseDTO updateStatus(Long runnerId, Long orderId, UpdateOrderStatusRequestDTO request) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> ApiException.notFound("Order not found"));
+        User runner = order.getRound().getRunner();
+        if (!runner.getId().equals(runnerId)) {
+            throw ApiException.forbidden("You are not the owner of this delivery round");
+        }
+        String from = order.getStatus();
+        String to = request.getStatus();
+        if (!OrderStatusRules.canRunnerChange(from, to)) {
+            throw ApiException.conflict("Cannot change status from " + from + " to " + to);
+        }
+        order.setStatus(to);
+        orderRepository.save(order);
+        orderStatusHistoryRepository.save(OrderStatusHistory.of(order, from, to, runner));
+        return OrderStatusResponseDTO.builder().orderId(order.getId()).status(to).build();
     }
 
     private DeliveryRound findRound(Long roundId) {

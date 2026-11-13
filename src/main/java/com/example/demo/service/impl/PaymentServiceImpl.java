@@ -4,9 +4,11 @@ import com.example.demo.dto.PaymentResponseDTO;
 import com.example.demo.dto.SetProductPriceRequestDTO;
 import com.example.demo.dto.SubmitSlipRequestDTO;
 import com.example.demo.entity.Order;
+import com.example.demo.entity.OrderStatusHistory;
 import com.example.demo.entity.Payment;
 import com.example.demo.exception.ApiException;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.repository.OrderStatusHistoryRepository;
 import com.example.demo.repository.PaymentRepository;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.PaymentService;
@@ -31,6 +33,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final FileStorageService fileStorageService;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
 
     @Override
     @Transactional
@@ -38,6 +41,9 @@ public class PaymentServiceImpl implements PaymentService {
         Order order = findOrder(orderId, "Order not found");
         if (!order.getRound().getRunner().getId().equals(runnerId)) {
             throw ApiException.forbidden("You are not the owner of this round");
+        }
+        if ("CANCELLED".equals(order.getStatus())) {
+            throw ApiException.conflict("Order has been cancelled");
         }
         if (!"PENDING".equals(order.getStatus())) {
             throw ApiException.conflict("Order has already been paid");
@@ -78,6 +84,9 @@ public class PaymentServiceImpl implements PaymentService {
         if (!order.getBuyer().getId().equals(buyerId)) {
             throw ApiException.forbidden("You are not the owner of this order");
         }
+        if ("CANCELLED".equals(order.getStatus())) {
+            throw ApiException.conflict("Order has been cancelled");
+        }
         if (!"PENDING".equals(order.getStatus())) {
             throw ApiException.conflict("Order has already been paid");
         }
@@ -99,6 +108,8 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setPaymentStatus("HELD");
         order.setStatus("PAID");
         orderRepository.save(order);
+        // Task46 (US06) บันทึกประวัติสถานะตอนจ่ายเงิน
+        orderStatusHistoryRepository.save(OrderStatusHistory.of(order, "PENDING", "PAID", order.getBuyer()));
         return toDto(paymentRepository.save(payment));
     }
 
