@@ -67,6 +67,7 @@ endpoint ที่แบ่งหน้าได้ (ตอนนี้มี `G
 }
 ```
 - `errors` ใช้เมื่อบอกได้ว่าผิดที่ field ไหน (ชื่อ field ตรงกับ JSON ที่ส่งมา) ถ้าเป็นข้อผิดพลาดอื่น เช่น `401`, `403`, `404`, `409` ส่งแค่ `status` กับ `message`
+- id ใน path หรือ query ที่ไม่ใช่ตัวเลข เช่น `/orders/abc` ได้ `400` และ `errors` ระบุชื่อ parameter เช่น `{ "field": "orderId", "message": "must be a number" }` (เพิ่มใน Sprint 2 Task41)
 - `data` ไม่ส่งเมื่อผิดพลาด
 
 ```mermaid
