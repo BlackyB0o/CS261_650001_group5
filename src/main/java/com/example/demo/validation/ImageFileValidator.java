@@ -10,10 +10,17 @@ public class ImageFileValidator implements ConstraintValidator<ImageFile, Multip
     private static final long MAX_SIZE_BYTES = 5L * 1024 * 1024;
     private static final Set<String> ALLOWED_TYPES = Set.of("image/jpeg", "image/png");
 
+    private boolean required = true;
+
+    @Override
+    public void initialize(ImageFile annotation) {
+        this.required = annotation.required();
+    }
+
     @Override
     public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
         if (file == null || file.isEmpty()) {
-            return fail(context, "must not be empty");
+            return !required || fail(context, "must not be empty");
         }
         if (file.getContentType() == null || !ALLOWED_TYPES.contains(file.getContentType().toLowerCase())) {
             return fail(context, "only JPEG or PNG images are allowed");

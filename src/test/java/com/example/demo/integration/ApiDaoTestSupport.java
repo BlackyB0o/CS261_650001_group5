@@ -60,7 +60,7 @@ abstract class ApiDaoTestSupport {
     /** ล้างข้อมูลหลังแต่ละ test ให้ทุกข้อเริ่มจากฐานข้อมูลว่าง (ลบตามลำดับ foreign key) */
     @AfterEach
     void cleanDatabase() {
-        for (String table : List.of("order_completions", "payments", "order_status_history", "order_items", "orders",
+        for (String table : List.of("reports", "order_completions", "payments", "order_status_history", "order_items", "orders",
                 "posts", "delivery_rounds", "otp_verifications", "users")) {
             jdbc.update("DELETE FROM " + table);
         }
