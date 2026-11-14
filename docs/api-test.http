@@ -340,6 +340,70 @@ Content-Type: image/png
 GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/completion
 Authorization: Bearer {{verifyRunner.response.body.data.token}}
 
+########## Task51 (US09): รายงานปัญหาหรือพฤติกรรมน่าสงสัย ##########
+
+### 26.1 B (ผู้ฝากหิ้ว) รายงานผู้รับหิ้ว พร้อมรูปหลักฐาน -> 201 PENDING
+POST {{baseUrl}}/reports
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: multipart/form-data; boundary=CarryHubBoundary
+
+--CarryHubBoundary
+Content-Disposition: form-data; name="orderId"
+
+{{createOrder.response.body.data.orderId}}
+--CarryHubBoundary
+Content-Disposition: form-data; name="category"
+
+DELIVERY_ISSUE
+--CarryHubBoundary
+Content-Disposition: form-data; name="description"
+
+ผู้รับหิ้วไม่นำสินค้ามาส่งตามเวลานัด
+--CarryHubBoundary
+Content-Disposition: form-data; name="evidenceImage"; filename="evidence.png"
+Content-Type: image/png
+
+< ./sample-image.png
+--CarryHubBoundary--
+
+### 26.2 A (ผู้รับหิ้ว) รายงานผู้ฝากหิ้ว ไม่แนบรูป -> 201
+POST {{baseUrl}}/reports
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: multipart/form-data; boundary=CarryHubBoundary
+
+--CarryHubBoundary
+Content-Disposition: form-data; name="orderId"
+
+{{createOrder.response.body.data.orderId}}
+--CarryHubBoundary
+Content-Disposition: form-data; name="category"
+
+SUSPICIOUS_BEHAVIOR
+--CarryHubBoundary
+Content-Disposition: form-data; name="description"
+
+ผู้ฝากหิ้วให้ข้อมูลจุดนัดรับเท็จและติดต่อไม่ได้
+--CarryHubBoundary--
+
+### 26.3 ไม่กรอกรายละเอียดปัญหา (ควรได้ 400 field description)
+POST {{baseUrl}}/reports
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: multipart/form-data; boundary=CarryHubBoundary
+
+--CarryHubBoundary
+Content-Disposition: form-data; name="orderId"
+
+{{createOrder.response.body.data.orderId}}
+--CarryHubBoundary
+Content-Disposition: form-data; name="category"
+
+OTHER
+--CarryHubBoundary
+Content-Disposition: form-data; name="description"
+
+
+--CarryHubBoundary--
+
 ########## ลืมรหัสผ่าน ##########
 
 ### 27. ขอ OTP รีเซ็ตรหัสผ่าน (ดู OTP ใน log ใส่ที่ @otpReset)
