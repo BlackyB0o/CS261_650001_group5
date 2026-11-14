@@ -1,16 +1,23 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.OrderStatusRules;
 import com.example.demo.dto.CreateOrderRequestDTO;
+import com.example.demo.dto.OrderDetailResponseDTO;
 import com.example.demo.dto.OrderItemRequestDTO;
 import com.example.demo.dto.OrderItemResponseDTO;
 import com.example.demo.dto.OrderResponseDTO;
+import com.example.demo.dto.OrderStatusHistoryResponseDTO;
+import com.example.demo.dto.OrderStatusResponseDTO;
+import com.example.demo.dto.UpdateOrderStatusRequestDTO;
 import com.example.demo.entity.DeliveryRound;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderItem;
+import com.example.demo.entity.OrderStatusHistory;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ApiException;
 import com.example.demo.repository.DeliveryRoundRepository;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.repository.OrderStatusHistoryRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.OrderService;
 import java.util.List;
@@ -18,7 +25,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Task16 ออเดอร์ เจ้าของออเดอร์ = ผู้ฝากหิ้ว, เจ้าของรอบของออเดอร์ = ผู้รับหิ้ว */
+/**
+ * Task16 ออเดอร์ เจ้าของออเดอร์ = ผู้ฝากหิ้ว, เจ้าของรอบของออเดอร์ = ผู้รับหิ้ว
+ * Task46 (US06) ผู้รับหิ้วเปลี่ยนสถานะออเดอร์ และบันทึกประวัติทุกครั้งที่สถานะเปลี่ยน
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -26,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final DeliveryRoundRepository deliveryRoundRepository;
     private final UserRepository userRepository;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
 
     @Override
     @Transactional
@@ -52,7 +63,10 @@ public class OrderServiceImpl implements OrderService {
             item.setNote(itemRequest.getNote());
             order.addItem(item);
         }
-        return toDto(orderRepository.save(order));
+        Order saved = orderRepository.save(order);
+        // Task46 (US06) ประวัติสถานะเริ่มตั้งแต่สร้างออเดอร์
+        orderStatusHistoryRepository.save(OrderStatusHistory.of(saved, null, "PENDING", buyer));
+        return toDto(saved);
     }
 
     @Override
@@ -70,22 +84,68 @@ public class OrderServiceImpl implements OrderService {
         if (!round.getRunner().getId().equals(runnerId)) {
             throw ApiException.forbidden("You are not the owner of this delivery round");
         }
-        return orderRepository.findByRoundIdOrderByCreatedAtAsc(roundId).stream()
+        // Task36 (US04) ดึงผู้ฝากหิ้วและรายการสินค้ามาพร้อมกันใน query เดียว
+        return orderRepository.findByRoundIdWithBuyerAndItems(roundId).stream()
                 .map(OrderServiceImpl::toDto)
                 .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public OrderResponseDTO getOrder(Long userId, Long orderId) {
-        Order order = orderRepository.findById(orderId)
+    public OrderDetailResponseDTO getOrderDetail(Long userId, Long orderId) {
+        Order order = orderRepository.findByIdWithDetails(orderId)
                 .orElseThrow(() -> ApiException.notFound("Order not found"));
+        User runner = order.getRound().getRunner();
         boolean isBuyer = order.getBuyer().getId().equals(userId);
-        boolean isRunner = order.getRound().getRunner().getId().equals(userId);
+        boolean isRunner = runner.getId().equals(userId);
         if (!isBuyer && !isRunner) {
             throw ApiException.forbidden("You are not allowed to view this order");
         }
-        return toDto(order);
+        List<OrderStatusHistoryResponseDTO> history = orderStatusHistoryRepository
+                .findByOrderIdOrderByChangedAtAscIdAsc(orderId).stream()
+                .map(h -> OrderStatusHistoryResponseDTO.builder()
+                        .fromStatus(h.getFromStatus())
+                        .toStatus(h.getToStatus())
+                        .changedById(h.getChangedBy().getId())
+                        .changedByName(h.getChangedBy().getFullName())
+                        .changedAt(h.getChangedAt())
+                        .build())
+                .toList();
+        OrderResponseDTO base = toDto(order);
+        return OrderDetailResponseDTO.builder()
+                .orderId(base.getOrderId())
+                .roundId(base.getRoundId())
+                .buyerId(base.getBuyerId())
+                .buyerName(base.getBuyerName())
+                .runnerId(runner.getId())
+                .runnerName(runner.getFullName())
+                .handoffMethod(base.getHandoffMethod())
+                .handoffLocation(base.getHandoffLocation())
+                .status(base.getStatus())
+                .createdAt(base.getCreatedAt())
+                .items(base.getItems())
+                .statusHistory(history)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public OrderStatusResponseDTO updateStatus(Long runnerId, Long orderId, UpdateOrderStatusRequestDTO request) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> ApiException.notFound("Order not found"));
+        User runner = order.getRound().getRunner();
+        if (!runner.getId().equals(runnerId)) {
+            throw ApiException.forbidden("You are not the owner of this delivery round");
+        }
+        String from = order.getStatus();
+        String to = request.getStatus();
+        if (!OrderStatusRules.canRunnerChange(from, to)) {
+            throw ApiException.conflict("Cannot change status from " + from + " to " + to);
+        }
+        order.setStatus(to);
+        orderRepository.save(order);
+        orderStatusHistoryRepository.save(OrderStatusHistory.of(order, from, to, runner));
+        return OrderStatusResponseDTO.builder().orderId(order.getId()).status(to).build();
     }
 
     private DeliveryRound findRound(Long roundId) {
