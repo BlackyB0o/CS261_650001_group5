@@ -1,14 +1,17 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.OrderStatusRules;
 import com.example.demo.dto.CompletionResponseDTO;
 import com.example.demo.dto.ConfirmReceiptRequestDTO;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderCompletion;
+import com.example.demo.entity.OrderStatusHistory;
 import com.example.demo.entity.Payment;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ApiException;
 import com.example.demo.repository.OrderCompletionRepository;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.repository.OrderStatusHistoryRepository;
 import com.example.demo.repository.PaymentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FileStorageService;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Task24 ผู้ฝากหิ้วยืนยันรับสินค้าพร้อมรูป (ใน transaction เดียว)
  * สำเร็จ: บันทึก OrderCompletion, Payment = RELEASED (โอนให้ผู้รับหิ้ว), Order = COMPLETED
+ * Task46 (US06) ยืนยันได้ตั้งแต่ PAID จนถึง DELIVERING (OrderStatusRules.CONFIRMABLE) และบันทึกประวัติสถานะ
  */
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,7 @@ public class OrderCompletionServiceImpl implements OrderCompletionService {
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final FileStorageService fileStorageService;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
 
     @Override
     @Transactional
@@ -43,7 +48,11 @@ public class OrderCompletionServiceImpl implements OrderCompletionService {
         if ("COMPLETED".equals(order.getStatus())) {
             throw ApiException.conflict("Order is already completed");
         }
-        if (!"PAID".equals(order.getStatus())) {
+        if ("CANCELLED".equals(order.getStatus())) {
+            throw ApiException.conflict("Order has been cancelled");
+        }
+        // Task46 (US06) ยืนยันได้ทุกขั้นหลังจ่ายเงิน ไม่ใช่แค่ PAID เพราะผู้รับหิ้วอาจเปลี่ยนสถานะไปแล้ว
+        if (!OrderStatusRules.CONFIRMABLE.contains(order.getStatus())) {
             throw ApiException.conflict("Order has not been paid");
         }
         Payment payment = paymentRepository.findByOrderId(orderId)
@@ -66,8 +75,11 @@ public class OrderCompletionServiceImpl implements OrderCompletionService {
 
         payment.setPaymentStatus("RELEASED");
         paymentRepository.save(payment);
+        String fromStatus = order.getStatus();
         order.setStatus("COMPLETED");
         orderRepository.save(order);
+        // Task46 (US06) บันทึกประวัติสถานะตอนยืนยันรับสินค้า
+        orderStatusHistoryRepository.save(OrderStatusHistory.of(order, fromStatus, "COMPLETED", buyer));
         return toDto(completion);
     }
 

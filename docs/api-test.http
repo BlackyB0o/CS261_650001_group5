@@ -195,6 +195,17 @@ Content-Type: application/json
 GET {{baseUrl}}/orders?roundId={{createRound.response.body.data.roundId}}
 Authorization: Bearer {{verifyRunner.response.body.data.token}}
 
+### 19.1 Task36 (US04) A ดูรายการฝากซื้อทั้งหมดในรอบตัวเอง (ผลเหมือนข้อ 19)
+GET {{baseUrl}}/delivery-rounds/{{createRound.response.body.data.roundId}}/orders
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+### 19.2 Task36 (US04) B ไม่ใช่เจ้าของรอบ ดูรายการฝากซื้อในรอบไม่ได้ (ควรได้ 403)
+GET {{baseUrl}}/delivery-rounds/{{createRound.response.body.data.roundId}}/orders
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+### 19.3 Task36 (US04) ไม่ส่ง token (ควรได้ 401)
+GET {{baseUrl}}/delivery-rounds/{{createRound.response.body.data.roundId}}/orders
+
 ### 20. B ดูออเดอร์ของฉัน
 GET {{baseUrl}}/orders/my
 Authorization: Bearer {{verifyBuyer.response.body.data.token}}
@@ -245,6 +256,71 @@ Content-Type: image/png
 
 < ./sample-image.png
 --CarryHubBoundary--
+
+########## Task46 (US06): ผู้รับหิ้วอัปเดตสถานะออเดอร์ ##########
+
+### 24.1 A ข้ามขั้น PAID -> DELIVERING (ควรได้ 409)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "DELIVERING" }
+
+### 24.2 B ไม่ใช่เจ้าของรอบ เปลี่ยนสถานะไม่ได้ (ควรได้ 403)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "ACCEPTED" }
+
+### 24.3 A รับออเดอร์ PAID -> ACCEPTED
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "ACCEPTED" }
+
+### 24.4 A กำลังซื้อสินค้า ACCEPTED -> PURCHASING
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "PURCHASING" }
+
+### 24.5 A ซื้อเสร็จ รอส่งมอบ PURCHASING -> READY_FOR_DELIVERY
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "READY_FOR_DELIVERY" }
+
+### 24.6 A กำลังส่งมอบ READY_FOR_DELIVERY -> DELIVERING (จากนั้น B ยืนยันรับของในข้อ 25 ได้)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "DELIVERING" }
+
+### 24.7 ส่งสถานะที่ไม่มีในระบบ (ควรได้ 400)
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}/status
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+Content-Type: application/json
+
+{ "status": "IN_PROGRESS" }
+
+########## Task41 (US05): ดูรายละเอียดและสถานะออเดอร์ ##########
+
+### 24.8 B (ผู้ฝากหิ้ว) ดูรายละเอียดออเดอร์ พร้อมผู้รับหิ้วและประวัติสถานะ
+GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+### 24.9 A (ผู้รับหิ้วของรอบ) ดูรายละเอียดออเดอร์เดียวกันได้
+GET {{baseUrl}}/orders/{{createOrder.response.body.data.orderId}}
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+### 24.10 orderId ไม่ใช่ตัวเลข (ควรได้ 400 พร้อม field orderId)
+GET {{baseUrl}}/orders/abc
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
 
 ########## Task24: ยืนยันรับสินค้า ##########
 

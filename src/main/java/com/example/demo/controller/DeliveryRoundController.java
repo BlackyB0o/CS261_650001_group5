@@ -4,11 +4,13 @@ import com.example.demo.common.RequestAttributes;
 import com.example.demo.dto.ApiResponseDTO;
 import com.example.demo.dto.CreateDeliveryRoundRequestDTO;
 import com.example.demo.dto.DeliveryRoundResponseDTO;
+import com.example.demo.dto.OrderResponseDTO;
 import com.example.demo.dto.PageMetaDTO;
 import com.example.demo.dto.RoundSearchRequestDTO;
 import com.example.demo.dto.RoundStatusResponseDTO;
 import com.example.demo.dto.UpdateRoundStatusRequestDTO;
 import com.example.demo.service.DeliveryRoundService;
+import com.example.demo.service.OrderService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Task08 รอบหิ้ว + Task31 (US02) ค้นหารอบ
+ * Task08 รอบหิ้ว + Task31 (US02) ค้นหารอบ + Task36 (US04) รายการฝากซื้อในรอบ
  * GET list/detail เปิดให้ Guest ดูได้ ส่วนที่เหลือต้องมี token (userId จาก JWT)
  */
 @RestController
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DeliveryRoundController {
 
     private final DeliveryRoundService deliveryRoundService;
+    private final OrderService orderService;
 
     @PostMapping
     public ResponseEntity<ApiResponseDTO<DeliveryRoundResponseDTO>> createRound(
@@ -67,6 +70,17 @@ public class DeliveryRoundController {
     @GetMapping("/{roundId}")
     public ResponseEntity<ApiResponseDTO<DeliveryRoundResponseDTO>> getRound(@PathVariable Long roundId) {
         return ResponseEntity.ok(ApiResponseDTO.success(deliveryRoundService.getRound(roundId)));
+    }
+
+    /**
+     * Task36 (US04) รายการฝากซื้อทั้งหมดในรอบ เจ้าของรอบเท่านั้น (ต้องมี token)
+     * ผลลัพธ์เหมือน GET /orders?roundId= ของ Task16 (ใช้ Service ตัวเดียวกัน)
+     */
+    @GetMapping("/{roundId}/orders")
+    public ResponseEntity<ApiResponseDTO<List<OrderResponseDTO>>> getRoundOrders(
+            @RequestAttribute(RequestAttributes.USER_ID) Long userId,
+            @PathVariable Long roundId) {
+        return ResponseEntity.ok(ApiResponseDTO.success(orderService.getOrdersByRound(userId, roundId)));
     }
 
     /** เจ้าของรอบเท่านั้น (Service ตรวจแล้วโยน 403) */
