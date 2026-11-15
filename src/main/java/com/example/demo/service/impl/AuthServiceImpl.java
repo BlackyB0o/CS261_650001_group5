@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.UserRoles;
 import com.example.demo.dto.AuthResponseDTO;
 import com.example.demo.dto.ForgotPasswordRequestDTO;
 import com.example.demo.dto.LoginRequestDTO;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Task04 สมัครสมาชิก, login 2 ขั้นตอน (รหัสผ่าน -> OTP -> JWT), ขอ OTP ใหม่, ลืมรหัสผ่าน
  * กติกา OTP: 6 หลัก, หมดอายุ 5 นาที, กรอกผิดได้ 5 ครั้ง, ขอใหม่ได้ทุก 60 วินาที, เก็บแบบ hash
+ * Task56 (US10) แอดมิน login ด้วยอีเมลและรหัสผ่าน (ไม่ผ่าน OTP) และบัญชีที่ถูกระงับเข้าสู่ระบบไม่ได้
  */
 @Service
 @RequiredArgsConstructor
@@ -81,7 +83,29 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordHasher.matches(request.getPassword(), user.getPasswordHash())) {
             throw ApiException.unauthorized("Invalid credentials");
         }
+        if (UserRoles.ADMIN.equals(user.getRole())) {
+            throw ApiException.forbidden("Please use admin login");
+        }
+        requireNotSuspended(user);
         return issueOtp(user, PURPOSE_LOGIN);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AuthResponseDTO adminLogin(LoginRequestDTO request) {
+        String email = request.getIdentifier().trim().toLowerCase();
+        User admin = userRepository.findByEmail(email)
+                .filter(user -> UserRoles.ADMIN.equals(user.getRole()))
+                .orElseThrow(() -> ApiException.unauthorized("Invalid credentials"));
+        if (!passwordHasher.matches(request.getPassword(), admin.getPasswordHash())) {
+            throw ApiException.unauthorized("Invalid credentials");
+        }
+        return AuthResponseDTO.builder()
+                .token(jwtService.generateToken(admin.getId()))
+                .tokenType("Bearer")
+                .userId(admin.getId())
+                .fullName(admin.getFullName())
+                .build();
     }
 
     /** noRollbackFor: จำนวนครั้งที่กรอกผิดต้องถูกบันทึกแม้จะตอบ error */
@@ -90,6 +114,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDTO verifyOtp(VerifyOtpRequestDTO request) {
         OtpVerification otp = checkOtp(request.getVerificationId(), request.getOtp(), PURPOSE_LOGIN);
         User user = otp.getUser();
+        requireNotSuspended(user);
         return AuthResponseDTO.builder()
                 .token(jwtService.generateToken(user.getId()))
                 .tokenType("Bearer")
@@ -104,6 +129,9 @@ public class AuthServiceImpl implements AuthService {
         OtpVerification old = otpRepository.findById(request.getVerificationId())
                 .orElseThrow(() -> ApiException.notFound("Verification not found"));
         User user = old.getUser();
+        if (PURPOSE_LOGIN.equals(old.getPurpose())) {
+            requireNotSuspended(user);
+        }
         otpRepository.findTopByUserIdAndPurposeOrderByCreatedAtDesc(user.getId(), old.getPurpose())
                 .ifPresent(latest -> {
                     if (latest.getCreatedAt().isAfter(LocalDateTime.now().minusSeconds(RESEND_COOLDOWN_SECONDS))) {
@@ -128,6 +156,13 @@ public class AuthServiceImpl implements AuthService {
         User user = otp.getUser();
         user.setPasswordHash(passwordHasher.hash(request.getNewPassword()));
         userRepository.save(user);
+    }
+
+    /** Task56 (US10) บัญชีที่แอดมินระงับไว้เข้าสู่ระบบไม่ได้ */
+    private void requireNotSuspended(User user) {
+        if (user.isSuspended()) {
+            throw ApiException.forbidden("Account suspended");
+        }
     }
 
     /** สร้าง OTP ใหม่ บันทึกแบบ hash แล้วส่ง SMS (mock) */
