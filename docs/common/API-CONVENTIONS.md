@@ -21,7 +21,9 @@
 
 ## 2. Authentication และสิทธิ์การใช้งาน
 
-- **ไม่มี role** ผู้ใช้ทุกคนฝากหิ้ว โพสต์ และเปิดรอบรับหิ้วได้ในบัญชีเดียว
+- **ผู้ใช้ทั่วไป (role `USER`)** ฝากหิ้ว โพสต์ และเปิดรอบรับหิ้วได้ในบัญชีเดียว ไม่ต้องเลือก role
+- **ผู้ดูแลระบบ (role `ADMIN`, Task54)** มีบัญชีเดียว เข้าสู่ระบบที่ `POST /auth/admin/login` และใช้ endpoint กลุ่ม `/admin/*` ได้คนเดียว ผู้ใช้ทั่วไปเรียก `/admin/*` ได้ `403` ระบบตรวจ role จากตาราง `users` (JWT ยังมีแค่ `userId`)
+- **บัญชีที่ถูกระงับ (Task54)** เข้าสู่ระบบได้ `403 Account suspended` และ request ที่แนบ token เดิมได้ `401 Account suspended`
 - **Guest (ไม่ได้เข้าสู่ระบบ)** ดูได้อย่างเดียว ไม่ต้องแนบ token ใช้ได้เฉพาะ endpoint เหล่านี้: `GET /delivery-rounds`, `GET /delivery-rounds/{id}`, `GET /posts`, `GET /posts/{id}` และ endpoint กลุ่ม `/auth/*` (Task04)
 - endpoint อื่นทั้งหมดต้องแนบ `Authorization: Bearer <JWT_TOKEN>` ไม่มี token → `401`
 - JWT มีเฉพาะ `userId` ได้มาหลังยืนยัน OTP สำเร็จ (login 2 ขั้นตอน ดู Task04)
@@ -108,7 +110,7 @@ classDiagram
 | `201 Created` | สร้างข้อมูลใหม่สำเร็จ |
 | `400 Bad Request` | ข้อมูลไม่ครบหรือไม่ถูกรูปแบบ (ไม่บันทึกข้อมูล) |
 | `401 Unauthorized` | ไม่มี token หรือ token ไม่ถูกต้อง/หมดอายุ |
-| `403 Forbidden` | ไม่ใช่เจ้าของข้อมูล หรือทำรายการกับของตัวเองที่ไม่อนุญาต |
+| `403 Forbidden` | ไม่ใช่เจ้าของข้อมูล, ทำรายการกับของตัวเองที่ไม่อนุญาต หรือไม่ใช่แอดมินแต่เรียก `/admin/*` |
 | `404 Not Found` | ไม่พบข้อมูลตาม id |
 | `429 Too Many Requests` | ขอ/กรอก OTP เกินกำหนด (ขอซ้ำก่อน 60 วินาที หรือกรอกผิดเกิน 5 ครั้ง) |
 | `409 Conflict` | ข้อมูลซ้ำ หรือสถานะปัจจุบันไม่อนุญาตให้ทำรายการนี้ |
@@ -127,6 +129,8 @@ classDiagram
 | `PostStatus` | `OPEN`, `ACCEPTED` | `POSTS.status` (Task12) |
 | `PaymentMethod` | `QR_TRANSFER` (สแกน QR ระบบตัวกลาง + แนบสลิป) | `PAYMENTS.payment_method` |
 | `CompletionStatus` | `COMPLETED` | `ORDER_COMPLETIONS.completion_status` |
+| `UserRole` | `USER`, `ADMIN` | `USERS.role` (Task54) |
+| `ReportStatus` | `PENDING` (รอแอดมินพิจารณา), `APPROVED` (อนุมัติรายงาน), `DECLINED` (ปฏิเสธรายงาน) | `REPORTS.status` (Task49, Task54) |
 
 ### ลำดับสถานะตลอดกระบวนการ
 
