@@ -56,6 +56,8 @@
             "order-detail.html?orderId=" + encodeURIComponent(order.orderId);
         document.getElementById("completion-back-link").href =
             "order-detail.html?orderId=" + encodeURIComponent(order.orderId);
+        document.getElementById("proof-report-button").href =
+            "report.html?orderId=" + encodeURIComponent(order.orderId);
         document.getElementById("completion-order-label").textContent = "ORDER #" + order.orderId;
         document.getElementById("completion-order-status").textContent = order.status || "-";
         document.getElementById("completion-summary-id").textContent = "RO" + order.orderId;

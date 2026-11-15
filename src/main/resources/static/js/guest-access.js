@@ -29,6 +29,7 @@
     const authPages = new Set([
         "forgot-password.html",
         "login.html",
+        "admin-login.html",
         "register.html",
         "reset-password.html",
         "verify-otp.html"
@@ -132,12 +133,6 @@
 
     const authenticated = hasValidToken();
 
-   
-
-    if (authPages.has(currentPage)) {
-        return;
-    }
-
     document.addEventListener(
         "click",
         function (event) {
@@ -214,6 +209,14 @@
     );
 
     document.querySelectorAll("nav").forEach(function (nav) {
+        if (!nav.querySelector('a[href$="admin-login.html"]')) {
+            const adminLoginLink = document.createElement("a");
+            adminLoginLink.href = "/admin-login.html";
+            adminLoginLink.className = "btn btn-outline";
+            adminLoginLink.textContent = "Admin Login";
+            nav.appendChild(adminLoginLink);
+        }
+
         const guestLinks = [
             'a[href$="rounds.html"]',
             'a[href$="buyer-posts.html"]',
@@ -230,9 +233,6 @@
             nav.querySelectorAll(selector).forEach(function (link) {
                 link.hidden = !authenticated;
             });
-        if (authPages.has(currentPage)) {
-    return;
-}    
         });
 
         authLinks.forEach(function (selector) {

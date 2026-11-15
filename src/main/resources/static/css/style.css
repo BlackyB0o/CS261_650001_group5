@@ -9265,6 +9265,11 @@ body {
     background: #e3f7e9;
 }
 
+.report-status.rejected {
+    color: #a33a3a;
+    background: #fde8e8;
+}
+
 .report-detail-link {
     color: #ed781b;
     text-decoration: none;
@@ -9366,6 +9371,73 @@ body {
     margin: 0 0 22px;
     color: #333;
     font-size: 19px;
+}
+
+.reported-account-card .card-heading {
+    margin-bottom: 18px;
+}
+
+.reported-account-card .card-heading h2 {
+    margin: 0;
+}
+
+.reported-account-name {
+    margin: 0 0 12px;
+    color: #333;
+    font-weight: 600;
+}
+
+.reported-account-note {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.reported-account-status {
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.reported-account-status.active {
+    color: #218348;
+    background: #e4f7e9;
+}
+
+.reported-account-status.suspended {
+    color: #a33a3a;
+    background: #fde8e8;
+}
+
+.reported-account-status.unavailable {
+    color: #777;
+    background: #f1f1f1;
+}
+
+.reported-account-action {
+    min-height: 44px;
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 9px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.reported-account-action.suspend {
+    background: #b83232;
+}
+
+.reported-account-action.restore {
+    background: #287a48;
+}
+
+.reported-account-action:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .card-heading {

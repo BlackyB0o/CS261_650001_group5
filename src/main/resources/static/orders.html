@@ -167,24 +167,26 @@
             </div>
 
             <div class="report-search">
-                <input type="text" id="reportSearch" placeholder="ค้นหารหัสรายงานหรือหัวข้อปัญหา...">
+                <input type="text" id="reportSearch" placeholder="ค้นหารหัสรายงาน หมายเลขออเดอร์ ประเภท หรือรายละเอียด...">
             </div>
+            <p id="report-history-message" class="form-message" role="status" aria-live="polite" hidden></p>
 
             <div class="report-table-wrapper">
                 <table class="report-table">
                     <thead>
                         <tr>
                             <th>รหัสรายงาน</th>
-                            <th>หัวข้อปัญหา</th>
+                            <th>หมายเลขออเดอร์</th>
+                            <th>ประเภทปัญหา</th>
                             <th>วันที่แจ้ง</th>
                             <th>สถานะ</th>
-                            <th></th>
+                            <th>รายละเอียด</th>
                         </tr>
                     </thead>
 
                     <tbody id="reportTableBody">
                         <tr id="noReportFound">
-                            <td colspan="5" class="no-report">
+                            <td colspan="6" class="no-report">
                                 ยังไม่มีประวัติการรายงานปัญหา
                             </td>
                         </tr>
@@ -280,6 +282,7 @@
     <script src="/js/my-rounds.js"></script>
     <script src="/js/my-orders.js"></script>
     <script src="/js/my-posts.js"></script>
+    <script src="/js/my-reports.js"></script>
     <script src="/js/guest-access.js"></script>
     <script>
     const menuToggle = document.getElementById("menuToggle");
