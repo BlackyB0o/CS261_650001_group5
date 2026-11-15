@@ -18,6 +18,7 @@ import lombok.Setter;
 /**
  * ตาราง reports (Task51 US09) รายงานปัญหาหรือพฤติกรรมน่าสงสัยของคู่กรณีในออเดอร์
  * ผู้รายงานเป็นผู้ฝากหิ้วหรือผู้รับหิ้วของออเดอร์ ส่วนผู้ถูกรายงานคืออีกฝ่าย
+ * Task54 (US10) แอดมินพิจารณารายงาน เปลี่ยนสถานะเป็น APPROVED หรือ DECLINED พร้อมบันทึกหมายเหตุ
  */
 @Entity
 @Table(name = "reports")
@@ -53,12 +54,20 @@ public class Report {
     @Column(name = "evidence_url", length = 500)
     private String evidenceUrl;
 
-    /** รายงานใหม่เป็น PENDING เสมอ */
+    /** รายงานใหม่เป็น PENDING เสมอ แอดมินพิจารณาแล้วเป็น APPROVED หรือ DECLINED (ดู ReportStatuses) */
     @Column(nullable = false, length = 20)
     private String status;
 
+    /** หมายเหตุจากแอดมินตอนพิจารณา null ได้ */
+    @Column(name = "admin_note", length = 1000)
+    private String adminNote;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    /** เวลาที่แอดมินพิจารณา null = ยังไม่พิจารณา */
+    @Column(name = "reviewed_at")
+    private LocalDateTime reviewedAt;
 
     @PrePersist
     void onCreate() {

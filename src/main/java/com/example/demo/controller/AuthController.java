@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Task04 ทุก endpoint ไม่ต้องใช้ token (Guest) */
+/** Task04 ทุก endpoint ไม่ต้องใช้ token (Guest), Task56 (US10) เพิ่ม admin login */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -34,6 +34,14 @@ public class AuthController {
         RegisterResponseDTO data = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponseDTO.success("User registered successfully", data));
+    }
+
+    /** Task56 (US10) แอดมินใส่อีเมลใน identifier ได้ token ทันที */
+    @PostMapping("/admin/login")
+    public ResponseEntity<ApiResponseDTO<AuthResponseDTO>> adminLogin(
+            @Valid @RequestBody LoginRequestDTO request) {
+        AuthResponseDTO data = authService.adminLogin(request);
+        return ResponseEntity.ok(ApiResponseDTO.success("Admin login successful", data));
     }
 
     /** ขั้นที่ 1 ตรวจรหัสผ่านและส่ง OTP (ยังไม่ส่ง token) */

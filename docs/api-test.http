@@ -9,6 +9,10 @@
 @otpBuyer = 000000
 @otpReset = 000000
 
+# บัญชีแอดมิน (Task56 US10) ต้องตรงกับ APP_ADMIN_EMAIL และ APP_ADMIN_PASSWORD ที่ตั้งก่อนรันแอป (เช่นในไฟล์ .env)
+@adminEmail = admin@carryhub.com
+@adminPassword = AdminPassword123
+
 ########## Task04: สมัคร / login / OTP ##########
 
 ### 1. สมัครผู้ใช้ A (จะเป็นคนเปิดรอบ) ถ้าเคยสมัครแล้วจะได้ 409 ข้ามได้
@@ -343,6 +347,7 @@ Authorization: Bearer {{verifyRunner.response.body.data.token}}
 ########## Task51 (US09): รายงานปัญหาหรือพฤติกรรมน่าสงสัย ##########
 
 ### 26.1 B (ผู้ฝากหิ้ว) รายงานผู้รับหิ้ว พร้อมรูปหลักฐาน -> 201 PENDING
+# @name reportByBuyer
 POST {{baseUrl}}/reports
 Authorization: Bearer {{verifyBuyer.response.body.data.token}}
 Content-Type: multipart/form-data; boundary=CarryHubBoundary
@@ -424,3 +429,90 @@ Content-Type: application/json
   "otp": "{{otpReset}}",
   "newPassword": "NewPassword123"
 }
+
+########## Task56 (US10): แอดมินตรวจสอบรายงานและระงับบัญชี ##########
+
+### 29.1 แอดมินเข้าสู่ระบบ (ไม่ต้องใช้ OTP)
+# @name adminLogin
+POST {{baseUrl}}/auth/admin/login
+Content-Type: application/json
+
+{
+  "identifier": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### 29.2 B (ผู้ใช้ทั่วไป) เรียก endpoint แอดมิน (ควรได้ 403 Admin access required)
+GET {{baseUrl}}/admin/reports
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}
+
+### 29.3 แอดมินดูรายงานทั้งหมด (ใหม่สุดก่อน)
+GET {{baseUrl}}/admin/reports
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+
+### 29.4 แอดมินดูรายละเอียดรายงานจากข้อ 26.1
+GET {{baseUrl}}/admin/reports/{{reportByBuyer.response.body.data.reportId}}
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+
+### 29.5 แอดมินอนุมัติรายงาน -> APPROVED
+PATCH {{baseUrl}}/admin/reports/{{reportByBuyer.response.body.data.reportId}}/decision
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "decision": "APPROVED",
+  "adminNote": "ตรวจสอบหลักฐานแล้ว ผู้รับหิ้วไม่มาส่งจริง"
+}
+
+### 29.6 พิจารณารายงานเดิมซ้ำ (ควรได้ 409 Report has already been reviewed)
+PATCH {{baseUrl}}/admin/reports/{{reportByBuyer.response.body.data.reportId}}/decision
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "decision": "DECLINED"
+}
+
+### 29.7 แอดมินระงับบัญชี A (ผู้รับหิ้วที่ถูกรายงาน)
+PATCH {{baseUrl}}/admin/users/{{verifyRunner.response.body.data.userId}}/suspend
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "suspended": true
+}
+
+### 29.8 A ใช้ token เดิม (ควรได้ 401 Account suspended)
+GET {{baseUrl}}/orders/my
+Authorization: Bearer {{verifyRunner.response.body.data.token}}
+
+### 29.9 A เข้าสู่ระบบใหม่ (ควรได้ 403 Account suspended)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "runner@test.com",
+  "password": "Password123"
+}
+
+### 29.10 แอดมินคืนสิทธิ์บัญชี A
+PATCH {{baseUrl}}/admin/users/{{verifyRunner.response.body.data.userId}}/suspend
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "suspended": false
+}
+
+### 29.11 แอดมินระงับบัญชีแอดมิน (ควรได้ 403 Admin accounts cannot be suspended)
+PATCH {{baseUrl}}/admin/users/{{adminLogin.response.body.data.userId}}/suspend
+Authorization: Bearer {{adminLogin.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "suspended": true
+}
+
+### 29.12 B ดูประวัติรายงานของตัวเอง (เห็นสถานะ APPROVED จากข้อ 29.5)
+GET {{baseUrl}}/reports/my
+Authorization: Bearer {{verifyBuyer.response.body.data.token}}

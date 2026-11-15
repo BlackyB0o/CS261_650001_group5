@@ -10,11 +10,15 @@ import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ReportRepository;
 import com.example.demo.service.FileStorageService;
 import com.example.demo.service.ReportService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Task51 (US09) ผู้รายงานต้องเป็นคู่กรณีในออเดอร์ ระบบระบุผู้ถูกรายงานให้เองเป็นอีกฝ่าย */
+/**
+ * Task51 (US09) ผู้รายงานต้องเป็นคู่กรณีในออเดอร์ ระบบระบุผู้ถูกรายงานให้เองเป็นอีกฝ่าย
+ * Task56 (US10) ผู้ใช้ดูประวัติรายงานของตัวเอง
+ */
 @Service
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
@@ -52,19 +56,29 @@ public class ReportServiceImpl implements ReportService {
             report.setEvidenceUrl(fileStorageService.store(request.getEvidenceImage(), "reports"));
         }
         report.setStatus("PENDING");
-        Report saved = reportRepository.save(report);
+        return toResponse(reportRepository.save(report));
+    }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReportResponseDTO> getMyReports(Long reporterId) {
+        return reportRepository.findByReporterIdOrderByCreatedAtDescIdDesc(reporterId).stream()
+                .map(ReportServiceImpl::toResponse)
+                .toList();
+    }
+
+    private static ReportResponseDTO toResponse(Report report) {
         return ReportResponseDTO.builder()
-                .reportId(saved.getId())
-                .orderId(order.getId())
-                .reporterId(reporter.getId())
-                .reportedUserId(reportedUser.getId())
-                .reportedUserName(reportedUser.getFullName())
-                .category(saved.getCategory())
-                .description(saved.getDescription())
-                .evidenceUrl(saved.getEvidenceUrl())
-                .status(saved.getStatus())
-                .createdAt(saved.getCreatedAt())
+                .reportId(report.getId())
+                .orderId(report.getOrder().getId())
+                .reporterId(report.getReporter().getId())
+                .reportedUserId(report.getReportedUser().getId())
+                .reportedUserName(report.getReportedUser().getFullName())
+                .category(report.getCategory())
+                .description(report.getDescription())
+                .evidenceUrl(report.getEvidenceUrl())
+                .status(report.getStatus())
+                .createdAt(report.getCreatedAt())
                 .build();
     }
 }
