@@ -173,10 +173,10 @@
         const visibleCount = document.getElementById("visible-count");
         const reportsMessage = document.getElementById("reports-message");
         const categoryLabels = {
-            PRODUCT: "สินค้าไม่ตรงตามที่สั่ง",
-            DELIVERY: "ปัญหาการส่งมอบสินค้า",
-            PAYMENT: "ปัญหาการชำระเงิน",
-            USER: "ปัญหาเกี่ยวกับผู้ใช้งาน",
+            PRODUCT_MISMATCH: "สินค้าไม่ตรงตามที่สั่ง",
+            DELIVERY_ISSUE: "ปัญหาการส่งมอบสินค้า",
+            PAYMENT_ISSUE: "ปัญหาการชำระเงิน",
+            SUSPICIOUS_BEHAVIOR: "ปัญหาเกี่ยวกับผู้ใช้งาน",
             OTHER: "อื่น ๆ"
         };
         let reports = [];
@@ -195,9 +195,9 @@
                 const row = document.createElement("tr");
                 row.dataset.status = report.status === "PENDING" ? "pending" : "resolved";
                 const cells = [
-                    "RP" + String(report.id).padStart(3, "0"),
-                    report.orderReference,
-                    report.reporterType === "CARRIER" ? "ผู้รับหิ้ว" : "ผู้ฝากซื้อ",
+                    "RP" + String(report.reportId).padStart(3, "0"),
+                    "RO" + report.orderId,
+                    report.reporterType === "RUNNER" ? "ผู้รับหิ้ว" : "ผู้ฝากซื้อ",
                     categoryLabels[report.category] || report.category,
                     statusLabel(report.status)
                 ];
@@ -212,8 +212,8 @@
                         const reporter = document.createElement("div");
                         reporter.className = "reporter-cell";
                         const avatar = document.createElement("div");
-                        avatar.className = "reporter-avatar" + (report.reporterType === "CARRIER" ? " carrier-avatar" : "");
-                        avatar.textContent = report.reporterType === "CARRIER" ? "ร" : "ผ";
+                        avatar.className = "reporter-avatar" + (report.reporterType === "RUNNER" ? " carrier-avatar" : "");
+                        avatar.textContent = report.reporterType === "RUNNER" ? "ร" : "ผ";
                         const name = document.createElement("span");
                         name.textContent = report.reporterName
                             ? report.reporterName + " (" + value + ")"
@@ -238,7 +238,7 @@
                 });
                 const detailCell = document.createElement("td");
                 const detailLink = document.createElement("a");
-                detailLink.href = "report-detail.html?id=" + encodeURIComponent(report.id);
+                detailLink.href = "report-detail.html?id=" + encodeURIComponent(report.reportId);
                 detailLink.className = "detail-btn";
                 detailLink.textContent = "ดูรายละเอียด →";
                 detailCell.appendChild(detailLink);

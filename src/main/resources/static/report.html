@@ -73,7 +73,7 @@
                                 หมายเลขออเดอร์ <span>*</span>
                             </label>
 
-                            <select id="order-id" name="orderReference" required>
+                            <select id="order-id" name="orderId" required>
                                 <option value="">กำลังโหลดรายการออเดอร์...</option>
                             </select>
 
@@ -88,10 +88,10 @@
 
                             <select id="category" name="category" required>
                                 <option value="">เลือกประเภทปัญหาที่พบ</option>
-                                <option value="PRODUCT">สินค้าไม่ตรงตามที่สั่ง</option>
-                                <option value="DELIVERY">ปัญหาการส่งมอบสินค้า</option>
-                                <option value="PAYMENT">ปัญหาการชำระเงิน</option>
-                                <option value="USER">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
+                                <option value="PRODUCT_MISMATCH">สินค้าไม่ตรงตามที่สั่ง</option>
+                                <option value="DELIVERY_ISSUE">ปัญหาการส่งมอบสินค้า</option>
+                                <option value="PAYMENT_ISSUE">ปัญหาการชำระเงิน</option>
+                                <option value="SUSPICIOUS_BEHAVIOR">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
                                 <option value="OTHER">อื่น ๆ</option>
                             </select>
                         </div>
@@ -301,7 +301,7 @@
                     }
                     const orderReference = "RO" + order.orderId;
                     const option = document.createElement("option");
-                    option.value = orderReference;
+                    option.value = order.orderId;
                     option.textContent = orderReference + (order.status ? " — " + order.status : "");
                     orderSelect.appendChild(option);
                     if (requestedOrderId && String(order.orderId) === requestedOrderId) {
@@ -366,7 +366,7 @@
                         ? result.message
                         : "ส่งรายงานไม่สำเร็จ (HTTP " + response.status + ")");
                 }
-                window.location.assign("report-success.html?id=" + encodeURIComponent(result.data.id));
+                window.location.assign("report-success.html?id=" + encodeURIComponent(result.data.reportId));
             } catch (error) {
                 reportMessage.textContent = error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง";
                 reportMessage.hidden = false;

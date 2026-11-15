@@ -7,10 +7,10 @@
     }
 
     const categoryLabels = {
-        PRODUCT: "สินค้าไม่ตรงตามที่สั่ง",
-        DELIVERY: "ปัญหาการส่งมอบสินค้า",
-        PAYMENT: "ปัญหาการชำระเงิน",
-        USER: "ปัญหาเกี่ยวกับผู้ใช้งาน",
+        PRODUCT_MISMATCH: "สินค้าไม่ตรงตามที่สั่ง",
+        DELIDELIVERY_ISSUEVERY: "ปัญหาการส่งมอบสินค้า",
+        PAYMENT_ISSUE: "ปัญหาการชำระเงิน",
+        SUSPICIOUS_BEHAVIOR: "ปัญหาเกี่ยวกับผู้ใช้งาน",
         OTHER: "อื่น ๆ"
     };
     let reports = [];
@@ -39,8 +39,8 @@
         const query = searchInput.value.trim().toLocaleLowerCase();
         const matchingReports = reports.filter(function (report) {
             return [
-                "RP" + String(report.id).padStart(3, "0"),
-                report.orderReference,
+                "RP" + String(report.reportId).padStart(3, "0"),
+                "RO" + report.orderId,
                 categoryLabels[report.category] || report.category,
                 report.description,
                 statusLabel(report.status)
@@ -66,8 +66,8 @@
         matchingReports.forEach(function (report) {
             const row = document.createElement("tr");
             const values = [
-                "RP" + String(report.id).padStart(3, "0"),
-                report.orderReference || "-",
+                "RP" + String(report.reportId).padStart(3, "0"),
+                "RO" + report.orderId,
                 categoryLabels[report.category] || report.category || "-",
                 formatDate(report.createdAt),
                 statusLabel(report.status),

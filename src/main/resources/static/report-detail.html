@@ -240,10 +240,10 @@
         const reportedAccountAction = document.getElementById("reported-account-action");
         const reportId = new URLSearchParams(window.location.search).get("id");
         const categoryLabels = {
-            PRODUCT: "สินค้าไม่ตรงตามที่สั่ง",
-            DELIVERY: "ปัญหาการส่งมอบสินค้า",
-            PAYMENT: "ปัญหาการชำระเงิน",
-            USER: "ปัญหาเกี่ยวกับผู้ใช้งาน",
+            PRODUCT_MISMATCH: "สินค้าไม่ตรงตามที่สั่ง",
+            DELIVERY_ISSUE: "ปัญหาการส่งมอบสินค้า",
+            PAYMENT_ISSUE: "ปัญหาการชำระเงิน",
+            SUSPICIOUS_BEHAVIOR: "ปัญหาเกี่ยวกับผู้ใช้งาน",
             OTHER: "อื่น ๆ"
         };
         let report;
@@ -332,19 +332,19 @@
                     throw new Error(result && result.message ? result.message : "โหลดรายละเอียดรายงานไม่สำเร็จ");
                 }
                 report = result.data;
-                document.getElementById("report-id").textContent = "RP" + String(report.id).padStart(3, "0");
+                document.getElementById("report-id").textContent = "RP" + String(report.reportId).padStart(3, "0");
                 document.getElementById("report-created-at").textContent =
                     report.createdAt ? new Date(report.createdAt).toLocaleString("th-TH") : "-";
-                document.getElementById("report-order-reference").textContent = report.orderReference;
+                document.getElementById("report-order-reference").textContent = "RO" + report.orderId;
                 document.getElementById("reporter-type").textContent =
                     report.reporterName + " (" +
-                    (report.reporterType === "CARRIER" ? "ผู้รับหิ้ว" : "ผู้ฝากซื้อ") + ")";
+                    (report.reporterType === "RUNNER" ? "ผู้รับหิ้ว" : "ผู้ฝากซื้อ") + ")";
                 document.getElementById("report-category").textContent = categoryLabels[report.category] || report.category;
                 document.getElementById("report-description").textContent = report.description;
                 const evidenceContainer = document.getElementById("evidence-link-container");
-                if (report.evidenceImageUrl) {
+                if (report.evidenceUrl) {
                     const evidenceLink = document.getElementById("evidence-link");
-                    evidenceLink.href = report.evidenceImageUrl;
+                    evidenceLink.href = report.evidenceUrl;
                     evidenceContainer.hidden = false;
                 }
                 document.getElementById("admin-note").value = report.adminNote || "";
@@ -381,7 +381,7 @@
             reportedAccountAction.disabled = true;
             reportedAccountFeedback.hidden = true;
             try {
-                const response = await fetch("/api/v1/admin/reports/" + encodeURIComponent(reportId) + "/suspension", {
+                const response = await fetch("/api/v1/admin/users/" + encodeURIComponent(report.reportedUserId) + "/suspend", {
                     method: "PATCH",
                     headers: {
                         "Authorization": (localStorage.getItem("tokenType") || "Bearer") + " " + token,
@@ -400,7 +400,7 @@
                 if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
                     throw new Error(result && result.message ? result.message : "เปลี่ยนสถานะบัญชีไม่สำเร็จ");
                 }
-                report = result.data;
+                report.reportedUserSuspended = result.data.suspended;
                 renderReportedAccount();
                 showReportedAccountFeedback(suspended ? "ระงับบัญชีแล้ว" : "คืนสิทธิ์บัญชีแล้ว", false);
             } catch (error) {
