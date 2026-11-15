@@ -8,7 +8,7 @@
 
     const categoryLabels = {
         PRODUCT_MISMATCH: "สินค้าไม่ตรงตามที่สั่ง",
-        DELIDELIVERY_ISSUEVERY: "ปัญหาการส่งมอบสินค้า",
+        DELIVERY_ISSUE: "ปัญหาการส่งมอบสินค้า",
         PAYMENT_ISSUE: "ปัญหาการชำระเงิน",
         SUSPICIOUS_BEHAVIOR: "ปัญหาเกี่ยวกับผู้ใช้งาน",
         OTHER: "อื่น ๆ"
