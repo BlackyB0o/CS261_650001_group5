@@ -34,3 +34,6 @@ build/
 
 ### Uploaded files ###
 uploads/
+
+### Local secrets (APP_ADMIN_PASSWORD) ###
+.env

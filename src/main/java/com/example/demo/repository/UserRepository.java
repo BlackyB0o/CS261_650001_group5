@@ -12,6 +12,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /** ค้นหาตอนลืมรหัสผ่าน */
     Optional<User> findByPhoneNumber(String phoneNumber);
 
+    /** Task54 (US10) ค้นหาบัญชีแอดมินจากอีเมล (admin login และตอนสร้างบัญชีแอดมิน) */
+    Optional<User> findByEmail(String email);
+
     boolean existsByEmail(String email);
 
     boolean existsByPhoneNumber(String phoneNumber);
