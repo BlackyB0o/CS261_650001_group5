@@ -12,6 +12,11 @@ erDiagram
     DELIVERY_ROUNDS ||--o{ ORDERS : receives
     ORDERS ||--|{ ORDER_ITEMS : contains
 
+    %% Task 20, 24 - ชำระเงิน / ยืนยันรับสินค้า
+    ORDERS ||--o| PAYMENTS : has
+    PAYMENTS ||--o| ORDER_COMPLETIONS : leads_to
+    USERS ||--o{ ORDER_COMPLETIONS : confirms
+
     %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
         bigint id PK
@@ -35,14 +40,14 @@ erDiagram
         varchar status "NOT NULL, DEFAULT OPEN (OPEN|CLOSED|COMPLETED|CANCELLED)"
     }
 
-    %% Task 16 - ฝากซื้อสินค้า/อาหาร
+    %% Task 16, 44 - ฝากซื้อสินค้า/อาหาร
     ORDERS {
         bigint id PK
         bigint buyer_id FK "NOT NULL"
         bigint round_id FK "NOT NULL"
-        varchar handoff_method "NOT NULL"
+        varchar handoff_method "NOT NULL (MEETUP|DELIVERY)"
         varchar handoff_location "NOT NULL"
-        varchar status "NOT NULL"
+        varchar status "NOT NULL, DEFAULT PENDING"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
@@ -52,29 +57,32 @@ erDiagram
         bigint order_id FK "NOT NULL"
         varchar product_name "NOT NULL"
         int quantity "NOT NULL, > 0"
-        varchar note "OPTIONAL"
+        text note "OPTIONAL"
     }
 
     %% Task 20 - ชำระค่าสินค้าและค่าหิ้ว
     PAYMENTS {
         bigint id PK
-        bigint order_id FK "NOT NULL, UK"
+        bigint order_id FK,UK "NOT NULL"
         decimal product_amount "NOT NULL, >=0"
         decimal service_fee "NOT NULL, >=0"
         decimal total_amount "NOT NULL, >=0"
-        varchar payment_method "NOT NULL"
-        varchar payment_status "NOT NULL"
-        varchar transaction_reference
-        timestamp paid_at
+        varchar payment_method "NOT NULL, DEFAULT QR_TRANSFER"
+        varchar qr_payload "OPTIONAL"
+        varchar slip_image_url "OPTIONAL"
+        varchar payment_status "NOT NULL, DEFAULT PENDING (PENDING|HELD|RELEASED)"
+        varchar transaction_reference "OPTIONAL"
+        timestamp paid_at "OPTIONAL"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
     %% Task 24 - ยืนยันรับสินค้าและปิดออเดอร์
     ORDER_COMPLETIONS {
         bigint id PK
-        bigint payment_id FK "NOT NULL, UK"
+        bigint payment_id FK,UK "NOT NULL"
         bigint confirmed_by FK "NOT NULL"
+        varchar evidence_image_url "NOT NULL"
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
-        varchar completion_status "NOT NULL"
+        varchar completion_status "NOT NULL, DEFAULT COMPLETED"
     }
 ```
