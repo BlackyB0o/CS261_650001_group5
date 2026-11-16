@@ -20,6 +20,10 @@ erDiagram
     %% Task 04 - ลงทะเบียน/เข้าสู่ระบบ + OTP
     USERS ||--o{ OTP_VERIFICATIONS : verifies
 
+    %% Task 12 - โพสต์หาคนรับหิ้ว
+    USERS ||--o{ POSTS : creates
+    USERS |o--o{ POSTS : accepts
+
     %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
         bigint id PK
@@ -98,6 +102,25 @@ erDiagram
         timestamp expires_at "NOT NULL"
         timestamp verified_at "OPTIONAL"
         int attempts_count "NOT NULL, DEFAULT 0"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    %% Task 12 - ผู้ฝากหิ้วโพสต์หาคนรับหิ้ว
+    POSTS {
+        bigint id PK
+        bigint buyer_id FK "NOT NULL"
+        varchar post_title "NOT NULL"
+        varchar shop_name "NOT NULL"
+        text product_detail "NOT NULL"
+        int quantity "NOT NULL"
+        decimal carry_fee "NOT NULL"
+        date desired_date "NOT NULL"
+        varchar location "NOT NULL"
+        decimal budget "OPTIONAL"
+        text additional_details "OPTIONAL"
+        varchar status "NOT NULL, DEFAULT OPEN (OPEN|ACCEPTED)"
+        bigint accepted_by FK "OPTIONAL"
+        timestamp accepted_at "OPTIONAL"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 ```
