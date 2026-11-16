@@ -24,6 +24,10 @@ erDiagram
     USERS ||--o{ POSTS : creates
     USERS |o--o{ POSTS : accepts
 
+    %% Task 39, 44 - รายละเอียดออเดอร์ / อัปเดตสถานะ (ประวัติสถานะ)
+    ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
+    USERS ||--o{ ORDER_STATUS_HISTORY : changes
+
     %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
         bigint id PK
@@ -122,5 +126,15 @@ erDiagram
         bigint accepted_by FK "OPTIONAL"
         timestamp accepted_at "OPTIONAL"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    %% Task 39, 44 - ประวัติการเปลี่ยนสถานะออเดอร์ (US05, US06)
+    ORDER_STATUS_HISTORY {
+        bigint id PK
+        bigint order_id FK "NOT NULL"
+        varchar from_status "OPTIONAL (null = ตอนสร้างออเดอร์)"
+        varchar to_status "NOT NULL"
+        bigint changed_by FK "NOT NULL"
+        timestamp changed_at "NOT NULL"
     }
 ```
