@@ -1,6 +1,8 @@
 # CS261 Group 5 - Database ER Diagram
 
-## Database ER Diagram (Tasks 04, 08, 16, 20, 24)
+## Database ER Diagram (Sprint 1: Tasks 04, 08, 12, 16, 20, 24 / Sprint 2: Tasks 29, 39, 44, 49, 54)
+
+> อ้างอิงตาม Entity ใน `src/main/java/com/example/demo/entity/` บน branch `develop`
 
 ```mermaid
 erDiagram
@@ -158,3 +160,17 @@ erDiagram
         timestamp reviewed_at "OPTIONAL"
     }
 ```
+
+### ค่าที่ใช้ในคอลัมน์ status / category
+
+| ตาราง.คอลัมน์ | ค่าที่เป็นไปได้ |
+|---|---|
+| `orders.status` | PENDING, PAID, ACCEPTED, PURCHASING, READY_FOR_DELIVERY, DELIVERING, COMPLETED, CANCELLED |
+| `reports.category` | PRODUCT_MISMATCH, DELIVERY_ISSUE, PAYMENT_ISSUE, SUSPICIOUS_BEHAVIOR, OTHER |
+| `reports.status` | PENDING, APPROVED, DECLINED |
+| `delivery_rounds.status` | OPEN, CLOSED, COMPLETED, CANCELLED |
+| `posts.status` | OPEN, ACCEPTED |
+| `orders.handoff_method` | MEETUP, DELIVERY |
+| `payments.payment_status` | PENDING, HELD, RELEASED |
+| `users.role` | USER, ADMIN |
+| `otp_verifications.purpose` | LOGIN, RESET_PASSWORD |
