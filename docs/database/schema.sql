@@ -8,11 +8,17 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(10) NOT NULL UNIQUE,
+    phone_number VARCHAR(10) UNIQUE,
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
+    suspended BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    -- phone_number is optional: admin accounts (US10) have no phone
     CONSTRAINT chk_phone_number 
-        CHECK (phone_number ~ '^[0-9]{10}$')
+        CHECK (phone_number IS NULL OR phone_number ~ '^[0-9]{10}$'),
+
+    CONSTRAINT chk_user_role
+        CHECK (role IN ('USER', 'ADMIN'))
 );
 
 CREATE TABLE otp_verifications (
