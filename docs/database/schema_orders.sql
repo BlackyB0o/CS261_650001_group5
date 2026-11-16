@@ -17,7 +17,16 @@ CREATE TABLE orders (
         CHECK (handoff_method IN ('MEETUP', 'DELIVERY')),
 
     CONSTRAINT chk_order_status
-        CHECK (status IN ('PENDING', 'PAID', 'COMPLETED'))
+        CHECK (status IN (
+            'PENDING',
+            'PAID',
+            'ACCEPTED',
+            'PURCHASING',
+            'READY_FOR_DELIVERY',
+            'DELIVERING',
+            'COMPLETED',
+            'CANCELLED'
+        ))
 );
 
 CREATE TABLE order_items (
