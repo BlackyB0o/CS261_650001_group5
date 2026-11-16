@@ -1,3 +1,8 @@
+# CS261 Group 5 - Database ER Diagram
+
+## Database ER Diagram (Tasks 04, 08, 16, 20, 24)
+
+```mermaid
 erDiagram
     %% Task 08, 29 - เปิดรอบ / ค้นหารอบรับหิ้ว
     USERS ||--o{ DELIVERY_ROUNDS : opens
@@ -152,3 +157,4 @@ erDiagram
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         timestamp reviewed_at "OPTIONAL"
     }
+```
