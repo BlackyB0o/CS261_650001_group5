@@ -1,47 +1,71 @@
 # CS261 Group 5 - Database ER Diagram
 
-## Database ER Diagram (Tasks 04, 08, 16, 20, 24)
+## Database ER Diagram (Sprint 1: Tasks 04, 08, 12, 16, 20, 24 / Sprint 2: Tasks 29, 39, 44, 49, 54)
+
+> อ้างอิงตาม Entity ใน `src/main/java/com/example/demo/entity/` บน branch `develop`
 
 ```mermaid
 erDiagram
-    %% Task 08 - เปิดรอบรับหิ้ว
+    %% Task 08, 29 - เปิดรอบ / ค้นหารอบรับหิ้ว
     USERS ||--o{ DELIVERY_ROUNDS : opens
-    
-    %% Task 16 - ความสัมพันธ์ของรายการสั่งซื้อ
+
+    %% Task 16, 34 - ฝากซื้อ / รายการฝากซื้อในรอบ
     USERS ||--o{ ORDERS : places
     DELIVERY_ROUNDS ||--o{ ORDERS : receives
     ORDERS ||--|{ ORDER_ITEMS : contains
-    
-    %% Task 04 - ลงทะเบียนหรือเข้าสู่ระบบ
+
+    %% Task 20, 24 - ชำระเงิน / ยืนยันรับสินค้า
+    ORDERS ||--o| PAYMENTS : has
+    PAYMENTS ||--o| ORDER_COMPLETIONS : leads_to
+    USERS ||--o{ ORDER_COMPLETIONS : confirms
+
+    %% Task 04 - ลงทะเบียน/เข้าสู่ระบบ + OTP
+    USERS ||--o{ OTP_VERIFICATIONS : verifies
+
+    %% Task 12 - โพสต์หาคนรับหิ้ว
+    USERS ||--o{ POSTS : creates
+    USERS |o--o{ POSTS : accepts
+
+    %% Task 39, 44 - รายละเอียดออเดอร์ / อัปเดตสถานะ (ประวัติสถานะ)
+    ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
+    USERS ||--o{ ORDER_STATUS_HISTORY : changes
+
+    %% Task 49, 54 - รายงานปัญหา / แอดมินตรวจสอบ
+    ORDERS ||--o{ REPORTS : about
+    USERS ||--o{ REPORTS : files
+    USERS ||--o{ REPORTS : is_reported_in
+
+    %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
         bigint id PK
         varchar email UK "NOT NULL"
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
-        varchar phone_number UK "NOT NULL"
-        varchar role "NOT NULL"
+        varchar phone_number UK "OPTIONAL, 10 digits"
+        varchar role "NOT NULL, DEFAULT USER (USER|ADMIN)"
+        boolean suspended "NOT NULL, DEFAULT false"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
-    %% Task 08 - เปิดรอบรับหิ้ว
+    %% Task 08, 29 - รอบรับหิ้ว
     DELIVERY_ROUNDS {
         bigint id PK
         bigint runner_id FK "NOT NULL"
-        varchar store_name
-        varchar location_name
+        varchar store_name "NOT NULL"
+        varchar location_name "NOT NULL"
         timestamp scheduled_at "NOT NULL"
         decimal service_fee "NOT NULL, >=0"
-        varchar status "NOT NULL"
+        varchar status "NOT NULL, DEFAULT OPEN (OPEN|CLOSED|COMPLETED|CANCELLED)"
     }
 
-    %% Task 16 - ฝากซื้อสินค้า/อาหาร
+    %% Task 16, 44 - ฝากซื้อสินค้า/อาหาร
     ORDERS {
         bigint id PK
         bigint buyer_id FK "NOT NULL"
         bigint round_id FK "NOT NULL"
-        varchar handoff_method "NOT NULL"
+        varchar handoff_method "NOT NULL (MEETUP|DELIVERY)"
         varchar handoff_location "NOT NULL"
-        varchar status "NOT NULL"
+        varchar status "NOT NULL, DEFAULT PENDING"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
@@ -51,28 +75,102 @@ erDiagram
         bigint order_id FK "NOT NULL"
         varchar product_name "NOT NULL"
         int quantity "NOT NULL, > 0"
-        varchar note "OPTIONAL"
+        text note "OPTIONAL"
     }
 
     %% Task 20 - ชำระค่าสินค้าและค่าหิ้ว
     PAYMENTS {
         bigint id PK
-        bigint order_id FK "NOT NULL, UK"
+        bigint order_id FK,UK "NOT NULL"
         decimal product_amount "NOT NULL, >=0"
         decimal service_fee "NOT NULL, >=0"
         decimal total_amount "NOT NULL, >=0"
-        varchar payment_method "NOT NULL"
-        varchar payment_status "NOT NULL"
-        varchar transaction_reference
-        timestamp paid_at
+        varchar payment_method "NOT NULL, DEFAULT QR_TRANSFER"
+        varchar qr_payload "OPTIONAL"
+        varchar slip_image_url "OPTIONAL"
+        varchar payment_status "NOT NULL, DEFAULT PENDING (PENDING|HELD|RELEASED)"
+        varchar transaction_reference "OPTIONAL"
+        timestamp paid_at "OPTIONAL"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
     %% Task 24 - ยืนยันรับสินค้าและปิดออเดอร์
     ORDER_COMPLETIONS {
         bigint id PK
-        bigint payment_id FK "NOT NULL, UK"
+        bigint payment_id FK,UK "NOT NULL"
         bigint confirmed_by FK "NOT NULL"
+        varchar evidence_image_url "NOT NULL"
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
-        varchar completion_status "NOT NULL"
+        varchar completion_status "NOT NULL, DEFAULT COMPLETED"
     }
+
+    %% Task 04 - OTP Verification
+    OTP_VERIFICATIONS {
+        bigint id PK
+        bigint user_id FK "NOT NULL"
+        varchar otp_hash "NOT NULL"
+        varchar purpose "NOT NULL (LOGIN|RESET_PASSWORD)"
+        timestamp expires_at "NOT NULL"
+        timestamp verified_at "OPTIONAL"
+        int attempts_count "NOT NULL, DEFAULT 0"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    %% Task 12 - ผู้ฝากหิ้วโพสต์หาคนรับหิ้ว
+    POSTS {
+        bigint id PK
+        bigint buyer_id FK "NOT NULL"
+        varchar post_title "NOT NULL"
+        varchar shop_name "NOT NULL"
+        text product_detail "NOT NULL"
+        int quantity "NOT NULL"
+        decimal carry_fee "NOT NULL"
+        date desired_date "NOT NULL"
+        varchar location "NOT NULL"
+        decimal budget "OPTIONAL"
+        text additional_details "OPTIONAL"
+        varchar status "NOT NULL, DEFAULT OPEN (OPEN|ACCEPTED)"
+        bigint accepted_by FK "OPTIONAL"
+        timestamp accepted_at "OPTIONAL"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    %% Task 39, 44 - ประวัติการเปลี่ยนสถานะออเดอร์ (US05, US06)
+    ORDER_STATUS_HISTORY {
+        bigint id PK
+        bigint order_id FK "NOT NULL"
+        varchar from_status "OPTIONAL (null = ตอนสร้างออเดอร์)"
+        varchar to_status "NOT NULL"
+        bigint changed_by FK "NOT NULL"
+        timestamp changed_at "NOT NULL"
+    }
+
+    %% Task 49, 54 - รายงานปัญหาและการตรวจสอบโดย Admin (US09, US10)
+    REPORTS {
+        bigint id PK
+        bigint order_id FK "NOT NULL"
+        bigint reporter_id FK "NOT NULL"
+        bigint reported_user_id FK "NOT NULL"
+        varchar category "NOT NULL"
+        varchar description "NOT NULL, max 1000"
+        varchar evidence_url "OPTIONAL"
+        varchar status "NOT NULL (PENDING|APPROVED|DECLINED)"
+        varchar admin_note "OPTIONAL"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        timestamp reviewed_at "OPTIONAL"
+    }
+```
+
+### ค่าที่ใช้ในคอลัมน์ status / category
+
+| ตาราง.คอลัมน์ | ค่าที่เป็นไปได้ |
+|---|---|
+| `orders.status` | PENDING, PAID, ACCEPTED, PURCHASING, READY_FOR_DELIVERY, DELIVERING, COMPLETED, CANCELLED |
+| `reports.category` | PRODUCT_MISMATCH, DELIVERY_ISSUE, PAYMENT_ISSUE, SUSPICIOUS_BEHAVIOR, OTHER |
+| `reports.status` | PENDING, APPROVED, DECLINED |
+| `delivery_rounds.status` | OPEN, CLOSED, COMPLETED, CANCELLED |
+| `posts.status` | OPEN, ACCEPTED |
+| `orders.handoff_method` | MEETUP, DELIVERY |
+| `payments.payment_status` | PENDING, HELD, RELEASED |
+| `users.role` | USER, ADMIN |
+| `otp_verifications.purpose` | LOGIN, RESET_PASSWORD |
