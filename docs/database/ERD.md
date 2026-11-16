@@ -17,6 +17,9 @@ erDiagram
     PAYMENTS ||--o| ORDER_COMPLETIONS : leads_to
     USERS ||--o{ ORDER_COMPLETIONS : confirms
 
+    %% Task 04 - ลงทะเบียน/เข้าสู่ระบบ + OTP
+    USERS ||--o{ OTP_VERIFICATIONS : verifies
+
     %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
         bigint id PK
@@ -84,5 +87,17 @@ erDiagram
         varchar evidence_image_url "NOT NULL"
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         varchar completion_status "NOT NULL, DEFAULT COMPLETED"
+    }
+
+    %% Task 04 - OTP Verification
+    OTP_VERIFICATIONS {
+        bigint id PK
+        bigint user_id FK "NOT NULL"
+        varchar otp_hash "NOT NULL"
+        varchar purpose "NOT NULL (LOGIN|RESET_PASSWORD)"
+        timestamp expires_at "NOT NULL"
+        timestamp verified_at "OPTIONAL"
+        int attempts_count "NOT NULL, DEFAULT 0"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 ```
