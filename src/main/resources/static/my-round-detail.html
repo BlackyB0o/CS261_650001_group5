@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กำลังเปิดรายละเอียดรอบ | CarryHub</title>
+</head>
+
+<body>
+    <p>กำลังเปิดรายละเอียดรอบรับหิ้ว...</p>
+    <script>
+        const query = new URLSearchParams(window.location.search);
+        const roundId = query.get("roundId");
+        window.location.replace(roundId
+            ? "/my-round-detailod.html?roundId=" + encodeURIComponent(roundId)
+            : "/orders.html#rounds-panel");
+    </script>
+</body>
+
+</html>

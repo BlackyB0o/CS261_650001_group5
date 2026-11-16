@@ -466,6 +466,7 @@ sequenceDiagram
         end
     end
     end
+```
 
     %% ==========================================
     %% 2. Endpoint 2: GET /api/v1/orders/{orderId}/payment (Get Order Payment)
@@ -519,6 +520,7 @@ sequenceDiagram
         end
     end
     end
+```
 
     %% ==========================================
     %% 3. Endpoint 3: POST /api/v1/orders/{orderId}/payment/slip (Submit Payment Slip)
@@ -604,3 +606,15 @@ sequenceDiagram
         end
     end
     end
+```
+
+## 6. Static HTML integration
+
+| UI surface | Task 20 endpoint |
+|---|---|
+| `order-detail.html?orderId=...` as the round owner | `PUT /api/v1/orders/{orderId}/price` |
+| `order-detail.html?orderId=...` for either order participant | `GET /api/v1/orders/{orderId}/payment` |
+| `order-detail.html?orderId=...` as the buyer | `POST /api/v1/orders/{orderId}/payment/slip` |
+
+The product price is submitted as JSON. Slip submission uses `multipart/form-data` with `slipImage` and `paidAmount`; the browser sets the multipart boundary. The page displays the API's QR payload, payment totals and held-payment receipt details.
+*** End of File

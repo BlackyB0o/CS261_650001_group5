@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โพสต์ของฉัน | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/buyer-post-detail.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html#posts-panel">โพสต์ของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="container post-detail-container">
+        <a href="orders.html#posts-panel" class="back-link">← กลับไปโพสต์ของฉัน</a>
+        <p id="my-post-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+        <section id="my-post-content" class="post-detail-card" hidden>
+            <div class="post-detail-header">
+                <span id="my-post-status" class="post-status"></span>
+                <span id="my-post-id" class="post-id"></span>
+            </div>
+            <h1 id="my-post-title"></h1>
+            <p id="my-post-product" class="post-description"></p>
+            <div class="post-divider"></div>
+            <h2>รายละเอียดโพสต์</h2>
+            <div class="post-info">
+                <div class="info-item"><span class="info-label">ร้านค้า</span><strong id="my-post-shop"></strong></div>
+                <div class="info-item"><span class="info-label">จำนวน</span><strong id="my-post-quantity"></strong></div>
+                <div class="info-item"><span class="info-label">วันที่ต้องการ</span><strong id="my-post-date"></strong></div>
+                <div class="info-item"><span class="info-label">สถานที่รับสินค้า</span><strong id="my-post-location"></strong></div>
+                <div class="info-item"><span class="info-label">ค่าหิ้ว</span><strong id="my-post-fee"></strong></div>
+                <div class="info-item"><span class="info-label">งบประมาณ</span><strong id="my-post-budget"></strong></div>
+                <div class="info-item"><span class="info-label">ผู้รับงาน</span><strong id="my-post-accepted-by"></strong></div>
+                <div class="info-item"><span class="info-label">วันที่รับงาน</span><strong id="my-post-accepted-at"></strong></div>
+            </div>
+            <div class="post-note">
+                <h3>รายละเอียดเพิ่มเติม</h3>
+                <p id="my-post-additional"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2026 CarryHub</p>
+    </footer>
+
+    <script src="/js/my-post-detail.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างโพสต์หาคนรับหิ้ว | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create-buyer-post.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                <a href="buyer-posts.html" class="back-link">← กลับไปหน้าโพสต์หาคนรับหิ้ว</a>
+
+                <h1>สร้างโพสต์หาคนรับหิ้ว</h1>
+                <p>กรอกรายละเอียดสินค้าที่ต้องการ เพื่อให้ผู้รับหิ้วสามารถติดต่อหรือรับงานได้</p>
+                <p>ขณะนี้ระบบยังไม่รองรับการบันทึกรูปสินค้าในโพสต์</p>
+            </div>
+
+            <form id="create-post-form">
+                <p id="create-post-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <div class="form-section">
+                    <h2>ข้อมูลสินค้า</h2>
+                    <p class="section-description">
+                        ระบุชื่อโพสต์ ร้านค้า และรายการสินค้าที่ต้องการฝากซื้อ
+                    </p>
+
+                    <div class="form-group">
+                        <label for="post-title">
+                            ชื่อโพสต์ <span class="required">*</span>
+                        </label>
+                        <input type="text" id="post-title" name="postTitle" maxlength="255"
+                            placeholder="เช่น ฝากซื้อเครื่องดื่ม" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shop-name">
+                            ชื่อร้านค้า <span class="required">*</span>
+                        </label>
+                        <input type="text" id="shop-name" name="shopName" maxlength="255"
+                            placeholder="กรอกชื่อร้านค้า" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product">
+                            รายการสินค้า <span class="required">*</span>
+                        </label>
+                        <textarea id="product" name="productDetail" rows="4"
+                            placeholder="ระบุชื่อสินค้า รุ่น รสชาติ หรือรายละเอียดที่ต้องการ" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">
+                            จำนวนสินค้า <span class="required">*</span>
+                        </label>
+                        <input type="number" id="quantity" name="quantity" min="1" step="1" placeholder="ระบุจำนวนสินค้า"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="carry-fee">
+                            ค่าหิ้วที่เสนอให้ (บาท) <span class="required">*</span>
+                        </label>
+                        <input type="number" id="carry-fee" name="carry-fee" min="0" step="0.01" placeholder="เช่น 20"
+                            required>
+                    </div>
+
+                </div>
+
+                <div class="form-section">
+                    <h2>วันเวลาและสถานที่รับสินค้า</h2>
+                    <p class="section-description">
+                        ระบุวันที่ต้องการรับสินค้าและสถานที่ที่สะดวก
+                    </p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">
+                                วันที่ต้องการรับสินค้า <span class="required">*</span>
+                            </label>
+                            <input type="date" id="date" name="desiredDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">
+                                สถานที่รับสินค้า <span class="required">*</span>
+                            </label>
+                            <input type="text" id="location" name="location" maxlength="255"
+                                placeholder="เช่น หน้าคณะ" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>งบประมาณและรายละเอียดเพิ่มเติม</h2>
+                    <p class="section-description">
+                        กำหนดงบประมาณและแจ้งข้อมูลที่ผู้รับหิ้วควรทราบ
+                    </p>
+
+                    <div class="form-group">
+                        <label for="budget">งบประมาณค่าสินค้า (บาท)</label>
+                        <input type="number" id="budget" name="budget" min="0" step="0.01" placeholder="ระบุงบประมาณ">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="details">รายละเอียดเพิ่มเติม</label>
+                        <textarea id="details" name="additionalDetails" rows="4"
+                            placeholder="เช่น รายละเอียดสินค้า จุดนัดรับ หรือเงื่อนไขเพิ่มเติม"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="create-post-button" type="submit" class="btn btn-primary">
+                        สร้างโพสต์
+                    </button>
+
+                    <a href="buyer-posts.html" class="btn btn-outline">
+                        ยกเลิก
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+
+    <script src="/js/create-post.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>

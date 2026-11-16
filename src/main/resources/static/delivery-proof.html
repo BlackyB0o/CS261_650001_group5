@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หลักฐานการส่งมอบ | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/delivery-proof.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="orders.html" class="active">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+        </nav>
+    </header>
+
+    <main class="proof-container">
+
+        <p id="completion-message" class="form-message" role="status" aria-live="polite" hidden></p>
+        <div class="proof-breadcrumb">
+            <a href="orders.html">รายการสั่งซื้อ</a>
+            <span>/</span>
+            <a id="completion-order-link" href="orders.html#round-orders-panel">รายละเอียดออเดอร์</a>
+            <span>/</span>
+            <span>หลักฐานการส่งมอบ</span>
+        </div>
+
+        <section class="proof-heading">
+            <div class="proof-heading-icon">CH</div>
+
+            <div>
+                <p id="completion-order-label" class="proof-eyebrow">ORDER</p>
+                <h1>ยืนยันว่าได้รับสินค้าแล้ว</h1>
+                <p class="proof-subtitle">
+                        แนบรูปหลักฐานเพื่อยืนยันการรับสินค้าและปิดออเดอร์
+                </p>
+            </div>
+
+            <span id="completion-order-status" class="proof-status">กำลังโหลด...</span>
+        </section>
+
+        <div class="proof-layout">
+
+            <div class="proof-main">
+
+                <section class="proof-card">
+                    <div class="proof-card-heading">
+                        <div>
+                            <h2>ข้อมูลออเดอร์</h2>
+                            <p>ตรวจสอบรายละเอียดก่อนยืนยันรับสินค้า</p>
+                        </div>
+                    </div>
+
+                    <div class="proof-info-list">
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">หมายเลขออเดอร์</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">รอบรับหิ้ว</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">ผู้รับหิ้ว</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">ผู้ฝากซื้อ</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+
+                        <div class="proof-info-row">
+                            <span class="proof-info-label">สถานที่ส่งมอบ</span>
+                            <span class="proof-info-value">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="proof-card">
+                    <div class="proof-card-heading">
+                        <div>
+                            <h2>หลักฐานการรับสินค้า</h2>
+                            <p>แนบรูปภาพเพื่อใช้เป็นหลักฐานยืนยันว่าคุณได้รับสินค้าแล้ว</p>
+                        </div>
+                    </div>
+
+                    <form id="completion-form">
+                        <label class="proof-upload-area" for="evidence-image">
+                            <div class="proof-upload-icon">+</div>
+                            <h3>แนบรูปภาพหลักฐาน</h3>
+                            <p>คลิกเพื่อเลือกภาพจากอุปกรณ์ของคุณ</p>
+                            <span>JPEG หรือ PNG, ขนาดไม่เกิน 5 MB</span>
+                            <input type="file" id="evidence-image" name="evidenceImage" accept="image/jpeg,image/png" required>
+                        </label>
+
+                        <p id="completion-form-message" class="form-message" role="status" aria-live="polite" hidden></p>
+                        <div class="proof-notice">
+                            <span class="proof-notice-mark">!</span>
+                            <p>
+                                กรุณาตรวจสอบว่ารูปภาพเป็นหลักฐานของออเดอร์นี้
+                                ก่อนกดยืนยันการส่งมอบ
+                            </p>
+                        </div>
+
+                        <div class="proof-actions">
+                            <a id="completion-back-link" href="orders.html#round-orders-panel" class="proof-btn proof-btn-secondary">
+                                กลับ
+                            </a>
+
+                            <button id="completion-submit" type="submit" class="proof-btn proof-btn-primary">
+                                ยืนยันว่าได้รับสินค้า
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+            </div>
+
+            <aside class="proof-sidebar">
+
+                <section class="proof-card proof-summary">
+                    <h2>สรุปออเดอร์</h2>
+
+                    <div class="proof-summary-id">
+                        <span>หมายเลขออเดอร์</span>
+                        <strong id="completion-summary-id">-</strong>
+                    </div>
+
+                    <div class="proof-summary-status">
+                        <span class="proof-status-dot"></span>
+                        <span id="completion-summary-status">กำลังโหลด...</span>
+                    </div>
+
+                    <div class="proof-summary-divider"></div>
+
+                    <div class="proof-summary-row">
+                        <span>สถานะหลักฐาน</span>
+                        <span id="completion-evidence-status">ยังไม่แนบรูปภาพ</span>
+                    </div>
+
+                    <div class="proof-summary-row">
+                        <span>สถานที่รับสินค้า</span>
+                        <span id="completion-location">-</span>
+                    </div>
+                </section>
+
+                <section class="proof-help-card">
+                    <h3>ต้องการความช่วยเหลือ?</h3>
+                    <p>
+                        หากพบปัญหาเกี่ยวกับการส่งมอบสินค้า
+                        สามารถแจ้งปัญหาให้ทีมงานตรวจสอบได้
+                    </p>
+                    <a href="report.html">แจ้งปัญหาออเดอร์</a>
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>CarryHub © 2026</p>
+    </footer>
+
+    <script src="/js/delivery-proof.js"></script>
+    <script src="/js/guest-access.js"></script>
+</body>
+
+</html>
