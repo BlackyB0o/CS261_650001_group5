@@ -4,22 +4,23 @@
 
 ```mermaid
 erDiagram
-    %% Task 08 - เปิดรอบรับหิ้ว
+    %% Task 08, 29 - เปิดรอบ / ค้นหารอบรับหิ้ว
     USERS ||--o{ DELIVERY_ROUNDS : opens
-    
-    %% Task 16 - ความสัมพันธ์ของรายการสั่งซื้อ
+
+    %% Task 16, 34 - ฝากซื้อ / รายการฝากซื้อในรอบ
     USERS ||--o{ ORDERS : places
     DELIVERY_ROUNDS ||--o{ ORDERS : receives
     ORDERS ||--|{ ORDER_ITEMS : contains
-    
-    %% Task 04 - ลงทะเบียนหรือเข้าสู่ระบบ
+
+    %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
         bigint id PK
         varchar email UK "NOT NULL"
         varchar password_hash "NOT NULL"
         varchar full_name "NOT NULL"
-        varchar phone_number UK "NOT NULL"
-        varchar role "NOT NULL"
+        varchar phone_number UK "OPTIONAL, 10 digits"
+        varchar role "NOT NULL, DEFAULT USER (USER|ADMIN)"
+        boolean suspended "NOT NULL, DEFAULT false"
         timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
 
@@ -76,3 +77,4 @@ erDiagram
         timestamp confirmed_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         varchar completion_status "NOT NULL"
     }
+```
