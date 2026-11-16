@@ -290,3 +290,21 @@ sequenceDiagram
     end
 ```
 
+---
+
+## 2. Test Cases (US10)
+
+| Test Case ID | หัวข้อการทดสอบ (Test Scenario) | เงื่อนไข / Input Data | ผลลัพธ์ที่คาดหวัง (Expected Output) | HTTP Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **TC-US10-01** | แอดมินเข้าสู่ระบบด้วยอีเมลและรหัสผ่านสำเร็จ | `POST /api/v1/auth/admin/login` + `{ "identifier": "admin@carryhub.com", "password": "AdminPassword123" }` | เข้าสู่ระบบได้ทันทีโดยไม่ผ่าน OTP คืน `"Admin login successful"` พร้อม JWT `token` | `200 OK` |
+| **TC-US10-02** | ป้องกันการเข้าสู่ระบบแอดมินเมื่อรหัสผ่านผิด หรือไม่ใช่บัญชีแอดมิน | `POST /api/v1/auth/admin/login` + รหัสผ่านผิด หรืออีเมลของผู้ใช้ทั่วไป (`role = USER`) | ปฏิเสธการเข้าสู่ระบบ คืนค่า Error `"Invalid credentials"` | `401 Unauthorized` |
+| **TC-US10-03** | แอดมินดึงข้อมูลรายงานทั้งหมดและดูรายละเอียดแต่ละรายงานสำเร็จ | `GET /api/v1/admin/reports` และ `GET /api/v1/admin/reports/12` + Token แอดมิน | คืนค่ารายการ `AdminReportResponseDTO` เรียงจากใหม่ไปเก่า พร้อมข้อมูลผู้ถูกรายงานและสถานะ `reportedUserSuspended` | `200 OK` |
+| **TC-US10-04** | แอดมินพิจารณารายงาน (`APPROVED` / `DECLINED`) พร้อมหมายเหตุสำเร็จ | `PATCH /api/v1/admin/reports/12/decision` + Token แอดมิน + `{ "decision": "APPROVED", "adminNote": "ตรวจสอบหลักฐานแล้ว ผู้รับหิ้วไม่มาส่งจริง" }` | อัปเดตสถานะรายงานเป็น `APPROVED`, บันทึก `adminNote` และ `reviewedAt` คืน `"Report reviewed successfully"` | `200 OK` |
+| **TC-US10-05** | ป้องกันการพิจารณารายงานซ้ำที่ถูกตัดสินไปแล้ว | `PATCH /api/v1/admin/reports/12/decision` (รายงานที่ `status` เป็น `APPROVED` หรือ `DECLINED` แล้ว) + Token แอดมิน | ปฏิเสธการแก้ไขซ้ำ คืนค่า Error `"Report has already been reviewed"` | `409 Conflict` |
+| **TC-US10-06** | แอดมินสั่งระงับบัญชีผู้ใช้ที่ทำผิดกฎ (`suspended: true`) สำเร็จ | `PATCH /api/v1/admin/users/3/suspend` + Token แอดมิน + `{ "suspended": true }` | อัปเดต `suspended = true`, คืน `"User suspended successfully"`, บัญชี 3 ล็อกอินไม่ได้ (`403 Account suspended`) และ Token เดิมถูกตัดทันที (`401 Account suspended`) | `200 OK` |
+| **TC-US10-07** | แอดมินคืนสิทธิ์การใช้งานบัญชี (`suspended: false`) สำเร็จ | `PATCH /api/v1/admin/users/3/suspend` + Token แอดมิน + `{ "suspended": false }` | อัปเดต `suspended = false` คืน `"User unsuspended successfully"` และบัญชี 3 กลับมาใช้งานได้ปกติ | `200 OK` |
+| **TC-US10-08** | ป้องกันการระงับบัญชีแอดมิน | `PATCH /api/v1/admin/users/1/suspend` (ID ของแอดมิน) + Token แอดมิน + `{ "suspended": true }` | ปฏิเสธการระงับบัญชี คืนค่า Error `"Admin accounts cannot be suspended"` | `403 Forbidden` |
+| **TC-US10-09** | ป้องกันผู้ใช้ทั่วไป (`role = USER`) เข้าถึง Endpoint กลุ่ม `/admin/*` | `GET /api/v1/admin/reports` หรือ `PATCH /api/v1/admin/users/3/suspend` + Token ของผู้ใช้ทั่วไป | ปฏิเสธการเข้าถึง คืนค่า Error `"Admin access required"` | `403 Forbidden` |
+| **TC-US10-10** | ผู้ใช้งานทั่วไปตรวจสอบประวัติรายงานของตนเองสำเร็จ | `GET /api/v1/reports/my` + Token ของผู้ใช้งาน | คืนค่ารายการ `ReportResponseDTO` ที่ผู้ใช้คนนี้ส่งเรียงจากใหม่ไปเก่า พร้อมสถานะการพิจารณาของแอดมิน | `200 OK` |
+| **TC-US10-11** | ไม่พบข้อมูลรายงานหรือบัญชีผู้ใช้ที่ระบุในระบบ | `GET /api/v1/admin/reports/9999` หรือ `PATCH /api/v1/admin/users/9999/suspend` + Token แอดมิน | คืนค่า Error `"Report not found"` หรือ `"User not found"` | `404 Not Found` |
+| **TC-US10-12** | Validation Error: ส่งค่า `decision` ผิด, ไม่ส่ง `suspended`, `adminNote` เกิน 1000 ตัวอักษร หรือ ID ผิดรูปแบบ | `PATCH /api/v1/admin/reports/12/decision` + `{ "decision": "INVALID" }` (หรือ `{}` ใน `/suspend`) | คืนค่า `"Validation failed"` พร้อมรายละเอียด field error | `400 Bad Request` |
