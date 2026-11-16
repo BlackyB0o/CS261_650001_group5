@@ -1,8 +1,3 @@
-# CS261 Group 5 - Database ER Diagram
-
-## Database ER Diagram (Tasks 04, 08, 16, 20, 24)
-
-```mermaid
 erDiagram
     %% Task 08, 29 - เปิดรอบ / ค้นหารอบรับหิ้ว
     USERS ||--o{ DELIVERY_ROUNDS : opens
@@ -27,6 +22,11 @@ erDiagram
     %% Task 39, 44 - รายละเอียดออเดอร์ / อัปเดตสถานะ (ประวัติสถานะ)
     ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
     USERS ||--o{ ORDER_STATUS_HISTORY : changes
+
+    %% Task 49, 54 - รายงานปัญหา / แอดมินตรวจสอบ
+    ORDERS ||--o{ REPORTS : about
+    USERS ||--o{ REPORTS : files
+    USERS ||--o{ REPORTS : is_reported_in
 
     %% Task 04, 54 - ผู้ใช้ (role, suspended เพิ่มสำหรับ Admin US10)
     USERS {
@@ -137,4 +137,18 @@ erDiagram
         bigint changed_by FK "NOT NULL"
         timestamp changed_at "NOT NULL"
     }
-```
+
+    %% Task 49, 54 - รายงานปัญหาและการตรวจสอบโดย Admin (US09, US10)
+    REPORTS {
+        bigint id PK
+        bigint order_id FK "NOT NULL"
+        bigint reporter_id FK "NOT NULL"
+        bigint reported_user_id FK "NOT NULL"
+        varchar category "NOT NULL"
+        varchar description "NOT NULL, max 1000"
+        varchar evidence_url "OPTIONAL"
+        varchar status "NOT NULL (PENDING|APPROVED|DECLINED)"
+        varchar admin_note "OPTIONAL"
+        timestamp created_at "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        timestamp reviewed_at "OPTIONAL"
+    }
