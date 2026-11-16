@@ -17,6 +17,9 @@ public interface AuthService {
 
     OtpSentResponseDTO login(LoginRequestDTO request);
 
+    /** Task56 (US10) แอดมินเข้าสู่ระบบด้วยอีเมลและรหัสผ่าน ได้ JWT ทันที (ไม่ผ่าน OTP) */
+    AuthResponseDTO adminLogin(LoginRequestDTO request);
+
     AuthResponseDTO verifyOtp(VerifyOtpRequestDTO request);
 
     OtpSentResponseDTO resendOtp(ResendOtpRequestDTO request);
