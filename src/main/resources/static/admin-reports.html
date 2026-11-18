@@ -13,15 +13,32 @@
 
 <body>
 
-    <!-- Navbar -->
     <header class="navbar">
-        <a href="index.html" class="logo">CarryHub</a>
+    <a href="index.html" class="logo">CarryHub</a>
 
-        <nav>
-            <a href="index.html">หน้าแรก</a>
-            <a href="profile.html">โปรไฟล์</a>
-        </nav>
-    </header>
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="เปิดเมนู"
+        aria-expanded="false"
+        aria-controls="navMenu"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="navMenu">
+        <a href="index.html">หน้าแรก</a>
+        <a href="rounds.html">รอบรับหิ้ว</a>
+        <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+        <a href="orders.html" class="nav-active">รายการของฉัน</a>
+        <a href="profile.html">โปรไฟล์</a>
+        <a href="login.html" class="btn btn-outline">เข้าสู่ระบบ</a>
+        <a href="register.html" class="btn btn-primary">ลงทะเบียน</a>
+    </nav>
+</header>
 
 
     <main class="admin-reports-container">
@@ -33,6 +50,7 @@
                 <h1>จัดการรายงานปัญหา</h1>
                 <p>ตรวจสอบรายงานปัญหาที่ส่งมาจากผู้ฝากซื้อและผู้รับหิ้ว</p>
             </div>
+            <p class="form-message error-message" id="reports-message" role="status" aria-live="polite" hidden></p>
         </section>
 
 
@@ -44,7 +62,7 @@
 
                 <div class="overview-info">
                     <p>รายงานทั้งหมด</p>
-                    <h2 id="total-reports">3</h2>
+                    <h2 id="total-reports">0</h2>
                     <span>รายการ</span>
                 </div>
             </div>
@@ -54,7 +72,7 @@
 
                 <div class="overview-info">
                     <p>รอตรวจสอบ</p>
-                    <h2 id="pending-reports">2</h2>
+                    <h2 id="pending-reports">0</h2>
                     <span>รายการ</span>
                 </div>
             </div>
@@ -63,8 +81,8 @@
                 <div class="overview-icon icon-green">✓</div>
 
                 <div class="overview-info">
-                    <p>ตรวจสอบแล้ว</p>
-                    <h2 id="resolved-reports">1</h2>
+                    <p>พิจารณาแล้ว</p>
+                    <h2 id="resolved-reports">0</h2>
                     <span>รายการ</span>
                 </div>
             </div>
@@ -82,7 +100,7 @@
                 </div>
 
                 <div class="report-count">
-                    <span id="visible-count">3</span> รายการ
+                    <span id="visible-count">0</span> รายการ
                 </div>
             </div>
 
@@ -100,7 +118,7 @@
                     </button>
 
                     <button class="filter-btn" data-filter="resolved">
-                        ตรวจสอบแล้ว
+                        พิจารณาแล้ว
                     </button>
                 </div>
 
@@ -123,128 +141,7 @@
                         </tr>
                     </thead>
 
-                    <tbody id="reports-table-body">
-
-                        <!-- Report 1 -->
-                        <tr data-status="pending">
-
-                            <td>
-                                <span class="report-id">RP001</span>
-                            </td>
-
-                            <td>
-                                <span class="order-id">CH001</span>
-                            </td>
-
-                            <td>
-                                <div class="reporter-cell">
-                                    <div class="reporter-avatar">ผ</div>
-                                    <span>ผู้ฝากซื้อ</span>
-                                </div>
-                            </td>
-
-                            <td>
-                                <span class="issue-text">
-                                    สินค้าไม่ตรงตามที่สั่ง
-                                </span>
-                            </td>
-
-                            <td>
-                                <span class="status-badge status-pending">
-                                    <span class="status-dot"></span>
-                                    รอตรวจสอบ
-                                </span>
-                            </td>
-
-                            <td>
-                                <a href="report-detail.html?id=RP001" class="detail-btn">
-                                    ดูรายละเอียด <span>→</span>
-                                </a>
-                            </td>
-
-                        </tr>
-
-
-                        <!-- Report 2 -->
-                        <tr data-status="pending">
-
-                            <td>
-                                <span class="report-id">RP002</span>
-                            </td>
-
-                            <td>
-                                <span class="order-id">CH002</span>
-                            </td>
-
-                            <td>
-                                <div class="reporter-cell">
-                                    <div class="reporter-avatar carrier-avatar">ร</div>
-                                    <span>ผู้รับหิ้ว</span>
-                                </div>
-                            </td>
-
-                            <td>
-                                <span class="issue-text">
-                                    ปัญหาการส่งมอบ
-                                </span>
-                            </td>
-
-                            <td>
-                                <span class="status-badge status-pending">
-                                    <span class="status-dot"></span>
-                                    รอตรวจสอบ
-                                </span>
-                            </td>
-
-                            <td>
-                                <a href="report-detail.html?id=RP002" class="detail-btn">
-                                    ดูรายละเอียด <span>→</span>
-                                </a>
-                            </td>
-
-                        </tr>
-
-
-                        <!-- Report 3 -->
-                        <tr data-status="resolved">
-
-                            <td>
-                                <span class="report-id">RP003</span>
-                            </td>
-
-                            <td>
-                                <span class="order-id">CH003</span>
-                            </td>
-
-                            <td>
-                                <div class="reporter-cell">
-                                    <div class="reporter-avatar">ผ</div>
-                                    <span>ผู้ฝากซื้อ</span>
-                                </div>
-                            </td>
-
-                            <td>
-                                <span class="issue-text">
-                                    ปัญหาการชำระเงิน
-                                </span>
-                            </td>
-
-                            <td>
-                                <span class="status-badge status-resolved">
-                                    <span class="status-dot"></span>
-                                    ตรวจสอบแล้ว
-                                </span>
-                            </td>
-
-                            <td>
-                                <a href="report-detail.html?id=RP003" class="detail-btn">
-                                    ดูรายละเอียด <span>→</span>
-                                </a>
-                            </td>
-
-                        </tr>
-
-                    </tbody>
+                    <tbody id="reports-table-body"></tbody>
 
                 </table>
 
@@ -270,50 +167,160 @@
 
 
     <script>
-        // เลือกกรองรายงานตามสถานะ
         const filterButtons = document.querySelectorAll(".filter-btn");
-        const reportRows = document.querySelectorAll(
-            "#reports-table-body tr"
-        );
-
+        const tableBody = document.getElementById("reports-table-body");
         const emptyState = document.getElementById("empty-state");
         const visibleCount = document.getElementById("visible-count");
+        const reportsMessage = document.getElementById("reports-message");
+        const categoryLabels = {
+            PRODUCT_MISMATCH: "สินค้าไม่ตรงตามที่สั่ง",
+            DELIVERY_ISSUE: "ปัญหาการส่งมอบสินค้า",
+            PAYMENT_ISSUE: "ปัญหาการชำระเงิน",
+            SUSPICIOUS_BEHAVIOR: "ปัญหาเกี่ยวกับผู้ใช้งาน",
+            OTHER: "อื่น ๆ"
+        };
+        let reports = [];
 
-        function filterReports(status) {
-            let count = 0;
-
-            reportRows.forEach(row => {
-                const rowStatus = row.dataset.status;
-
-                const showRow =
-                    status === "all" || rowStatus === status;
-
-                row.hidden = !showRow;
-
-                if (showRow) {
-                    count++;
-                }
-            });
-
-            visibleCount.textContent = count;
-            emptyState.hidden = count !== 0;
+        function statusLabel(status) {
+            return status === "PENDING" ? "รอตรวจสอบ"
+                : status === "APPROVED" ? "อนุมัติแล้ว" : "ปฏิเสธแล้ว";
         }
 
-        filterButtons.forEach(button => {
-            button.addEventListener("click", () => {
-
-                filterButtons.forEach(item => {
-                    item.classList.remove("active");
+        function renderReports(filter) {
+            const matching = reports.filter(report => filter === "all"
+                || (filter === "pending" && report.status === "PENDING")
+                || (filter === "resolved" && report.status !== "PENDING"));
+            tableBody.replaceChildren();
+            matching.forEach(report => {
+                const row = document.createElement("tr");
+                row.dataset.status = report.status === "PENDING" ? "pending" : "resolved";
+                const cells = [
+                    "RP" + String(report.reportId).padStart(3, "0"),
+                    "RO" + report.orderId,
+                    report.reporterType === "RUNNER" ? "ผู้รับหิ้ว" : "ผู้ฝากซื้อ",
+                    categoryLabels[report.category] || report.category,
+                    statusLabel(report.status)
+                ];
+                cells.forEach((value, index) => {
+                    const cell = document.createElement("td");
+                    if (index === 0 || index === 1) {
+                        const text = document.createElement("span");
+                        text.className = index === 0 ? "report-id" : "order-id";
+                        text.textContent = value;
+                        cell.appendChild(text);
+                    } else if (index === 2) {
+                        const reporter = document.createElement("div");
+                        reporter.className = "reporter-cell";
+                        const avatar = document.createElement("div");
+                        avatar.className = "reporter-avatar" + (report.reporterType === "RUNNER" ? " carrier-avatar" : "");
+                        avatar.textContent = report.reporterType === "RUNNER" ? "ร" : "ผ";
+                        const name = document.createElement("span");
+                        name.textContent = report.reporterName
+                            ? report.reporterName + " (" + value + ")"
+                            : value;
+                        reporter.append(avatar, name);
+                        cell.appendChild(reporter);
+                    } else if (index === 4) {
+                        const badge = document.createElement("span");
+                        badge.className = "status-badge " + (report.status === "PENDING" ? "status-pending"
+                            : report.status === "APPROVED" ? "status-resolved" : "status-rejected");
+                        const dot = document.createElement("span");
+                        dot.className = "status-dot";
+                        badge.append(dot, document.createTextNode(value));
+                        cell.appendChild(badge);
+                    } else {
+                        const text = document.createElement("span");
+                        text.className = "issue-text";
+                        text.textContent = value;
+                        cell.appendChild(text);
+                    }
+                    row.appendChild(cell);
                 });
-
-                button.classList.add("active");
-
-                filterReports(button.dataset.filter);
+                const detailCell = document.createElement("td");
+                const detailLink = document.createElement("a");
+                detailLink.href = "report-detail.html?id=" + encodeURIComponent(report.reportId);
+                detailLink.className = "detail-btn";
+                detailLink.textContent = "ดูรายละเอียด →";
+                detailCell.appendChild(detailLink);
+                row.appendChild(detailCell);
+                tableBody.appendChild(row);
             });
-        });
+            visibleCount.textContent = matching.length;
+            emptyState.hidden = matching.length !== 0;
+        }
+
+        filterButtons.forEach(button => button.addEventListener("click", function () {
+            filterButtons.forEach(item => item.classList.remove("active"));
+            button.classList.add("active");
+            renderReports(button.dataset.filter);
+        }));
+
+        async function loadReports() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.replace("/login.html?returnTo=" + encodeURIComponent("/admin-reports.html"));
+                return;
+            }
+            try {
+                const response = await fetch("/api/v1/admin/reports", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const result = await response.json();
+                if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.replace("/login.html?returnTo=" + encodeURIComponent("/admin-reports.html"));
+                    return;
+                }
+                if (!response.ok || !result || result.status !== "SUCCESS" || !Array.isArray(result.data)) {
+                    throw new Error(result && result.message ? result.message : "โหลดรายงานไม่สำเร็จ");
+                }
+                reports = result.data;
+                document.getElementById("total-reports").textContent = reports.length;
+                document.getElementById("pending-reports").textContent =
+                    reports.filter(report => report.status === "PENDING").length;
+                document.getElementById("resolved-reports").textContent =
+                    reports.filter(report => report.status !== "PENDING").length;
+                renderReports("all");
+            } catch (error) {
+                reportsMessage.textContent = error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้";
+                reportsMessage.hidden = false;
+            }
+        }
+
+        loadReports();
     </script>
 
     <script src="/js/guest-access.js"></script>
+    <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    menuToggle.addEventListener("click", function () {
+        const isOpen = navMenu.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", isOpen);
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "ปิดเมนู" : "เปิดเมนู"
+        );
+    });
+
+    navMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        });
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 850) {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        }
+    });
+</script>
 </body>
 
 </html>

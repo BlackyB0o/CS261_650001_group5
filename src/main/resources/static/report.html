@@ -11,17 +11,32 @@
 
 <body>
 
-    <header class="navbar">
-        <a href="index.html" class="logo">CarryHub</a>
+   <header class="navbar">
+    <a href="index.html" class="logo">CarryHub</a>
 
-        <nav>
-            <a href="index.html">หน้าแรก</a>
-            <a href="rounds.html">รอบรับหิ้ว</a>
-            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
-            <a href="orders.html">รายการของฉัน</a>
-            <a href="profile.html">โปรไฟล์</a>
-        </nav>
-    </header>
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="เปิดเมนู"
+        aria-expanded="false"
+        aria-controls="navMenu"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="navMenu">
+        <a href="index.html">หน้าแรก</a>
+        <a href="rounds.html">รอบรับหิ้ว</a>
+        <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+        <a href="orders.html">รายการของฉัน</a>
+        <a href="profile.html">โปรไฟล์</a>
+        <a href="login.html" class="btn btn-outline">เข้าสู่ระบบ</a>
+        <a href="register.html" class="btn btn-primary">ลงทะเบียน</a>
+    </nav>
+</header>
 
     <main class="report-page">
 
@@ -49,7 +64,7 @@
                     <span class="report-required">* จำเป็น</span>
                 </div>
 
-                <form action="report-success.html" method="get">
+                <form id="report-form">
 
                     <div class="report-form-grid">
 
@@ -58,21 +73,12 @@
                                 หมายเลขออเดอร์ <span>*</span>
                             </label>
 
-                            <input type="text" id="order-id" name="order-id" placeholder="เช่น CH001" required>
-
-                            <small>ระบุหมายเลขออเดอร์ที่เกี่ยวข้องกับปัญหา</small>
-                        </div>
-
-                        <div class="report-field">
-                            <label for="reporter">
-                                ประเภทผู้รายงาน <span>*</span>
-                            </label>
-
-                            <select id="reporter" name="reporter" required>
-                                <option value="">เลือกประเภทผู้รายงาน</option>
-                                <option value="buyer">ผู้ฝากซื้อ</option>
-                                <option value="carrier">ผู้รับหิ้ว</option>
+                            <select id="order-id" name="orderId" required>
+                                <option value="">กำลังโหลดรายการออเดอร์...</option>
                             </select>
+
+                            <small>เลือกออเดอร์ที่เกี่ยวข้อง ระบบจะระบุอีกฝ่ายในออเดอร์เป็นผู้ถูกรายงานโดยอัตโนมัติ</small>
+                            <p class="form-message error-message" id="order-message" role="status" aria-live="polite" hidden></p>
                         </div>
 
                         <div class="report-field report-field-full">
@@ -82,11 +88,11 @@
 
                             <select id="category" name="category" required>
                                 <option value="">เลือกประเภทปัญหาที่พบ</option>
-                                <option value="product">สินค้าไม่ตรงตามที่สั่ง</option>
-                                <option value="delivery">ปัญหาการส่งมอบสินค้า</option>
-                                <option value="payment">ปัญหาการชำระเงิน</option>
-                                <option value="user">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
-                                <option value="other">อื่น ๆ</option>
+                                <option value="PRODUCT_MISMATCH">สินค้าไม่ตรงตามที่สั่ง</option>
+                                <option value="DELIVERY_ISSUE">ปัญหาการส่งมอบสินค้า</option>
+                                <option value="PAYMENT_ISSUE">ปัญหาการชำระเงิน</option>
+                                <option value="SUSPICIOUS_BEHAVIOR">ปัญหาเกี่ยวกับผู้ใช้งาน</option>
+                                <option value="OTHER">อื่น ๆ</option>
                             </select>
                         </div>
 
@@ -108,8 +114,8 @@
                             </label>
 
                             <div class="report-upload-box">
-                                <input type="file" id="evidence" name="evidence"
-                                    accept="image/png, image/jpeg, image/webp">
+                                <input type="file" id="evidence" name="evidenceImage"
+                                    accept="image/png, image/jpeg">
 
                                 <div class="upload-content">
                                     <div class="upload-icon">+</div>
@@ -117,7 +123,7 @@
                                     <div>
                                         <strong>แนบรูปภาพประกอบ</strong>
                                         <p>เลือกภาพจากอุปกรณ์ของคุณ</p>
-                                        <small>รองรับ JPG, PNG และ WEBP</small>
+                                        <small>รองรับ JPG และ PNG (ไม่เกิน 5 MB)</small>
                                     </div>
                                 </div>
                             </div>
@@ -133,6 +139,7 @@
                             ส่งรายงาน
                         </button>
                     </div>
+                    <p class="form-message error-message" id="report-message" role="status" aria-live="polite" hidden></p>
 
                 </form>
 
@@ -194,11 +201,212 @@
 
     </main>
 
-    <footer class="footer">
-        <p>CarryHub © 2026</p>
+    <footer class="footer home-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">CarryHub</a>
+                <p>บริการรับฝากซื้อรอบมหาวิทยาลัย</p>
+
+            </div>
+
+            <div class="footer-links">
+                <a href="rounds.html">รอบรับหิ้ว</a>
+                <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+                <a href="orders.html">รายการสั่งซื้อ</a>
+                <a href="report.html">รายงานปัญหา</a>
+            </div>
+        </div>
+
+        <p class="copyright">© 2026 CarryHub. All rights reserved.</p>
     </footer>
 
+    <script>
+        const reportForm = document.getElementById("report-form");
+        const reportMessage = document.getElementById("report-message");
+        const reportSubmit = reportForm.querySelector('button[type="submit"]');
+        const orderSelect = document.getElementById("order-id");
+        const orderMessage = document.getElementById("order-message");
+        reportSubmit.disabled = true;
+
+        function showOrderMessage(text) {
+            orderMessage.textContent = text;
+            orderMessage.hidden = false;
+        }
+
+        async function loadReportOrders() {
+            let token;
+            let tokenType;
+            try {
+                token = localStorage.getItem("token");
+                tokenType = localStorage.getItem("tokenType") || "Bearer";
+            } catch (error) {
+                showOrderMessage("ไม่สามารถอ่านสถานะเข้าสู่ระบบได้ กรุณาเข้าสู่ระบบใหม่");
+                return;
+            }
+            if (!token) {
+                window.location.replace("/login.html?returnTo=" + encodeURIComponent(window.location.pathname + window.location.search));
+                return;
+            }
+
+            const requestedOrderId = new URLSearchParams(window.location.search).get("orderId");
+            if (requestedOrderId && !/^[1-9]\d*$/.test(requestedOrderId)) {
+                showOrderMessage("หมายเลขออเดอร์ไม่ถูกต้อง");
+                return;
+            }
+
+            try {
+                const endpoint = requestedOrderId
+                    ? "/api/v1/orders/" + encodeURIComponent(requestedOrderId)
+                    : "/api/v1/orders/my";
+                const response = await fetch(endpoint, {
+                    headers: { "Authorization": tokenType + " " + token }
+                });
+                let result;
+                try {
+                    result = await response.json();
+                } catch (error) {
+                    showOrderMessage("เซิร์ฟเวอร์ตอบกลับในรูปแบบที่ไม่ถูกต้อง กรุณาลองอีกครั้ง");
+                    return;
+                }
+                if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("tokenType");
+                    window.location.replace("/login.html?returnTo=" + encodeURIComponent(window.location.pathname + window.location.search));
+                    return;
+                }
+                if (!response.ok || !result || result.status !== "SUCCESS") {
+                    showOrderMessage(result && result.message
+                        ? result.message
+                        : "โหลดรายการออเดอร์ไม่สำเร็จ (HTTP " + response.status + ")");
+                    return;
+                }
+
+                const orders = requestedOrderId ? [result.data] : result.data;
+                if (!Array.isArray(orders)) {
+                    showOrderMessage("ไม่พบรายการออเดอร์ที่เกี่ยวข้อง");
+                    return;
+                }
+
+                orderSelect.replaceChildren();
+                const placeholder = document.createElement("option");
+                placeholder.value = "";
+                placeholder.textContent = "เลือกหมายเลขออเดอร์";
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                orderSelect.appendChild(placeholder);
+
+                orders.forEach(function (order) {
+                    if (!order || order.orderId == null) {
+                        return;
+                    }
+                    const orderReference = "RO" + order.orderId;
+                    const option = document.createElement("option");
+                    option.value = order.orderId;
+                    option.textContent = orderReference + (order.status ? " — " + order.status : "");
+                    orderSelect.appendChild(option);
+                    if (requestedOrderId && String(order.orderId) === requestedOrderId) {
+                        option.selected = true;
+                        placeholder.selected = false;
+                    }
+                });
+
+                if (orderSelect.options.length === 1) {
+                    orderSelect.disabled = true;
+                    showOrderMessage("ไม่พบออเดอร์ที่เกี่ยวข้อง กรุณาเปิดรายงานจากหน้ารายละเอียดออเดอร์");
+                    return;
+                }
+                orderSelect.disabled = false;
+                reportSubmit.disabled = false;
+            } catch (error) {
+                showOrderMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์เพื่อโหลดรายการออเดอร์ได้");
+            }
+        }
+
+        reportForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            let token;
+            try {
+                token = localStorage.getItem("token");
+            } catch (error) {
+                reportMessage.textContent = "ไม่สามารถอ่านสถานะเข้าสู่ระบบได้ กรุณาเปิดพื้นที่จัดเก็บข้อมูลแล้วลองใหม่";
+                reportMessage.hidden = false;
+                return;
+            }
+            if (!token) {
+                window.location.assign("/login.html?returnTo="
+                    + encodeURIComponent(window.location.pathname + window.location.search));
+                return;
+            }
+            if (!orderSelect.value) {
+                reportMessage.textContent = "กรุณาเลือกออเดอร์ที่เกี่ยวข้องกับปัญหา";
+                reportMessage.hidden = false;
+                return;
+            }
+
+            reportSubmit.disabled = true;
+            reportMessage.hidden = true;
+            try {
+                const response = await fetch("/api/v1/reports", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": (localStorage.getItem("tokenType") || "Bearer") + " " + token
+                    },
+                    body: new FormData(reportForm)
+                });
+                const result = await response.json();
+                if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
+                    if (response.status === 401) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("tokenType");
+                        window.location.assign("/login.html?returnTo="
+                            + encodeURIComponent(window.location.pathname + window.location.search));
+                        return;
+                    }
+                    throw new Error(result && result.message
+                        ? result.message
+                        : "ส่งรายงานไม่สำเร็จ (HTTP " + response.status + ")");
+                }
+                window.location.assign("report-success.html?id=" + encodeURIComponent(result.data.reportId));
+            } catch (error) {
+                reportMessage.textContent = error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง";
+                reportMessage.hidden = false;
+                reportSubmit.disabled = false;
+            }
+        });
+
+        loadReportOrders();
+    </script>
     <script src="/js/guest-access.js"></script>
+    <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    menuToggle.addEventListener("click", function () {
+        const isOpen = navMenu.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", isOpen);
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "ปิดเมนู" : "เปิดเมนู"
+        );
+    });
+
+    navMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        });
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 850) {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        }
+    });
+</script>
 </body>
 
 </html>

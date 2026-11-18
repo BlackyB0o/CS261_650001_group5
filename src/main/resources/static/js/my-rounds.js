@@ -78,9 +78,36 @@
         card.append(header, body, footer);
         return card;
     }
+    function updateRoundCounts() {
+    const roundCount = roundsList.querySelectorAll(".order-card").length;
+
+    const roundsCountElement = document.getElementById("rounds-count");
+    if (roundsCountElement) {
+        roundsCountElement.textContent = roundCount;
+    }
+
+    const totalCountElement = document.getElementById("total-count");
+    if (totalCountElement) {
+        const listIds = [
+            "buyer-orders-list",
+            "carrier-orders-list",
+            "my-posts-list",
+            "my-orders-list",
+            "my-rounds-list"
+        ];
+
+        const total = listIds.reduce(function (sum, id) {
+            const list = document.getElementById(id);
+            return sum + (list ? list.querySelectorAll(".order-card").length : 0);
+        }, 0);
+
+        totalCountElement.textContent = total;
+    }
+}
 
     async function loadRounds() {
         roundsList.replaceChildren();
+
         showMessage("กำลังโหลดรอบรับหิ้ว...", false);
 
         let token;
@@ -129,6 +156,9 @@
             result.data.forEach(function (round) {
                 roundsList.appendChild(renderRound(round));
             });
+
+            updateRoundCounts();
+            
         } catch (error) {
             showMessage("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง", true);
         }
