@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | CarryHub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">CarryHub</a>
+
+        <button
+            class="menu-toggle"
+            id="menuToggle"
+            type="button"
+            aria-label="เปิดเมนู"
+            aria-expanded="false"
+            aria-controls="navMenu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="navMenu">
+            <a href="index.html">หน้าแรก</a>
+            <a href="rounds.html">รอบรับหิ้ว</a>
+            <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+            <a href="orders.html">รายการของฉัน</a>
+            <a href="profile.html">โปรไฟล์</a>
+            <a href="login.html" class="btn btn-outline">เข้าสู่ระบบ</a>
+            <a href="register.html" class="btn btn-primary">ลงทะเบียน</a>
+            <a href="admin-login.html" class="btn btn-outline">Admin Login</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="auth-card">
+            <h1>เข้าสู่ระบบผู้ดูแล</h1>
+            <p>สำหรับทีมงาน CarryHub เท่านั้น</p>
+
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="identifier">Admin email</label>
+                    <input type="email" id="identifier" placeholder="Admin@email.com"
+                        autocomplete="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน</label>
+                    <input type="password" id="password" autocomplete="current-password"
+                        placeholder="กรอกรหัสผ่าน Admin" required>
+                </div>
+
+                <p id="admin-login-message" class="form-message" role="status" aria-live="polite" hidden></p>
+
+                <button id="admin-login-button" type="submit" class="btn btn-primary btn-full">
+                    เข้าสู่ระบบ Admin
+                </button>
+            </form>
+
+            <p class="text-center">
+                <a href="login.html">กลับไปเข้าสู่ระบบผู้ใช้</a>
+            </p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CarryHub</p>
+    </footer>
+
+    <script>
+        const adminLoginForm = document.getElementById("admin-login-form");
+        const adminLoginButton = document.getElementById("admin-login-button");
+        const adminLoginMessage = document.getElementById("admin-login-message");
+
+        function showAdminLoginMessage(message) {
+            adminLoginMessage.textContent = message;
+            adminLoginMessage.className = "form-message error-message";
+            adminLoginMessage.hidden = false;
+        }
+
+        adminLoginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            if (window.location.protocol === "file:") {
+                showAdminLoginMessage("กรุณาเปิดหน้านี้ผ่านเซิร์ฟเวอร์ CarryHub เพื่อเชื่อมต่อ API");
+                return;
+            }
+
+            adminLoginButton.disabled = true;
+            adminLoginButton.textContent = "กำลังตรวจสอบ...";
+            adminLoginMessage.hidden = true;
+            try {
+                const response = await fetch("/api/v1/auth/admin/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        identifier: document.getElementById("identifier").value.trim(),
+                        password: document.getElementById("password").value
+                    })
+                });
+                const result = await response.json();
+                if (!response.ok || !result || result.status !== "SUCCESS"
+                    || !result.data || typeof result.data.token !== "string" || !result.data.token) {
+                    throw new Error(result && result.message
+                        ? result.message
+                        : "Admin login failed (HTTP " + response.status + ")");
+                }
+                localStorage.setItem("tokenType", result.data.tokenType || "Bearer");
+                localStorage.setItem("token", result.data.token);
+                window.location.assign("/admin-reports.html");
+            } catch (error) {
+                showAdminLoginMessage(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองอีกครั้ง");
+                adminLoginButton.disabled = false;
+                adminLoginButton.textContent = "เข้าสู่ระบบ Admin";
+            }
+        });
+    </script>
+    <script src="/js/guest-access.js"></script>
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const navMenu = document.getElementById("navMenu");
+
+        menuToggle.addEventListener("click", function () {
+            const isOpen = navMenu.classList.toggle("open");
+            menuToggle.setAttribute("aria-expanded", isOpen);
+            menuToggle.setAttribute("aria-label", isOpen ? "ปิดเมนู" : "เปิดเมนู");
+        });
+
+        navMenu.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navMenu.classList.remove("open");
+                menuToggle.setAttribute("aria-expanded", "false");
+                menuToggle.setAttribute("aria-label", "เปิดเมนู");
+            });
+        });
+
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 850) {
+                navMenu.classList.remove("open");
+                menuToggle.setAttribute("aria-expanded", "false");
+                menuToggle.setAttribute("aria-label", "เปิดเมนู");
+            }
+        });
+    </script>
+</body>
+
+</html>

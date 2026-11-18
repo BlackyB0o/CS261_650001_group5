@@ -14,13 +14,31 @@
 <body>
 
     <header class="navbar">
-        <a href="index.html" class="logo">CarryHub</a>
+    <a href="index.html" class="logo">CarryHub</a>
 
-        <nav>
-            <a href="index.html">หน้าแรก</a>
-            <a href="profile.html">โปรไฟล์</a>
-        </nav>
-    </header>
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="เปิดเมนู"
+        aria-expanded="false"
+        aria-controls="navMenu"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="navMenu">
+        <a href="index.html">หน้าแรก</a>
+        <a href="rounds.html">รอบรับหิ้ว</a>
+        <a href="buyer-posts.html">หาคนรับหิ้ว</a>
+        <a href="orders.html" class="nav-active">รายการของฉัน</a>
+        <a href="profile.html">โปรไฟล์</a>
+        <a href="login.html" class="btn btn-outline">เข้าสู่ระบบ</a>
+        <a href="register.html" class="btn btn-primary">ลงทะเบียน</a>
+    </nav>
+</header>
 
 
     <main class="report-detail-container">
@@ -64,7 +82,7 @@
 
                 <div class="report-date">
                     <span>วันที่รายงาน</span>
-                    <strong>15 ตุลาคม 2026</strong>
+                    <strong id="report-created-at">-</strong>
                 </div>
 
             </div>
@@ -73,7 +91,7 @@
 
                 <div class="info-item">
                     <span class="info-label">หมายเลขออเดอร์</span>
-                    <strong class="info-value">CH001</strong>
+                    <strong class="info-value" id="report-order-reference">-</strong>
                 </div>
 
                 <div class="info-item">
@@ -81,13 +99,13 @@
 
                     <div class="reporter-info">
                         <div class="reporter-avatar">ผ</div>
-                        <strong class="info-value">ผู้ฝากซื้อ</strong>
+                        <strong class="info-value" id="reporter-type">-</strong>
                     </div>
                 </div>
 
                 <div class="info-item">
                     <span class="info-label">ประเภทปัญหา</span>
-                    <strong class="info-value">สินค้าไม่ตรงตามที่สั่ง</strong>
+                    <strong class="info-value" id="report-category">-</strong>
                 </div>
 
                 <div class="info-item">
@@ -106,13 +124,26 @@
                     รายละเอียดปัญหา
                 </h3>
 
-                <p>
-                    ผู้ฝากซื้อแจ้งว่าได้รับสินค้าไม่ตรงตามรายการที่สั่งซื้อ
-                    จึงส่งรายงานเข้ามาเพื่อให้แอดมินตรวจสอบและดำเนินการแก้ไข
-                </p>
+                <p id="report-description">กำลังโหลด...</p>
+                <p id="evidence-link-container" hidden><a id="evidence-link" target="_blank" rel="noopener">ดูรูปภาพหลักฐาน</a></p>
 
             </div>
 
+        </section>
+
+        <section class="detail-card reported-account-card" id="reported-account-card">
+            <div class="card-heading">
+                <h2>บัญชีที่ถูกรายงาน</h2>
+                <span class="reported-account-status" id="reported-account-status">กำลังโหลด...</span>
+            </div>
+            <p class="reported-account-name" id="reported-account-name">กำลังโหลดข้อมูลบัญชี...</p>
+            <p class="reported-account-note" id="reported-account-note"></p>
+            <p class="form-message" id="reported-account-feedback" role="status" aria-live="polite" hidden></p>
+            <div class="form-actions">
+                <button type="button" class="btn reported-account-action" id="reported-account-action" disabled>
+                    ระงับบัญชี
+                </button>
+            </div>
         </section>
 
         <section class="detail-card review-card">
@@ -135,14 +166,13 @@
                         สถานะรายงาน <span class="required">*</span>
                     </label>
 
-                    <select id="status" name="status" required>
-                        <option value="pending">รอตรวจสอบ</option>
-                        <option value="investigating">กำลังตรวจสอบ</option>
-                        <option value="resolved">แก้ไขแล้ว</option>
-                        <option value="rejected">ไม่รับเรื่อง</option>
+                    <select id="status" name="decision" required>
+                        <option value="">เลือกผลการพิจารณา</option>
+                        <option value="APPROVED">อนุมัติรายงาน</option>
+                        <option value="DECLINED">ปฏิเสธรายงาน</option>
                     </select>
 
-                    <small>เลือกสถานะให้ตรงกับผลการตรวจสอบล่าสุด</small>
+                    <small>รายงานที่พิจารณาแล้วจะไม่สามารถเปลี่ยนผลได้</small>
 
                 </div>
 
@@ -151,7 +181,7 @@
 
                     <label for="admin-note">บันทึกจากแอดมิน</label>
 
-                    <textarea id="admin-note" name="admin-note" rows="5"
+                    <textarea id="admin-note" name="adminNote" rows="5" maxlength="1000"
                         placeholder="ระบุผลการตรวจสอบ แนวทางแก้ไข หรือเหตุผลในการไม่รับเรื่อง"></textarea>
 
                 </div>
@@ -170,7 +200,7 @@
 
                 </div>
 
-                <p class="form-message" id="form-message" hidden></p>
+                <p class="form-message" id="form-message" role="status" aria-live="polite" hidden></p>
 
             </form>
 
@@ -178,10 +208,24 @@
 
     </main>
 
-    <footer class="footer">
-        <p>CarryHub © 2026</p>
-    </footer>
+   <footer class="footer home-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">CarryHub</a>
+                <p>บริการรับฝากซื้อรอบมหาวิทยาลัย</p>
 
+            </div>
+
+            <div class="footer-links">
+                <a href="rounds.html">รอบรับหิ้ว</a>
+                <a href="buyer-posts.html">โพสต์หาคนรับหิ้ว</a>
+                <a href="orders.html">รายการสั่งซื้อ</a>
+                <a href="report.html">รายงานปัญหา</a>
+            </div>
+        </div>
+
+        <p class="copyright">© 2026 CarryHub. All rights reserved.</p>
+    </footer>
 
     <script>
         const statusSelect = document.getElementById("status");
@@ -189,60 +233,262 @@
         const statusText = document.getElementById("status-text");
         const reviewForm = document.getElementById("review-form");
         const formMessage = document.getElementById("form-message");
-
-        const statusLabels = {
-            pending: "รอตรวจสอบ",
-            investigating: "กำลังตรวจสอบ",
-            resolved: "แก้ไขแล้ว",
-            rejected: "ไม่รับเรื่อง"
+        const reportedAccountName = document.getElementById("reported-account-name");
+        const reportedAccountStatus = document.getElementById("reported-account-status");
+        const reportedAccountNote = document.getElementById("reported-account-note");
+        const reportedAccountFeedback = document.getElementById("reported-account-feedback");
+        const reportedAccountAction = document.getElementById("reported-account-action");
+        const reportId = new URLSearchParams(window.location.search).get("id");
+        const categoryLabels = {
+            PRODUCT_MISMATCH: "สินค้าไม่ตรงตามที่สั่ง",
+            DELIVERY_ISSUE: "ปัญหาการส่งมอบสินค้า",
+            PAYMENT_ISSUE: "ปัญหาการชำระเงิน",
+            SUSPICIOUS_BEHAVIOR: "ปัญหาเกี่ยวกับผู้ใช้งาน",
+            OTHER: "อื่น ๆ"
         };
+        let report;
 
-        const statusClasses = {
-            pending: "status-pending",
-            investigating: "status-investigating",
-            resolved: "status-resolved",
-            rejected: "status-rejected"
-        };
-
-        function updateStatusDisplay(status) {
-            currentStatus.className =
-                "status-badge " + statusClasses[status];
-
-            currentStatus.innerHTML =
-                '<span class="status-dot"></span>' +
-                statusLabels[status];
-
-            statusText.textContent = statusLabels[status];
+        function setStatus(status) {
+            const labels = { PENDING: "รอตรวจสอบ", APPROVED: "อนุมัติแล้ว", DECLINED: "ปฏิเสธแล้ว" };
+            const classes = { PENDING: "status-pending", APPROVED: "status-resolved", DECLINED: "status-rejected" };
+            currentStatus.className = "status-badge " + (classes[status] || classes.PENDING);
+            currentStatus.replaceChildren();
+            const dot = document.createElement("span");
+            dot.className = "status-dot";
+            currentStatus.append(dot, document.createTextNode(labels[status] || status));
+            statusText.textContent = labels[status] || status;
         }
 
-        statusSelect.addEventListener("change", () => {
-            updateStatusDisplay(statusSelect.value);
-        });
+        function showReportedAccountFeedback(message, isError) {
+            reportedAccountFeedback.hidden = false;
+            reportedAccountFeedback.className = "form-message " + (isError ? "error-message" : "success-message");
+            reportedAccountFeedback.textContent = message;
+        }
 
-        reviewForm.addEventListener("submit", function (event) {
-            event.preventDefault();
+        function renderReportedAccount() {
+            reportedAccountFeedback.hidden = true;
+            if (!report.reportedUserId) {
+                reportedAccountName.textContent = "ไม่พบข้อมูลบัญชีที่ถูกรายงาน";
+                reportedAccountStatus.className = "reported-account-status unavailable";
+                reportedAccountStatus.textContent = "ระบุบัญชีไม่ได้";
+                reportedAccountNote.textContent = "รายงานนี้ไม่มีบัญชีเป้าหมายที่เชื่อมโยงไว้ จึงไม่สามารถระงับบัญชีจากรายงานนี้ได้";
+                reportedAccountAction.textContent = "ไม่สามารถระงับบัญชีได้";
+                reportedAccountAction.className = "btn reported-account-action";
+                reportedAccountAction.disabled = true;
+                return;
+            }
 
-            const selectedStatus = statusSelect.value;
-            const note = document.getElementById("admin-note").value.trim();
+            const isSuspended = report.reportedUserSuspended === true;
+            const isAdmin = report.reportedUserRole === "ADMIN";
+            reportedAccountName.textContent = (report.reportedUserName || "ผู้ใช้")
+                + " (ID: " + report.reportedUserId + ")";
+            reportedAccountStatus.className = "reported-account-status "
+                + (isSuspended ? "suspended" : "active");
+            reportedAccountStatus.textContent = isSuspended ? "ถูกระงับ" : "ใช้งานได้";
+            reportedAccountAction.textContent = isSuspended ? "คืนสิทธิ์บัญชี" : "ระงับบัญชี";
+            reportedAccountAction.className = "btn reported-account-action "
+                + (isSuspended ? "restore" : "suspend");
+            reportedAccountAction.disabled = isAdmin || (!isSuspended && report.status !== "APPROVED");
 
-            updateStatusDisplay(selectedStatus);
+            if (isAdmin) {
+                reportedAccountNote.textContent = "ไม่สามารถระงับบัญชีผู้ดูแลระบบได้";
+            } else if (isSuspended) {
+                reportedAccountNote.textContent = "บัญชีนี้จะยังถูกระงับจนกว่า Admin จะคืนสิทธิ์";
+            } else if (report.status !== "APPROVED") {
+                reportedAccountNote.textContent = "อนุมัติรายงานก่อนจึงจะสามารถระงับบัญชีได้";
+            } else {
+                reportedAccountNote.textContent = "บัญชีจะถูกระงับจนกว่า Admin จะคืนสิทธิ์";
+            }
+        }
 
+        function showError(message) {
             formMessage.hidden = false;
-            formMessage.className = "form-message success-message";
-            formMessage.textContent =
-                "เปลี่ยนสถานะเป็น \"" +
-                statusLabels[selectedStatus] +
-                "\" แล้ว" +
-                (note ? " และรับบันทึกข้อความบนหน้าจอแล้ว" : "");
+            formMessage.className = "form-message error-message";
+            formMessage.textContent = message;
+        }
 
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: "smooth"
-            });
+        async function loadReport() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.replace("/login.html?returnTo=" + encodeURIComponent(window.location.pathname + window.location.search));
+                return;
+            }
+            if (!reportId || !/^\d+$/.test(reportId)) {
+                showError("หมายเลขรายงานไม่ถูกต้อง");
+                reviewForm.hidden = true;
+                return;
+            }
+            try {
+                const response = await fetch("/api/v1/admin/reports/" + encodeURIComponent(reportId), {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const result = await response.json();
+                if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.replace("/login.html?returnTo=" + encodeURIComponent(window.location.pathname + window.location.search));
+                    return;
+                }
+                if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
+                    throw new Error(result && result.message ? result.message : "โหลดรายละเอียดรายงานไม่สำเร็จ");
+                }
+                report = result.data;
+                document.getElementById("report-id").textContent = "RP" + String(report.reportId).padStart(3, "0");
+                document.getElementById("report-created-at").textContent =
+                    report.createdAt ? new Date(report.createdAt).toLocaleString("th-TH") : "-";
+                document.getElementById("report-order-reference").textContent = "RO" + report.orderId;
+                document.getElementById("reporter-type").textContent =
+                    report.reporterName + " (" +
+                    (report.reporterType === "RUNNER" ? "ผู้รับหิ้ว" : "ผู้ฝากซื้อ") + ")";
+                document.getElementById("report-category").textContent = categoryLabels[report.category] || report.category;
+                document.getElementById("report-description").textContent = report.description;
+                const evidenceContainer = document.getElementById("evidence-link-container");
+                if (report.evidenceUrl) {
+                    const evidenceLink = document.getElementById("evidence-link");
+                    evidenceLink.href = report.evidenceUrl;
+                    evidenceContainer.hidden = false;
+                }
+                document.getElementById("admin-note").value = report.adminNote || "";
+                setStatus(report.status);
+                renderReportedAccount();
+                if (report.status !== "PENDING") {
+                    statusSelect.disabled = true;
+                    reviewForm.querySelector('button[type="submit"]').disabled = true;
+                    document.getElementById("admin-note").disabled = true;
+                    showError("รายงานนี้ได้รับการพิจารณาแล้ว");
+                }
+            } catch (error) {
+                showError(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
+                reviewForm.hidden = true;
+            }
+        }
+
+        reportedAccountAction.addEventListener("click", async function () {
+            if (!report || !report.reportedUserId || reportedAccountAction.disabled) {
+                return;
+            }
+            const suspended = report.reportedUserSuspended !== true;
+            const action = suspended ? "ระงับบัญชี" : "คืนสิทธิ์บัญชี";
+            if (!window.confirm("ยืนยัน" + action + "ของ " + report.reportedUserName + " หรือไม่?")) {
+                return;
+            }
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.replace("/login.html?returnTo="
+                    + encodeURIComponent(window.location.pathname + window.location.search));
+                return;
+            }
+
+            reportedAccountAction.disabled = true;
+            reportedAccountFeedback.hidden = true;
+            try {
+                const response = await fetch("/api/v1/admin/users/" + encodeURIComponent(report.reportedUserId) + "/suspend", {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization": (localStorage.getItem("tokenType") || "Bearer") + " " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ suspended: suspended })
+                });
+                const result = await response.json();
+                if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("tokenType");
+                    window.location.replace("/login.html?returnTo="
+                        + encodeURIComponent(window.location.pathname + window.location.search));
+                    return;
+                }
+                if (!response.ok || !result || result.status !== "SUCCESS" || !result.data) {
+                    throw new Error(result && result.message ? result.message : "เปลี่ยนสถานะบัญชีไม่สำเร็จ");
+                }
+                report.reportedUserSuspended = result.data.suspended;
+                renderReportedAccount();
+                showReportedAccountFeedback(suspended ? "ระงับบัญชีแล้ว" : "คืนสิทธิ์บัญชีแล้ว", false);
+            } catch (error) {
+                renderReportedAccount();
+                showReportedAccountFeedback(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้", true);
+            }
         });
+
+        reviewForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const token = localStorage.getItem("token");
+            if (!token || !report) {
+                showError("กรุณาเข้าสู่ระบบใหม่");
+                return;
+            }
+            const button = reviewForm.querySelector('button[type="submit"]');
+            button.disabled = true;
+            formMessage.hidden = true;
+            try {
+                const response = await fetch("/api/v1/admin/reports/" + encodeURIComponent(reportId) + "/decision", {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        decision: statusSelect.value,
+                        adminNote: document.getElementById("admin-note").value.trim()
+                    })
+                });
+                const result = await response.json();
+                if (response.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.replace("/login.html?returnTo=" + encodeURIComponent(window.location.pathname + window.location.search));
+                    return;
+                }
+                if (!response.ok || !result || result.status !== "SUCCESS") {
+                    throw new Error(result && result.message ? result.message : "บันทึกผลไม่สำเร็จ");
+                }
+                report = result.data;
+                setStatus(report.status);
+                renderReportedAccount();
+                statusSelect.disabled = true;
+                button.disabled = true;
+                document.getElementById("admin-note").disabled = true;
+                formMessage.hidden = false;
+                formMessage.className = "form-message success-message";
+                formMessage.textContent = "บันทึกผลการพิจารณาแล้ว";
+            } catch (error) {
+                showError(error.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
+                button.disabled = false;
+            }
+        });
+
+        loadReport();
     </script>
 
     <script src="/js/guest-access.js"></script>
+    <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    menuToggle.addEventListener("click", function () {
+        const isOpen = navMenu.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", isOpen);
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "ปิดเมนู" : "เปิดเมนู"
+        );
+    });
+
+    navMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        });
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 850) {
+            navMenu.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "เปิดเมนู");
+        }
+    });
+</script>
 </body>
 
 </html>
