@@ -78,6 +78,46 @@
                     <p class="muted">กำลังโหลดข้อมูลการชำระเงิน...</p>
                 </div>
             </section>
+                        <!-- Buyer confirms received order -->
+            <section class="order-section-card" id="confirm-receipt-section" hidden>
+                <div class="order-section-heading">
+                    <div>
+                        <h2>ยืนยันรับสินค้า</h2>
+                        <p>แนบรูปสินค้าที่ได้รับเพื่อยืนยันการรับสินค้า</p>
+                    </div>
+                </div>
+
+                <div id="confirm-receipt-message"
+                     class="form-message"
+                     role="status"
+                     hidden></div>
+
+                <div class="payment-form">
+                    <label for="delivery-proof-image">รูปภาพยืนยันการรับสินค้า</label>
+                    <input
+                        type="file"
+                        id="delivery-proof-image"
+                        accept="image/jpeg,image/png"
+                    >
+
+                    <div id="delivery-proof-preview" hidden>
+                        <p>ตัวอย่างรูปภาพ</p>
+                        <img
+                            id="delivery-proof-preview-image"
+                            src=""
+                            alt="ตัวอย่างรูปยืนยันรับสินค้า"
+                            style="max-width: 100%; max-height: 250px; object-fit: contain;"
+                        >
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="confirm-receipt-button">
+                        ยืนยันรับสินค้าและปิดออเดอร์
+                    </button>
+                </div>
+            </section>
         </div>
 
         <aside class="order-side-column">
